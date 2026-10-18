@@ -95,13 +95,12 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-orderSchema.pre('save', function (next) {
+orderSchema.pre('save', function () {
   if (!this.orderId) {
     const dateStr = new Date().toISOString().slice(2, 10).replace(/-/g, '');
     const rand = Math.floor(1000 + Math.random() * 9000);
     this.orderId = `SD-${dateStr}-${rand}`;
   }
-  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);

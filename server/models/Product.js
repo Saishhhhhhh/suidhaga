@@ -110,7 +110,7 @@ function slugify(text) {
 }
 
 // Auto-generate slug and discount before saving
-productSchema.pre('save', function (next) {
+productSchema.pre('save', function () {
   if (!this.slug) {
     this.slug = slugify(this.title);
   }
@@ -120,7 +120,6 @@ productSchema.pre('save', function (next) {
   } else {
     this.discount = 0;
   }
-  next();
 });
 
 productSchema.statics.createSlug = slugify;
