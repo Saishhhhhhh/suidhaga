@@ -169,12 +169,10 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
             <div className="form-group">
               <label className="form-label">Category *</label>
               <select name="category" value={formData.category} onChange={handleChange} className="form-select">
-                <option value="Anarkalis">Anarkalis</option>
-                <option value="Kurtas & Sets">Kurtas & Sets</option>
+                <option value="Ethnic Wear">Ethnic Wear</option>
+                <option value="Travel Ready">Travel Ready</option>
+                <option value="Shirts">Shirts</option>
                 <option value="Indo-Western">Indo-Western</option>
-                <option value="Lehengas">Lehengas</option>
-                <option value="Sarees">Sarees</option>
-                <option value="Festive Edit">Festive Edit</option>
               </select>
             </div>
           </div>

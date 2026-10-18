@@ -18,19 +18,13 @@ export default function Header({ currentView, setCurrentView }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Dynamic categories from MongoDB with 'All Collections' first
+  // The 4 official brand collections
   const displayCategories = [
     { label: 'All Collections', value: 'All' },
-    ...(apiCategories && apiCategories.length > 0
-      ? apiCategories.map((c) => ({ label: c, value: c }))
-      : [
-          { label: 'Co-ord Sets', value: 'Co-ord Sets' },
-          { label: 'Anarkalis', value: 'Anarkalis' },
-          { label: 'Kurtas & Sets', value: 'Kurtas & Sets' },
-          { label: 'Indo-Western', value: 'Indo-Western' },
-          { label: 'Dresses', value: 'Dresses' },
-          { label: 'Sarees', value: 'Sarees' },
-        ]),
+    { label: 'Ethnic Wear', value: 'Ethnic Wear' },
+    { label: 'Travel Ready', value: 'Travel Ready' },
+    { label: 'Shirts', value: 'Shirts' },
+    { label: 'Indo-Western', value: 'Indo-Western' },
   ];
 
   const handleCategoryClick = (catVal) => {

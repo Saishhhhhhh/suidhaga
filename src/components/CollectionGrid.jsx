@@ -7,39 +7,32 @@ export default function CollectionGrid() {
 
   const collections = [
     {
-      title: 'Signature Anarkalis',
-      subtitle: 'Graceful silhouettes in royal maroons & pure silk',
-      image: '/assets/maroon_anarkali.jpg',
-      category: 'Anarkalis',
-      tag: 'Bestseller',
+      title: 'Ethnic Wear',
+      subtitle: 'Timeless grace crafted in rich silks and handloom weaves',
+      image: '/assets/ethenic.webp',
+      category: 'Ethnic Wear',
+      tag: 'Heritage Edit',
     },
     {
-      title: 'Kurtas & Sharara Sets',
-      subtitle: 'Vibrant emeralds & mustard hues for celebrations',
-      image: '/assets/emerald_kurta.jpg',
-      category: 'Kurtas & Sets',
-      tag: 'Festive Hit',
+      title: 'Travel Ready',
+      subtitle: 'Light. Breezy. Effortless. Your perfect travel companion',
+      image: '/assets/travel.webp',
+      category: 'Travel Ready',
+      tag: 'Resort & Travel',
     },
     {
-      title: 'Indo-Western Fusion',
-      subtitle: 'Modern capes, bustiers & palazzo trousers',
-      image: '/assets/indowestern_cape.jpg',
+      title: 'Shirts',
+      subtitle: 'Crisp hand-finished cottons and embroidered motifs',
+      image: '/assets/shirts.webp',
+      category: 'Shirts',
+      tag: 'Everyday Chic',
+    },
+    {
+      title: 'Indo-Western',
+      subtitle: 'Contemporary fusion cuts blending tradition with modern flair',
+      image: '/assets/indowest.webp',
       category: 'Indo-Western',
-      tag: 'Trending',
-    },
-    {
-      title: 'Handcrafted Lehengas',
-      subtitle: 'Blush pink georgette with delicate micro-sequins',
-      image: '/assets/blush_lehenga.jpg',
-      category: 'Lehengas',
-      tag: 'Wedding Edit',
-    },
-    {
-      title: 'Organza Sarees',
-      subtitle: 'Whisper-soft hand-painted florals with scallop borders',
-      image: '/assets/organza_saree.jpg',
-      category: 'Sarees',
-      tag: 'Artisanal',
+      tag: 'Modern Fusion',
     },
   ];
 
@@ -75,19 +68,19 @@ export default function CollectionGrid() {
             className="font-display maroon-gradient-text"
             style={{ fontSize: '2.4rem', fontWeight: 700, marginBottom: '0.8rem' }}
           >
-            Handpicked For Every Celebration
+            Explore Our 4 Signature Collections
           </h2>
           <p style={{ color: 'var(--text-medium)', fontSize: '0.98rem' }}>
-            From grand wedding soirees to intimate family gatherings, explore Indian wear crafted to make you look and feel extraordinary.
+            Handcrafted with love for every mood and occasion — from heritage celebrations to effortless travel and modern chic.
           </p>
         </div>
 
-        {/* Categories Grid */}
+        {/* 4 Collections Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '1.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.75rem',
           }}
         >
           {collections.map((item, idx) => (
@@ -98,10 +91,10 @@ export default function CollectionGrid() {
                 position: 'relative',
                 borderRadius: 'var(--radius-md)',
                 overflow: 'hidden',
-                height: '360px',
+                height: '460px',
                 cursor: 'pointer',
                 boxShadow: 'var(--shadow-soft)',
-                border: '1px solid rgba(107, 29, 47, 0.1)',
+                border: '1.5px solid rgba(107, 29, 47, 0.12)',
                 transition: 'all var(--transition-smooth)',
               }}
               className="collection-card"
@@ -119,7 +112,7 @@ export default function CollectionGrid() {
               />
 
               {/* Tag pill */}
-              <div style={{ position: 'absolute', top: '1rem', left: '1rem' }}>
+              <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 3 }}>
                 <span className="badge-gold">{item.tag}</span>
               </div>
 
@@ -128,18 +121,19 @@ export default function CollectionGrid() {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'linear-gradient(to top, rgba(31, 10, 16, 0.92) 0%, rgba(31, 10, 16, 0.4) 45%, transparent 100%)',
+                  background: 'linear-gradient(to top, rgba(31, 10, 16, 0.92) 0%, rgba(31, 10, 16, 0.35) 45%, transparent 100%)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
                   padding: '1.5rem',
                   color: '#ffffff',
+                  zIndex: 2,
                 }}
               >
-                <h3 className="font-display" style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.3rem' }}>
+                <h3 className="font-display" style={{ fontSize: '1.45rem', fontWeight: 700, marginBottom: '0.3rem' }}>
                   {item.title}
                 </h3>
-                <p style={{ fontSize: '0.82rem', color: '#faedd9', marginBottom: '0.8rem', opacity: 0.9 }}>
+                <p style={{ fontSize: '0.82rem', color: '#faedd9', marginBottom: '0.8rem', opacity: 0.95 }}>
                   {item.subtitle}
                 </p>
                 <div
@@ -152,7 +146,7 @@ export default function CollectionGrid() {
                     color: '#d4af37',
                   }}
                 >
-                  <span>Explore Outfits</span>
+                  <span>Explore {item.title}</span>
                   <ArrowRight size={15} />
                 </div>
               </div>
@@ -166,10 +160,10 @@ export default function CollectionGrid() {
         .collection-card:hover {
           transform: translateY(-6px);
           box-shadow: var(--shadow-medium);
-          border-color: rgba(212, 175, 55, 0.5);
+          border-color: rgba(212, 175, 55, 0.6);
         }
         .collection-card:hover .collection-card-img {
-          transform: scale(1.06);
+          transform: scale(1.05);
         }
       `}</style>
     </section>

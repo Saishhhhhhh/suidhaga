@@ -144,7 +144,7 @@ export default function Footer({ setCurrentView }) {
               Curated Collections
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.88rem' }}>
-              {['Anarkalis', 'Kurtas & Sets', 'Indo-Western', 'Lehengas', 'Sarees'].map((cat) => (
+              {['Ethnic Wear', 'Travel Ready', 'Shirts', 'Indo-Western'].map((cat) => (
                 <li key={cat}>
                   <button
                     onClick={() => {

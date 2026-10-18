@@ -16,7 +16,7 @@ export default function ProductCatalog() {
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'bestsellers' | 'new'
   const [sortBy, setSortBy] = useState('featured');
 
-  const categories = ['All', ...(apiCategories && apiCategories.length > 0 ? apiCategories : ['Co-ord Sets', 'Anarkalis', 'Kurtas & Sets', 'Dresses', 'Western Co-ord Sets', 'Indo-Western', 'Sarees'])];
+  const categories = ['All', 'Ethnic Wear', 'Travel Ready', 'Shirts', 'Indo-Western'];
 
   // Filtering
   const filtered = products.filter((p) => {

@@ -51,7 +51,7 @@ export default function AdminProducts({ products, loading, onRefresh, onEditProd
     }
   };
 
-  const categories = ['All', 'Anarkalis', 'Kurtas & Sets', 'Indo-Western', 'Lehengas', 'Sarees', 'Festive Edit'];
+  const categories = ['All', 'Ethnic Wear', 'Travel Ready', 'Shirts', 'Indo-Western'];
 
   return (
     <div>
