@@ -12,18 +12,25 @@ export default function Header({ currentView, setCurrentView }) {
     setSearchQuery,
     selectedCategory,
     setSelectedCategory,
+    categories: apiCategories,
   } = useShop();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const categories = [
+  // Dynamic categories from MongoDB with 'All Collections' first
+  const displayCategories = [
     { label: 'All Collections', value: 'All' },
-    { label: 'Anarkalis', value: 'Anarkalis' },
-    { label: 'Kurtas & Sets', value: 'Kurtas & Sets' },
-    { label: 'Indo-Western', value: 'Indo-Western' },
-    { label: 'Lehengas', value: 'Lehengas' },
-    { label: 'Sarees', value: 'Sarees' },
+    ...(apiCategories && apiCategories.length > 0
+      ? apiCategories.map((c) => ({ label: c, value: c }))
+      : [
+          { label: 'Co-ord Sets', value: 'Co-ord Sets' },
+          { label: 'Anarkalis', value: 'Anarkalis' },
+          { label: 'Kurtas & Sets', value: 'Kurtas & Sets' },
+          { label: 'Indo-Western', value: 'Indo-Western' },
+          { label: 'Dresses', value: 'Dresses' },
+          { label: 'Sarees', value: 'Sarees' },
+        ]),
   ];
 
   const handleCategoryClick = (catVal) => {
@@ -138,7 +145,7 @@ export default function Header({ currentView, setCurrentView }) {
             }}
             className="desktop-nav"
           >
-            {categories.map((cat) => (
+            {displayCategories.slice(0, 7).map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => handleCategoryClick(cat.value)}
@@ -361,7 +368,7 @@ export default function Header({ currentView, setCurrentView }) {
                 style={{ padding: '0.5rem 0.8rem', fontSize: '0.85rem' }}
               />
             </div>
-            {categories.map((cat) => (
+            {displayCategories.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => handleCategoryClick(cat.value)}

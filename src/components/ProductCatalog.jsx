@@ -10,19 +10,13 @@ export default function ProductCatalog() {
     selectedCategory,
     setSelectedCategory,
     searchQuery,
+    categories: apiCategories,
   } = useShop();
 
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'bestsellers' | 'new'
   const [sortBy, setSortBy] = useState('featured');
 
-  const categories = [
-    'All',
-    'Anarkalis',
-    'Kurtas & Sets',
-    'Indo-Western',
-    'Lehengas',
-    'Sarees',
-  ];
+  const categories = ['All', ...(apiCategories && apiCategories.length > 0 ? apiCategories : ['Co-ord Sets', 'Anarkalis', 'Kurtas & Sets', 'Dresses', 'Western Co-ord Sets', 'Indo-Western', 'Sarees'])];
 
   // Filtering
   const filtered = products.filter((p) => {
