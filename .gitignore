@@ -1,5 +1,8 @@
-node_modules
-dist
-uploads
-.DS_Store
+node_modules/
+dist/
+uploads/
+.env
 .env.local
+.DS_Store
+*.zip
+*.tar.gz
