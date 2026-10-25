@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ShoppingBag, Heart, ShieldCheck, Menu, X, Sparkles } from 'lucide-react';
+import { Search, ShoppingBag, Heart, ShieldCheck, Menu, X, ArrowRight } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
 export default function Header({ currentView, setCurrentView }) {
@@ -12,13 +12,12 @@ export default function Header({ currentView, setCurrentView }) {
     setSearchQuery,
     selectedCategory,
     setSelectedCategory,
-    categories: apiCategories,
   } = useShop();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
-  // The 4 official brand collections
+  // The 4 official brand collections + All
   const displayCategories = [
     { label: 'All Collections', value: 'All' },
     { label: 'Ethnic Wear', value: 'Ethnic Wear' },
@@ -33,7 +32,10 @@ export default function Header({ currentView, setCurrentView }) {
       setCurrentView('shop');
     }
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 600, behavior: 'smooth' });
+    const el = document.getElementById('collection-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleStoryClick = () => {
@@ -53,16 +55,19 @@ export default function Header({ currentView, setCurrentView }) {
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        backgroundColor: 'rgba(253, 251, 247, 0.96)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(107, 29, 47, 0.12)',
-        boxShadow: '0 2px 15px rgba(107, 29, 47, 0.05)',
+        backgroundColor: 'rgba(253, 251, 247, 0.97)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(212, 175, 55, 0.22)',
+        boxShadow: '0 4px 25px -4px rgba(107, 29, 47, 0.05)',
+        transition: 'all 0.3s ease',
       }}
+      className="luxury-header"
     >
-      <div className="container" style={{ padding: '0.6rem 1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+      <div className="container" style={{ padding: '0.85rem 1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
           
-          {/* Mobile menu trigger */}
+          {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
@@ -71,6 +76,7 @@ export default function Header({ currentView, setCurrentView }) {
               border: 'none',
               cursor: 'pointer',
               color: 'var(--maroon-800)',
+              padding: '0.3rem',
             }}
             className="mobile-toggle-btn"
             aria-label="Toggle menu"
@@ -78,7 +84,7 @@ export default function Header({ currentView, setCurrentView }) {
             {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
 
-          {/* Logo & Brand Name */}
+          {/* Left: Brand Identity with Authentic Logo */}
           <div
             onClick={() => {
               setCurrentView('shop');
@@ -88,29 +94,42 @@ export default function Header({ currentView, setCurrentView }) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.75rem',
+              gap: '1rem',
               cursor: 'pointer',
               textDecoration: 'none',
+              flexShrink: 0,
             }}
+            className="brand-logo-container"
           >
             <img
               src="/assets/logo.webp"
               alt="Sui Dhaga Logo"
               style={{
-                height: '52px',
+                height: '50px',
                 width: 'auto',
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 2px 4px rgba(107, 29, 47, 0.15))',
+                filter: 'drop-shadow(0 2px 6px rgba(107, 29, 47, 0.12))',
+                transition: 'transform 0.3s ease',
               }}
+              className="brand-logo-img"
             />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                borderLeft: '1px solid rgba(107, 29, 47, 0.14)',
+                paddingLeft: '0.9rem',
+              }}
+              className="brand-text-block"
+            >
               <span
                 className="font-royal"
                 style={{
                   fontSize: '1.25rem',
                   fontWeight: 800,
-                  color: 'var(--maroon-800)',
-                  letterSpacing: '0.12em',
+                  color: 'var(--maroon-900)',
+                  letterSpacing: '0.14em',
                   lineHeight: 1.1,
                 }}
               >
@@ -118,151 +137,179 @@ export default function Header({ currentView, setCurrentView }) {
               </span>
               <span
                 style={{
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.18em',
-                  color: '#8c6913',
-                  fontWeight: 600,
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.22em',
+                  color: '#9e7920',
+                  fontWeight: 700,
                   textTransform: 'uppercase',
+                  marginTop: '0.15rem',
                 }}
               >
-                by Komal • Ethnic Couture
+                by Komal • Couture
               </span>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Center: Desktop Navigation Bar */}
           <nav
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1.5rem',
+              gap: '1.9rem',
             }}
             className="desktop-nav"
           >
-            {displayCategories.slice(0, 7).map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => handleCategoryClick(cat.value)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '0.9rem',
-                  fontWeight: selectedCategory === cat.value ? 700 : 500,
-                  color: selectedCategory === cat.value ? 'var(--maroon-800)' : 'var(--text-medium)',
-                  cursor: 'pointer',
-                  padding: '0.4rem 0',
-                  position: 'relative',
-                  transition: 'color 0.2s',
-                }}
-              >
-                {cat.label}
-                {selectedCategory === cat.value && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '20%',
-                      right: '20%',
-                      height: '2px',
-                      backgroundColor: 'var(--gold-500)',
-                      borderRadius: '2px',
-                    }}
-                  />
-                )}
-              </button>
-            ))}
+            {displayCategories.map((cat) => {
+              const isSelected = selectedCategory === cat.value;
+              return (
+                <button
+                  key={cat.value}
+                  onClick={() => handleCategoryClick(cat.value)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '0.88rem',
+                    fontWeight: isSelected ? 700 : 500,
+                    color: isSelected ? 'var(--maroon-800)' : '#443538',
+                    cursor: 'pointer',
+                    padding: '0.55rem 0',
+                    position: 'relative',
+                    letterSpacing: '0.03em',
+                    transition: 'color 0.25s ease',
+                  }}
+                  className="nav-link-btn"
+                >
+                  {cat.label}
+                  {isSelected && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '2px',
+                        background: 'linear-gradient(90deg, #d4af37 0%, #b8912e 100%)',
+                        borderRadius: '2px',
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
 
             <button
               onClick={handleStoryClick}
               style={{
                 background: 'none',
                 border: 'none',
-                fontSize: '0.9rem',
+                fontSize: '0.88rem',
                 fontWeight: 500,
-                color: 'var(--text-medium)',
+                color: '#443538',
                 cursor: 'pointer',
-                padding: '0.4rem 0',
+                padding: '0.55rem 0',
+                letterSpacing: '0.03em',
+                transition: 'color 0.25s ease',
               }}
+              className="nav-link-btn"
             >
               Our Story
             </button>
           </nav>
 
-          {/* Right Action Icons & Admin portal */}
+          {/* Right: Sleek Search, Wishlist, Cart & Admin Pill */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
             
-            {/* Search Toggle / Box */}
-            <div style={{ position: 'relative' }}>
-              <div
+            {/* Minimal Luxury Search Bar */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: searchFocused ? '#ffffff' : 'rgba(255, 255, 255, 0.85)',
+                border: searchFocused ? '1.5px solid #d4af37' : '1px solid rgba(107, 29, 47, 0.16)',
+                borderRadius: 'var(--radius-full)',
+                padding: '0.42rem 0.95rem',
+                gap: '0.5rem',
+                boxShadow: searchFocused ? '0 0 0 3px rgba(212, 175, 55, 0.16)' : 'none',
+                transition: 'all 0.25s ease',
+              }}
+              className="desktop-search-box"
+            >
+              <Search size={15} color="var(--maroon-700)" />
+              <input
+                type="text"
+                placeholder="Search kurtas, suits..."
+                value={searchQuery}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: '#ffffff',
-                  border: '1px solid rgba(107, 29, 47, 0.18)',
-                  borderRadius: 'var(--radius-full)',
-                  padding: '0.35rem 0.8rem',
-                  gap: '0.4rem',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '0.83rem',
+                  width: searchFocused ? '170px' : '135px',
+                  backgroundColor: 'transparent',
+                  color: 'var(--text-dark)',
+                  transition: 'width 0.25s ease',
                 }}
-                className="desktop-search-box"
-              >
-                <Search size={16} color="var(--maroon-700)" />
-                <input
-                  type="text"
-                  placeholder="Search kurtas, lehengas..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
                   style={{
+                    background: 'none',
                     border: 'none',
-                    outline: 'none',
-                    fontSize: '0.82rem',
-                    width: '150px',
-                    backgroundColor: 'transparent',
-                    color: 'var(--text-dark)',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem',
+                    color: '#888',
+                    padding: '0 0.15rem',
                   }}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: '#999' }}
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
+                  title="Clear search"
+                >
+                  ×
+                </button>
+              )}
             </div>
 
-            {/* Wishlist Icon */}
+            {/* Wishlist Circular Button */}
             <button
               onClick={() => {
                 alert(`You have ${wishlist.length} saved favorites in your Wishlist!`);
               }}
               style={{
                 position: 'relative',
-                background: 'none',
-                border: 'none',
+                background: '#ffffff',
+                border: '1px solid rgba(107, 29, 47, 0.14)',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: 'pointer',
                 color: 'var(--maroon-800)',
-                padding: '0.4rem',
+                transition: 'all 0.2s ease',
               }}
+              className="action-icon-btn"
               title="My Wishlist"
             >
-              <Heart size={21} />
+              <Heart size={18} color="var(--maroon-800)" />
               {wishlist.length > 0 && (
                 <span
                   style={{
                     position: 'absolute',
-                    top: '2px',
-                    right: '0',
+                    top: '-3px',
+                    right: '-3px',
                     backgroundColor: 'var(--maroon-700)',
                     color: '#ffffff',
-                    fontSize: '0.65rem',
-                    fontWeight: 700,
-                    width: '16px',
-                    height: '16px',
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    width: '17px',
+                    height: '17px',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    border: '1.5px solid #ffffff',
                   }}
                 >
                   {wishlist.length}
@@ -270,36 +317,38 @@ export default function Header({ currentView, setCurrentView }) {
               )}
             </button>
 
-            {/* Shopping Bag Button */}
+            {/* Shopping Bag Luxury Pill */}
             <button
               onClick={() => setCartOpen(true)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'var(--maroon-50)',
-                border: '1px solid rgba(107, 29, 47, 0.2)',
+                gap: '0.6rem',
+                backgroundColor: '#ffffff',
+                border: '1px solid rgba(107, 29, 47, 0.18)',
                 borderRadius: 'var(--radius-full)',
-                padding: '0.4rem 0.9rem',
+                padding: '0.42rem 1rem',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 10px rgba(107, 29, 47, 0.04)',
               }}
+              className="action-cart-btn"
               title="Shopping Bag"
             >
-              <div style={{ position: 'relative' }}>
-                <ShoppingBag size={20} color="var(--maroon-800)" />
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <ShoppingBag size={18} color="var(--maroon-800)" />
                 {cartCount > 0 && (
                   <span
                     style={{
                       position: 'absolute',
-                      top: '-6px',
+                      top: '-7px',
                       right: '-8px',
                       backgroundColor: 'var(--maroon-800)',
                       color: '#ffffff',
-                      fontSize: '0.65rem',
-                      fontWeight: 700,
-                      width: '17px',
-                      height: '17px',
+                      fontSize: '0.62rem',
+                      fontWeight: 800,
+                      width: '16px',
+                      height: '16px',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
@@ -323,19 +372,29 @@ export default function Header({ currentView, setCurrentView }) {
               </span>
             </button>
 
-            {/* Switch to Admin Portal Button */}
+            {/* Discreet Luxury Admin Concierge Badge */}
             <button
               onClick={() => setCurrentView(currentView === 'admin' ? 'shop' : 'admin')}
-              className={currentView === 'admin' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'}
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                backgroundColor: currentView === 'admin' ? 'var(--maroon-800)' : 'rgba(212, 175, 55, 0.08)',
+                color: currentView === 'admin' ? '#ffffff' : 'var(--maroon-900)',
+                border: '1px solid rgba(212, 175, 55, 0.45)',
+                borderRadius: 'var(--radius-full)',
+                padding: '0.42rem 0.9rem',
                 fontSize: '0.78rem',
-                padding: '0.45rem 0.85rem',
-                gap: '0.35rem',
+                fontWeight: 600,
+                letterSpacing: '0.04em',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
               }}
+              className="admin-badge-btn"
               title="Admin Portal"
             >
               <ShieldCheck size={14} color="#d4af37" />
-              <span>{currentView === 'admin' ? 'View Store' : 'Admin Panel'}</span>
+              <span>{currentView === 'admin' ? 'Storefront' : 'Admin'}</span>
             </button>
           </div>
         </div>
@@ -344,22 +403,23 @@ export default function Header({ currentView, setCurrentView }) {
         {mobileMenuOpen && (
           <div
             style={{
-              padding: '1rem 0',
+              padding: '1.25rem 0',
               borderTop: '1px solid rgba(107, 29, 47, 0.1)',
-              marginTop: '0.6rem',
+              marginTop: '0.85rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.75rem',
+              gap: '0.85rem',
+              animation: 'fadeIn 0.25s ease-out',
             }}
           >
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.4rem' }}>
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search kurtas, suits..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="form-input"
-                style={{ padding: '0.5rem 0.8rem', fontSize: '0.85rem' }}
+                style={{ padding: '0.6rem 0.95rem', fontSize: '0.88rem' }}
               />
             </div>
             {displayCategories.map((cat) => (
@@ -373,7 +433,7 @@ export default function Header({ currentView, setCurrentView }) {
                   fontSize: '0.95rem',
                   fontWeight: selectedCategory === cat.value ? 700 : 500,
                   color: selectedCategory === cat.value ? 'var(--maroon-800)' : 'var(--text-dark)',
-                  padding: '0.3rem 0',
+                  padding: '0.4rem 0',
                 }}
               >
                 {cat.label}
@@ -388,7 +448,7 @@ export default function Header({ currentView, setCurrentView }) {
                 fontSize: '0.95rem',
                 fontWeight: 500,
                 color: 'var(--text-dark)',
-                padding: '0.3rem 0',
+                padding: '0.4rem 0',
               }}
             >
               Our Story
@@ -398,11 +458,36 @@ export default function Header({ currentView, setCurrentView }) {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
+        .brand-logo-img:hover {
+          transform: scale(1.04);
+        }
+        .nav-link-btn:hover {
+          color: var(--maroon-800) !important;
+        }
+        .action-icon-btn:hover {
+          background-color: var(--maroon-50) !important;
+          border-color: rgba(107, 29, 47, 0.3) !important;
+          transform: translateY(-1px);
+        }
+        .action-cart-btn:hover {
+          background-color: var(--maroon-50) !important;
+          border-color: rgba(107, 29, 47, 0.35) !important;
+          transform: translateY(-1px);
+        }
+        .admin-badge-btn:hover {
+          background-color: var(--maroon-800) !important;
+          color: #ffffff !important;
+          border-color: var(--maroon-800) !important;
+          transform: translateY(-1px);
+        }
+        @media (max-width: 990px) {
           .desktop-nav { display: none !important; }
           .desktop-search-box { display: none !important; }
           .mobile-toggle-btn { display: block !important; }
           .cart-subtotal-text { display: none !important; }
+        }
+        @media (max-width: 580px) {
+          .brand-text-block { display: none !important; }
         }
       `}</style>
     </header>

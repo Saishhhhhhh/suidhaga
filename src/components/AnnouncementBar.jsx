@@ -28,11 +28,11 @@ export default function AnnouncementBar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <Sparkles size={14} color="#d4af37" />
           <span>
-            <strong>Festive Heritage Edit:</strong> Use code <strong style={{ color: '#d4af37' }}>SUIDHAGA10</strong> for 10% Off
+            <strong>Shubh Deepavali Celebration:</strong> Flat <strong>15% OFF</strong> with code <strong style={{ color: '#d4af37', letterSpacing: '0.05em' }}>DIWALI15</strong>
           </span>
           <span style={{ opacity: 0.5 }}>|</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-            <Truck size={13} color="#e5c378" /> Free Shipping above ₹1999
+            <Truck size={13} color="#e5c378" /> Free Shipping above ₹1999 across India
           </span>
         </div>
 

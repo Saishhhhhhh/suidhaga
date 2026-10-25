@@ -156,7 +156,11 @@ export const ShopProvider = ({ children }) => {
 
   const applyCoupon = (code) => {
     const clean = code.trim().toUpperCase();
-    if (clean === 'SUIDHAGA10') {
+    if (clean === 'DIWALI15') {
+      setAppliedCoupon({ code: clean, percent: 15 });
+      showNotification('🪔 Diwali Special Coupon Applied! 15% discount added.');
+      return true;
+    } else if (clean === 'SUIDHAGA10') {
       setAppliedCoupon({ code: clean, percent: 10 });
       showNotification('Coupon applied! 10% Festive discount added.');
       return true;
@@ -165,7 +169,7 @@ export const ShopProvider = ({ children }) => {
       showNotification('VIP Coupon applied! 20% Founder discount added.');
       return true;
     } else {
-      showNotification('Invalid or expired coupon code. Try SUIDHAGA10', 'error');
+      showNotification('Invalid coupon. Try DIWALI15 or SUIDHAGA10', 'error');
       return false;
     }
   };

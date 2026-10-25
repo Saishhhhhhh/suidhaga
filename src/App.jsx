@@ -3,6 +3,7 @@ import { ShopProvider, useShop } from './context/ShopContext';
 import AnnouncementBar from './components/AnnouncementBar';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
+import DiwaliBanner from './components/DiwaliBanner';
 import CollectionGrid from './components/CollectionGrid';
 import ProductCatalog from './components/ProductCatalog';
 import FounderStory from './components/FounderStory';
@@ -122,6 +123,7 @@ function MainApp() {
           
           <main style={{ flexGrow: 1 }}>
             <HeroSection />
+            <DiwaliBanner />
             <CollectionGrid />
             <ProductCatalog />
             <FounderStory />
