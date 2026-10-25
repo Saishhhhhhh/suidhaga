@@ -136,24 +136,7 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
           </button>
         </form>
 
-        {/* Demo Credentials Hint */}
-        <div
-          style={{
-            marginTop: '1.5rem',
-            padding: '0.8rem',
-            backgroundColor: 'var(--ivory-surface)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.75rem',
-            color: 'var(--text-muted)',
-            textAlign: 'center',
-            border: '1px dashed var(--border-delicate)',
-          }}
-        >
-          <div><strong>Default Admin Credentials:</strong></div>
-          <div>Email: <code>admin@suidhaga.com</code> | Password: <code>admin123</code></div>
-        </div>
-
-        <div style={{ textAlign: 'center', marginTop: '1.25rem' }}>
+        <div style={{ textAlign: 'center', marginTop: '1.75rem' }}>
           <button
             onClick={onBackToStore}
             style={{ background: 'none', border: 'none', color: 'var(--maroon-800)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}

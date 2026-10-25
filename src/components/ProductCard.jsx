@@ -103,38 +103,69 @@ export default function ProductCard({ product, onOpenProduct }) {
           )}
         </div>
 
-        {/* Wishlist Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleWishlist(product._id);
-          }}
+        {/* Floating Top Right Actions (Wishlist + WhatsApp) */}
+        <div
           style={{
             position: 'absolute',
-            top: '0.75rem',
-            right: '0.75rem',
-            background: 'rgba(255, 255, 255, 0.85)',
-            backdropFilter: 'blur(4px)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
+            top: '0.65rem',
+            right: '0.65rem',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            zIndex: 2,
-            transition: 'all 0.2s',
+            flexDirection: 'column',
+            gap: '0.45rem',
+            zIndex: 3,
           }}
-          title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
         >
-          <Heart
-            size={18}
-            color={isWishlisted ? '#c23b4b' : '#6b1d2f'}
-            fill={isWishlisted ? '#c23b4b' : 'none'}
-          />
-        </button>
+          {/* Wishlist Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleWishlist(product._id);
+            }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.92)',
+              backdropFilter: 'blur(4px)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              transition: 'all 0.2s',
+            }}
+            title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+          >
+            <Heart
+              size={16}
+              color={isWishlisted ? '#c23b4b' : '#6b1d2f'}
+              fill={isWishlisted ? '#c23b4b' : 'none'}
+            />
+          </button>
+
+          {/* WhatsApp Enquiry Button */}
+          <button
+            onClick={handleWhatsAppEnquiry}
+            style={{
+              background: 'rgba(255, 255, 255, 0.92)',
+              backdropFilter: 'blur(4px)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              transition: 'all 0.2s',
+            }}
+            title="Chat on WhatsApp about this outfit"
+          >
+            <MessageCircle size={16} color="#25D366" />
+          </button>
+        </div>
 
         {/* Quick View Overlay on Hover */}
         <button
@@ -169,14 +200,14 @@ export default function ProductCard({ product, onOpenProduct }) {
       </div>
 
       {/* Product Details */}
-      <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <div className="product-card-details" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         
         {/* Category & Fabric */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8c6913', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#8c6913', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             {product.category}
           </span>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
             {product.fabric || 'Pure Silk Blend'}
           </span>
         </div>
@@ -184,13 +215,10 @@ export default function ProductCard({ product, onOpenProduct }) {
         {/* Title */}
         <h3
           onClick={handleClickProduct}
-          className="font-display"
+          className="font-display product-card-title"
           style={{
-            fontSize: '1.05rem',
             fontWeight: 600,
             color: 'var(--text-dark)',
-            lineHeight: 1.35,
-            marginBottom: '0.5rem',
             cursor: 'pointer',
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -202,22 +230,22 @@ export default function ProductCard({ product, onOpenProduct }) {
         </h3>
 
         {/* Rating stars */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.5rem' }}>
           <div style={{ display: 'flex', gap: '2px' }}>
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={13} fill="#d4af37" color="#d4af37" />
+              <Star key={i} size={12} fill="#d4af37" color="#d4af37" />
             ))}
           </div>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>(4.9)</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>(4.9)</span>
         </div>
 
         {/* Price & MRP */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', marginBottom: '1rem' }}>
-          <span style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--maroon-800)' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.65rem', flexWrap: 'wrap' }}>
+          <span className="product-card-price" style={{ fontWeight: 800, color: 'var(--maroon-800)' }}>
             ₹{product.price.toLocaleString('en-IN')}
           </span>
           {product.originalPrice > product.price && (
-            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
               ₹{product.originalPrice.toLocaleString('en-IN')}
             </span>
           )}
@@ -225,23 +253,20 @@ export default function ProductCard({ product, onOpenProduct }) {
 
         {/* Size Selector */}
         {product.sizes && product.sizes.length > 0 && (
-          <div style={{ marginBottom: '1.1rem' }}>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
+          <div style={{ marginBottom: '0.75rem' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '0.25rem', fontWeight: 600 }}>
               Select Size:
             </div>
-            <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
               {product.sizes.map((sz) => (
                 <button
                   key={sz}
                   onClick={() => setSelectedSize(sz)}
+                  className="product-card-size-btn"
                   style={{
                     border: selectedSize === sz ? '1.5px solid var(--maroon-800)' : '1px solid #dcd4ce',
                     backgroundColor: selectedSize === sz ? 'var(--maroon-800)' : '#ffffff',
                     color: selectedSize === sz ? '#ffffff' : 'var(--text-dark)',
-                    borderRadius: '4px',
-                    padding: '0.2rem 0.55rem',
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
                     cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
@@ -253,51 +278,63 @@ export default function ProductCard({ product, onOpenProduct }) {
           </div>
         )}
 
-        {/* Actions Button Row */}
-        <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem' }}>
+        {/* Action Button Row */}
+        <div style={{ marginTop: 'auto', paddingTop: '0.4rem' }}>
           <button
             onClick={() => !isSoldOut && addToCart(product, selectedSize, 1)}
             disabled={isSoldOut}
-            className="btn btn-primary btn-sm"
+            className="product-card-add-btn"
             style={{
-              flexGrow: 1,
-              padding: '0.65rem 0.8rem',
-              opacity: isSoldOut ? 0.65 : 1,
-              cursor: isSoldOut ? 'not-allowed' : 'pointer',
-              backgroundColor: isSoldOut ? '#4b5563' : undefined,
-              borderColor: isSoldOut ? '#4b5563' : undefined,
-            }}
-          >
-            <ShoppingBag size={15} />
-            <span>{isSoldOut ? 'Sold Out' : 'Add to Bag'}</span>
-          </button>
-
-          <button
-            onClick={handleWhatsAppEnquiry}
-            style={{
-              backgroundColor: '#25D366',
+              width: '100%',
+              backgroundColor: isSoldOut ? '#6b7280' : 'var(--maroon-800)',
               color: '#ffffff',
               border: 'none',
-              borderRadius: 'var(--radius-full)',
-              width: '38px',
-              height: '38px',
+              cursor: isSoldOut ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              cursor: 'pointer',
-              flexShrink: 0,
-              boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)',
-              transition: 'transform 0.2s',
+              gap: '0.45rem',
+              transition: 'background-color 0.2s ease, transform 0.15s ease',
             }}
-            title="Enquire on WhatsApp"
           >
-            <MessageCircle size={18} />
+            <ShoppingBag size={14} />
+            <span>{isSoldOut ? 'Sold Out' : 'Add to Bag'}</span>
           </button>
         </div>
 
       </div>
 
       <style>{`
+        .product-card-details {
+          padding: 1.15rem;
+        }
+        .product-card-title {
+          font-size: 1rem;
+          line-height: 1.3;
+          margin-bottom: 0.4rem;
+          min-height: 2.6em;
+        }
+        .product-card-price {
+          font-size: 1.25rem;
+        }
+        .product-card-size-btn {
+          border-radius: 4px;
+          padding: 0.2rem 0.55rem;
+          font-size: 0.72rem;
+          font-weight: 700;
+          min-width: 28px;
+        }
+        .product-card-add-btn {
+          height: 38px;
+          border-radius: 6px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          white-space: nowrap;
+          box-shadow: 0 2px 8px rgba(107, 29, 47, 0.2);
+        }
+        .product-card-add-btn:active {
+          transform: scale(0.98);
+        }
         .card-luxury:hover .product-img {
           transform: scale(1.05);
         }
@@ -307,6 +344,35 @@ export default function ProductCard({ product, onOpenProduct }) {
         }
         .card-luxury:hover .quick-view-overlay-btn {
           opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+          .product-card-details {
+            padding: 0.75rem 0.6rem !important;
+          }
+          .product-card-title {
+            font-size: 0.86rem !important;
+            line-height: 1.25 !important;
+            margin-bottom: 0.3rem !important;
+            min-height: 2.4em !important;
+          }
+          .product-card-price {
+            font-size: 1.1rem !important;
+          }
+          .product-card-size-btn {
+            padding: 0.15rem 0.4rem !important;
+            font-size: 0.68rem !important;
+            min-width: 24px !important;
+          }
+          .product-card-add-btn {
+            height: 36px !important;
+            font-size: 0.78rem !important;
+            padding: 0 0.4rem !important;
+            border-radius: 4px !important;
+          }
+          .quick-view-overlay-btn {
+            display: none !important;
+          }
         }
       `}</style>
     </div>
