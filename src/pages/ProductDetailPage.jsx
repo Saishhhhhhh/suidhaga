@@ -29,7 +29,9 @@ export default function ProductDetailPage({
   // Find product from list or fallback
   const product = products.find((p) => p._id === productId) || products[0];
 
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(
+    product?.images?.[0] || '/assets/maroon_anarkali.jpg'
+  );
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
