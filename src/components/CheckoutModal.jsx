@@ -507,15 +507,15 @@ export default function CheckoutModal() {
                 {/* Payment Selection */}
                 <div style={{ marginBottom: '1.5rem' }}>
                   <div style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.6rem' }}>Select Payment Method:</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     
-                    {/* PhonePe Option (Highlighted) */}
+                    {/* PhonePe Option (Highlighted & Recommended) */}
                     <label
                       style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        padding: '0.75rem 0.9rem',
+                        padding: '0.85rem 1rem',
                         backgroundColor: formData.paymentMethod === 'PHONEPE' ? '#fbf8ff' : '#ffffff',
                         border: formData.paymentMethod === 'PHONEPE' ? '2px solid #5f259f' : '1px solid #dcd1c6',
                         borderRadius: 'var(--radius-sm)',
@@ -525,7 +525,7 @@ export default function CheckoutModal() {
                         boxShadow: formData.paymentMethod === 'PHONEPE' ? '0 3px 12px rgba(95, 37, 159, 0.12)' : 'none',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <input
                           type="radio"
                           name="paymentMethod"
@@ -535,16 +535,18 @@ export default function CheckoutModal() {
                           style={{ accentColor: '#5f259f' }}
                         />
                         <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            <span style={{ fontWeight: 800, color: '#5f259f', fontSize: '0.92rem' }}>PhonePe</span>
-                            <span style={{ backgroundColor: '#5f259f', color: '#ffffff', fontSize: '0.62rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '3px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.15rem' }}>
+                            <span style={{ fontWeight: 800, color: '#5f259f', fontSize: '0.95rem' }}>PhonePe Payment Gateway</span>
+                            <span style={{ backgroundColor: '#5f259f', color: '#ffffff', fontSize: '0.62rem', fontWeight: 700, padding: '0.15rem 0.45rem', borderRadius: '3px' }}>
                               RECOMMENDED
                             </span>
                           </div>
-                          <div style={{ fontSize: '0.74rem', color: '#666' }}>UPI QR Code, PhonePe App, NetBanking & Cards</div>
+                          <div style={{ fontSize: '0.75rem', color: '#666' }}>
+                            Google Pay, PhonePe, Paytm, Any UPI App, QR Code, Cards & NetBanking
+                          </div>
                         </div>
                       </div>
-                      <div style={{ width: '28px', height: '28px', backgroundColor: '#5f259f', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>
+                      <div style={{ width: '30px', height: '30px', backgroundColor: '#5f259f', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: '0.92rem' }}>
                         पे
                       </div>
                     </label>
@@ -554,13 +556,14 @@ export default function CheckoutModal() {
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.65rem',
-                        padding: '0.65rem 0.9rem',
-                        backgroundColor: '#ffffff',
+                        gap: '0.75rem',
+                        padding: '0.85rem 1rem',
+                        backgroundColor: formData.paymentMethod === 'COD' ? '#fef8f8' : '#ffffff',
                         border: formData.paymentMethod === 'COD' ? '2px solid var(--maroon-800)' : '1px solid #dcd1c6',
                         borderRadius: 'var(--radius-sm)',
                         cursor: 'pointer',
                         fontSize: '0.85rem',
+                        transition: 'all 0.2s',
                       }}
                     >
                       <input
@@ -569,37 +572,11 @@ export default function CheckoutModal() {
                         value="COD"
                         checked={formData.paymentMethod === 'COD'}
                         onChange={handleChange}
+                        style={{ accentColor: 'var(--maroon-800)' }}
                       />
                       <div>
-                        <strong>Cash on Delivery (COD)</strong>
-                        <div style={{ fontSize: '0.74rem', color: '#666' }}>Pay in cash or UPI when package is delivered</div>
-                      </div>
-                    </label>
-
-                    {/* General UPI */}
-                    <label
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.65rem',
-                        padding: '0.65rem 0.9rem',
-                        backgroundColor: '#ffffff',
-                        border: formData.paymentMethod === 'UPI' ? '2px solid var(--maroon-800)' : '1px solid #dcd1c6',
-                        borderRadius: 'var(--radius-sm)',
-                        cursor: 'pointer',
-                        fontSize: '0.85rem',
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="UPI"
-                        checked={formData.paymentMethod === 'UPI'}
-                        onChange={handleChange}
-                      />
-                      <div>
-                        <strong>Google Pay / Other UPI</strong>
-                        <div style={{ fontSize: '0.74rem', color: '#666' }}>Pay via any alternative UPI handle</div>
+                        <strong style={{ fontSize: '0.9rem' }}>Cash on Delivery (COD)</strong>
+                        <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.1rem' }}>Pay in cash or UPI upon home delivery</div>
                       </div>
                     </label>
 
