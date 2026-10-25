@@ -3,6 +3,7 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { verifyAdmin } = require('../middleware/auth');
+const { sendOrderNotificationToAdmin } = require('../services/emailService');
 
 // POST /api/orders - Customer places an order
 router.post('/', async (req, res) => {
@@ -44,6 +45,11 @@ router.post('/', async (req, res) => {
     });
 
     const savedOrder = await order.save();
+
+    // Trigger email notification to Komal (sahamatekomal@gmail.com)
+    sendOrderNotificationToAdmin(savedOrder).catch((err) =>
+      console.warn('Background order email notice:', err.message)
+    );
 
     // Deduct stock for each item
     for (const item of items) {

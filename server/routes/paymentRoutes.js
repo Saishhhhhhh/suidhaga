@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const phonepeService = require('../services/phonepeService');
+const { sendOrderNotificationToAdmin } = require('../services/emailService');
 
 /**
  * Public PhonePe Gateway Configuration
@@ -124,6 +125,11 @@ router.get('/phonepe/status/:orderId', async (req, res) => {
           order.phonePeTransactionId = statusResult.orderId || 'SUCCESS';
         }
         await order.save();
+
+        // Send order notification email to Komal
+        sendOrderNotificationToAdmin(order).catch((err) =>
+          console.warn('Background PhonePe order email notice:', err.message)
+        );
       } else if (statusResult.state === 'FAILED') {
         order.paymentStatus = 'Failed';
         await order.save();

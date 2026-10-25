@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus, Layers, UserCog } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus, Layers, UserCog, MessageSquare } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
@@ -7,6 +7,7 @@ import AdminCategories from './AdminCategories';
 import AdminWordpressImport from './AdminWordpressImport';
 import AdminPhonePe from './AdminPhonePe';
 import AdminHeroSettings from './AdminHeroSettings';
+import AdminInquiries from './AdminInquiries';
 import AdminProfileModal from './AdminProfileModal';
 import ProductFormModal from './ProductFormModal';
 
@@ -86,6 +87,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
     { id: 'categories', label: 'Categories & Options', icon: Layers },
     { id: 'products', label: 'Products & Inventory', icon: Package, count: products.length },
     { id: 'orders', label: 'Customer Orders', icon: ShoppingBag },
+    { id: 'inquiries', label: 'Contact Messages', icon: MessageSquare },
     { id: 'phonepe', label: 'PhonePe Gateway', icon: ShieldCheck },
     { id: 'wordpress', label: 'WordPress Importer', icon: Globe },
   ];
@@ -361,6 +363,10 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
 
           {activeTab === 'orders' && (
             <AdminOrders token={token} />
+          )}
+
+          {activeTab === 'inquiries' && (
+            <AdminInquiries token={token} />
           )}
 
           {activeTab === 'phonepe' && (

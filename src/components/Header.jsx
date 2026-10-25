@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, ShoppingBag, Heart, ShieldCheck, Menu, X, ArrowRight } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function Header({ currentView, onNavigateHome, onOpenCategory, onOpenStory, activeCategory }) {
+export default function Header({ currentView, onNavigateHome, onOpenCategory, onOpenStory, onOpenContact, activeCategory }) {
   const {
     cartCount,
     setCartOpen,
@@ -16,18 +16,25 @@ export default function Header({ currentView, onNavigateHome, onOpenCategory, on
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Clean 4 brand collections
+  // Clean brand collections & pages
   const navLinks = [
     { label: 'Ethnic Wear', value: 'Ethnic Wear' },
     { label: 'Travel Ready', value: 'Travel Ready' },
     { label: 'Shirts', value: 'Shirts' },
     { label: 'Indo-Western', value: 'Indo-Western' },
     { label: 'Our Story', value: 'story' },
+    { label: 'Contact', value: 'contact' },
   ];
 
   const handleNavClick = (link) => {
     setMobileMenuOpen(false);
-    if (link.value === 'story') {
+    if (link.value === 'contact') {
+      if (onOpenContact) {
+        onOpenContact();
+      } else {
+        window.location.href = '/contact-us';
+      }
+    } else if (link.value === 'story') {
       if (onOpenStory) {
         onOpenStory();
       } else {
@@ -121,6 +128,8 @@ export default function Header({ currentView, onNavigateHome, onOpenCategory, on
               const isSelected =
                 item.value === 'story'
                   ? currentView === 'story'
+                  : item.value === 'contact'
+                  ? currentView === 'contact'
                   : currentView === 'category'
                   ? activeCategory === item.value
                   : false;

@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Heart, Sparkles, Send, ShieldCheck, Truck, RotateC
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
-export default function Footer({ setCurrentView, onOpenCategory }) {
+export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, onOpenContact }) {
   const { setSelectedCategory, setOrderTrackerOpen } = useShop();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -189,6 +189,24 @@ export default function Footer({ setCurrentView, onOpenCategory }) {
                   Track Your Order ➔
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => onOpenContact ? onOpenContact() : (window.location.href = '/contact-us')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#e5d7d0',
+                    cursor: 'pointer',
+                    padding: 0,
+                    textAlign: 'left',
+                    fontSize: '0.88rem',
+                    transition: 'color 0.2s',
+                  }}
+                  className="footer-link-btn"
+                >
+                  Contact Us & Atelier Studio
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -225,7 +243,7 @@ export default function Footer({ setCurrentView, onOpenCategory }) {
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
                 <MapPin size={16} color="#d4af37" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span>Atelier Studio, Mumbai, Maharashtra, India</span>
+                <span>Atelier Studio, Vasai – Virar (East), Maharashtra, India</span>
               </div>
             </div>
           </div>
@@ -290,14 +308,46 @@ export default function Footer({ setCurrentView, onOpenCategory }) {
           <div>
             © {new Date().getFullYear()} <strong>SUI-DHAGA by Komal</strong>. All Rights Reserved. Crafted with care in India.
           </div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-            <span>Shipping & Returns</span>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => onOpenPolicy ? onOpenPolicy('privacy') : (window.location.href = '/privacy-policy')}
+              style={{ background: 'none', border: 'none', color: '#c2b3ab', cursor: 'pointer', fontSize: '0.78rem', padding: 0 }}
+              className="policy-link-btn"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => onOpenPolicy ? onOpenPolicy('terms') : (window.location.href = '/terms-and-conditions')}
+              style={{ background: 'none', border: 'none', color: '#c2b3ab', cursor: 'pointer', fontSize: '0.78rem', padding: 0 }}
+              className="policy-link-btn"
+            >
+              Terms and Conditions
+            </button>
+            <button
+              onClick={() => onOpenPolicy ? onOpenPolicy('returns') : (window.location.href = '/return-policy')}
+              style={{ background: 'none', border: 'none', color: '#c2b3ab', cursor: 'pointer', fontSize: '0.78rem', padding: 0 }}
+              className="policy-link-btn"
+            >
+              Return, Exchange & Shipping
+            </button>
+            <button
+              onClick={() => onOpenContact ? onOpenContact() : (window.location.href = '/contact-us')}
+              style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer', fontSize: '0.78rem', padding: 0, fontWeight: 700 }}
+              className="policy-link-btn"
+            >
+              Contact Us
+            </button>
           </div>
         </div>
 
       </div>
+
+      <style>{`
+        .policy-link-btn:hover, .footer-link-btn:hover {
+          color: #ffffff !important;
+          text-decoration: underline;
+        }
+      `}</style>
     </footer>
   );
 }

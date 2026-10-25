@@ -19,6 +19,8 @@ import AdminLogin from './components/admin/AdminLogin';
 import CategoryPage from './pages/CategoryPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import PaymentCallbackPage from './pages/PaymentCallbackPage';
+import PolicyPage from './pages/PolicyPage';
+import ContactPage from './pages/ContactPage';
 import { getProductSlug } from './utils/slug';
 
 const slugToCategory = {
@@ -39,7 +41,7 @@ function parseCurrentRoute() {
   const path = window.location.pathname;
   if (path.startsWith('/admin')) {
     const rawTab = path.replace(/^\/admin\/?/, '').split('/')[0] || '';
-    const validTabs = ['overview', 'hero', 'categories', 'products', 'orders', 'phonepe', 'wordpress'];
+    const validTabs = ['overview', 'hero', 'categories', 'products', 'orders', 'phonepe', 'wordpress', 'inquiries'];
     const adminTab = validTabs.includes(rawTab) ? rawTab : 'overview';
     return { view: 'admin', adminTab };
   }
@@ -54,6 +56,18 @@ function parseCurrentRoute() {
   }
   if (path.startsWith('/payment-callback') || path.startsWith('/payment-status')) {
     return { view: 'payment-callback' };
+  }
+  if (path.startsWith('/privacy-policy')) {
+    return { view: 'policy', policyType: 'privacy' };
+  }
+  if (path.startsWith('/terms-and-conditions') || path.startsWith('/terms')) {
+    return { view: 'policy', policyType: 'terms' };
+  }
+  if (path.startsWith('/return-policy') || path.startsWith('/shipping-policy') || path.startsWith('/returns')) {
+    return { view: 'policy', policyType: 'returns' };
+  }
+  if (path.startsWith('/contact-us') || path.startsWith('/contact')) {
+    return { view: 'contact' };
   }
   if (path.startsWith('/our-story') || path.startsWith('/story')) {
     return { view: 'story' };
@@ -128,6 +142,24 @@ function MainApp() {
   const navigateToStory = () => {
     window.history.pushState({}, '', '/our-story');
     setRoute({ view: 'story' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToPolicy = (policyType = 'privacy') => {
+    const pathMap = {
+      privacy: '/privacy-policy',
+      terms: '/terms-and-conditions',
+      returns: '/return-policy',
+    };
+    const targetUrl = pathMap[policyType] || '/privacy-policy';
+    window.history.pushState({}, '', targetUrl);
+    setRoute({ view: 'policy', policyType });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToContact = () => {
+    window.history.pushState({}, '', '/contact-us');
+    setRoute({ view: 'contact' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -207,10 +239,19 @@ function MainApp() {
             onNavigateHome={navigateToHome}
             onOpenCategory={navigateToCategory}
             onOpenStory={navigateToStory}
+            onOpenContact={navigateToContact}
           />
           
           <main style={{ flexGrow: 1 }}>
-            {route.view === 'payment-callback' ? (
+            {route.view === 'policy' ? (
+              <PolicyPage
+                type={route.policyType || 'privacy'}
+                onSelectType={(t) => navigateToPolicy(t)}
+                onBackToHome={navigateToHome}
+              />
+            ) : route.view === 'contact' ? (
+              <ContactPage onBackToHome={navigateToHome} />
+            ) : route.view === 'payment-callback' ? (
               <PaymentCallbackPage
                 onNavigateHome={navigateToHome}
                 onOpenTracker={() => setOrderTrackerOpen(true)}
@@ -251,8 +292,10 @@ function MainApp() {
           </main>
 
           <Footer
-            setCurrentView={(v) => v === 'admin' ? navigateToAdmin() : navigateToHome()}
+            setCurrentView={(v) => (v === 'admin' ? navigateToAdmin() : navigateToHome())}
             onOpenCategory={navigateToCategory}
+            onOpenPolicy={navigateToPolicy}
+            onOpenContact={navigateToContact}
           />
 
           {/* Modals & Drawers */}

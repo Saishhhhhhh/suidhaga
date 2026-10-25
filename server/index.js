@@ -11,6 +11,7 @@ const importRoutes = require('./routes/importRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 const Product = require('./models/Product');
 
 const app = express();
@@ -70,6 +71,7 @@ const apiRouters = [
   ['/payment', paymentRoutes],
   ['/upload', uploadRoutes],
   ['/settings', settingsRoutes],
+  ['/contact', contactRoutes],
 ];
 
 apiRouters.forEach(([basePath, router]) => {
