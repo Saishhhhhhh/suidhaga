@@ -21,6 +21,7 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     if (product) {
@@ -108,11 +109,11 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
           };
         });
       } else {
-        alert(resData.message || 'Error uploading images');
+        setFormError(resData.message || 'Error uploading images');
       }
     } catch (err) {
       console.error('Upload error:', err);
-      alert('Failed to upload images. Please check file format.');
+      setFormError('Failed to upload images. Please check file format.');
     } finally {
       setUploading(false);
       e.target.value = '';
@@ -139,8 +140,9 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError('');
     if (!formData.title || !formData.price || !formData.category) {
-      alert('Please fill in Title, Price and Category');
+      setFormError('Please fill in Title, Price and Category');
       return;
     }
 
@@ -174,10 +176,10 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
         onSave();
         onClose();
       } else {
-        alert(data.message || 'Error saving product');
+        setFormError(data.message || 'Error saving product');
       }
     } catch (err) {
-      alert('Failed to save product');
+      setFormError('Failed to save product');
     } finally {
       setLoading(false);
     }
@@ -198,6 +200,23 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
             <X size={22} />
           </button>
         </div>
+
+        {formError && (
+          <div
+            style={{
+              padding: '0.75rem 1rem',
+              backgroundColor: '#fef2f2',
+              border: '1px solid #fecaca',
+              borderRadius: 'var(--radius-sm)',
+              color: '#dc2626',
+              fontSize: '0.88rem',
+              fontWeight: 600,
+              marginBottom: '1.25rem',
+            }}
+          >
+            ⚠️ {formError}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem' }}>

@@ -81,9 +81,6 @@ export default function AdminWordpressImport({ token, onProductUpdated }) {
 
   // 3. One-Click Demo Seed
   const handleSeed = async () => {
-    if (!window.confirm('This will seed the curated Sui-Dhaga luxury Indian ethnic wear collection into MongoDB. Proceed?')) {
-      return;
-    }
 
     setSeedLoading(true);
     setSeedResult(null);

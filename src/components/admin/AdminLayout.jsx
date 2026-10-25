@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus, Layers } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus, Layers, UserCog } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminCategories from './AdminCategories';
 import AdminWordpressImport from './AdminWordpressImport';
 import AdminPhonePe from './AdminPhonePe';
+import AdminHeroSettings from './AdminHeroSettings';
+import AdminProfileModal from './AdminProfileModal';
 import ProductFormModal from './ProductFormModal';
 
 export default function AdminLayout({ adminUser, token, onLogout, onBackToStore, initialTab = 'overview', onNavigateTab }) {
@@ -13,6 +15,10 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
+  const [currentUser, setCurrentUser] = useState(adminUser);
+
+  // Profile modal
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   // Sync state if initialTab changes (e.g. from browser back/forward or route update)
   useEffect(() => {
@@ -76,10 +82,11 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
 
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'categories', label: 'Categories & Options', icon: Layers, highlight: true },
+    { id: 'hero', label: 'Hero Banner & Text', icon: Sparkles, highlight: true },
+    { id: 'categories', label: 'Categories & Options', icon: Layers },
     { id: 'products', label: 'Products & Inventory', icon: Package, count: products.length },
     { id: 'orders', label: 'Customer Orders', icon: ShoppingBag },
-    { id: 'phonepe', label: 'PhonePe Gateway', icon: ShieldCheck, highlight: true },
+    { id: 'phonepe', label: 'PhonePe Gateway', icon: ShieldCheck },
     { id: 'wordpress', label: 'WordPress Importer', icon: Globe },
   ];
 
@@ -99,48 +106,86 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
         }}
         className="admin-sidebar"
       >
-        {/* Brand Logo Header */}
-        <div style={{ padding: '1.75rem 1.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-            <img src="/assets/logo.webp" alt="Sui Dhaga" style={{ height: '46px', filter: 'brightness(1.15)' }} />
-            <div>
-              <div className="font-royal" style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.08em' }}>
-                SUI-DHAGA
+        {/* Brand Logo Header - Pure Logo Image ONLY (No text as requested) */}
+        <div
+          style={{
+            padding: '1.5rem',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <img
+            src="/assets/logo.webp"
+            alt="Sui Dhaga"
+            style={{
+              height: '50px',
+              maxWidth: '100%',
+              objectFit: 'contain',
+              filter: 'brightness(1.15)',
+              display: 'block',
+            }}
+          />
+        </div>
+
+        {/* User Badge with Profile Edit Option */}
+        <div
+          style={{
+            padding: '1.1rem 1.25rem',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', overflow: 'hidden' }}>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--maroon-800)',
+                border: '1.5px solid var(--gold-500)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                color: '#ffffff',
+                flexShrink: 0,
+              }}
+            >
+              {currentUser?.name?.[0] || 'K'}
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                {currentUser?.name || 'Komal (Store Owner)'}
               </div>
-              <div style={{ fontSize: '0.68rem', color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-                Admin Console
+              <div style={{ fontSize: '0.7rem', color: '#d4af37' }}>
+                Verified Administrator
               </div>
             </div>
           </div>
-        </div>
 
-        {/* User Badge */}
-        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div
+          <button
+            onClick={() => setProfileModalOpen(true)}
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--maroon-800)',
-              border: '1.5px solid var(--gold-500)',
+              background: 'none',
+              border: 'none',
+              color: 'var(--gold-400)',
+              cursor: 'pointer',
+              padding: '0.35rem',
+              borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              color: '#ffffff',
             }}
+            title="Edit Admin Profile & Password"
           >
-            K
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-              {adminUser?.name || 'Komal (Store Owner)'}
-            </div>
-            <div style={{ fontSize: '0.72rem', color: '#d4af37' }}>
-              Verified Administrator
-            </div>
-          </div>
+            <UserCog size={18} />
+          </button>
         </div>
 
         {/* Navigation */}
@@ -218,7 +263,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
               gap: '0.6rem',
               background: 'none',
               border: 'none',
-              color: '#f87171',
+              color: '#fca5a5',
               cursor: 'pointer',
               fontSize: '0.85rem',
               fontWeight: 600,
@@ -232,9 +277,9 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
       </aside>
 
       {/* Main Content Area */}
-      <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflowY: 'auto' }}>
         
-        {/* Top Navbar */}
+        {/* Top bar */}
         <div
           style={{
             padding: '1rem 2rem',
@@ -288,6 +333,10 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
             />
           )}
 
+          {activeTab === 'hero' && (
+            <AdminHeroSettings token={token} />
+          )}
+
           {activeTab === 'categories' && (
             <AdminCategories
               products={products}
@@ -334,6 +383,17 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore,
         onClose={() => setModalOpen(false)}
         onSave={fetchAdminProducts}
         token={token}
+      />
+
+      {/* Admin Profile Modal */}
+      <AdminProfileModal
+        isOpen={profileModalOpen}
+        onClose={() => setProfileModalOpen(false)}
+        token={token}
+        adminUser={currentUser}
+        onProfileUpdated={(updated) => {
+          setCurrentUser(updated);
+        }}
       />
 
       <style>{`

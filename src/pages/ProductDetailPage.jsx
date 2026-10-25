@@ -208,6 +208,7 @@ export default function ProductDetailPage({
       {/* Main Product Showcase */}
       <div className="container" style={{ marginTop: '2.5rem' }}>
         <div
+          className="pdp-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',

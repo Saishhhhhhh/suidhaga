@@ -35,6 +35,14 @@ export default function AdminOrders({ token }) {
     fetchOrders();
   }, [statusFilter, search]);
 
+  const [toastMsg, setToastMsg] = useState(null);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+
+  const showToast = (text, type = 'success') => {
+    setToastMsg({ text, type });
+    setTimeout(() => setToastMsg(null), 3500);
+  };
+
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(`/api/orders/${orderId}/status`, {
@@ -47,10 +55,11 @@ export default function AdminOrders({ token }) {
       });
       const data = await res.json();
       if (data.success) {
+        showToast(`Order status updated to "${newStatus}"`);
         fetchOrders();
       }
     } catch (err) {
-      alert('Failed to update order status');
+      showToast('Failed to update order status', 'error');
     }
   };
 
@@ -72,25 +81,28 @@ export default function AdminOrders({ token }) {
       });
       const data = await res.json();
       if (data.success) {
+        showToast('Tracking details saved and customer notified!');
         setTrackingModalOrder(null);
         setNewTrackingNumber('');
         fetchOrders();
       }
     } catch (err) {
-      alert('Failed to update tracking');
+      showToast('Failed to update tracking', 'error');
     }
   };
 
-  const handleDelete = async (orderId) => {
-    if (!window.confirm('Are you sure you want to delete this order?')) return;
+  const confirmDeleteOrder = async () => {
+    if (!orderToDelete) return;
     try {
-      await fetch(`/api/orders/${orderId}`, {
+      await fetch(`/api/orders/${orderToDelete}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
+      showToast('Order removed from records');
+      setOrderToDelete(null);
       fetchOrders();
     } catch (err) {
-      alert('Failed to delete order');
+      showToast('Failed to delete order', 'error');
     }
   };
 
@@ -311,7 +323,7 @@ export default function AdminOrders({ token }) {
 
                       {/* Delete */}
                       <button
-                        onClick={() => handleDelete(ord._id)}
+                        onClick={() => setOrderToDelete(ord._id)}
                         style={{ backgroundColor: '#fff', border: '1px solid #fecaca', borderRadius: '4px', padding: '0.35rem 0.55rem', cursor: 'pointer', color: '#dc2626' }}
                         title="Delete order"
                       >
@@ -430,6 +442,96 @@ export default function AdminOrders({ token }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* In-app Toast Notification */}
+      {toastMsg && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '1.25rem',
+            right: '2rem',
+            zIndex: 3000,
+            backgroundColor: toastMsg.type === 'error' ? '#dc2626' : 'var(--maroon-900)',
+            color: '#ffffff',
+            padding: '0.75rem 1.4rem',
+            borderRadius: 'var(--radius-full)',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+            border: '1px solid var(--border-gold)',
+            fontSize: '0.88rem',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            animation: 'fadeIn 0.25s ease-out',
+          }}
+        >
+          <span>{toastMsg.type === 'error' ? '⚠️' : '✓'}</span>
+          <span>{toastMsg.text}</span>
+        </div>
+      )}
+
+      {/* In-App Delete Confirmation Modal (No Browser Native Confirm Popups) */}
+      {orderToDelete && (
+        <div className="modal-backdrop" onClick={() => setOrderToDelete(null)}>
+          <div
+            className="modal-content animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '440px', padding: '2rem', textAlign: 'center' }}
+          >
+            <div
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                backgroundColor: '#fee2e2',
+                color: '#dc2626',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.25rem',
+              }}
+            >
+              <Trash2 size={26} />
+            </div>
+
+            <h3 className="font-display" style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--maroon-950)', marginBottom: '0.6rem' }}>
+              Delete Customer Order?
+            </h3>
+
+            <p style={{ color: 'var(--text-medium)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '1.75rem' }}>
+              Are you sure you want to delete this order? This action will remove the record from your store history.
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button
+                type="button"
+                onClick={() => setOrderToDelete(null)}
+                className="btn btn-secondary"
+                style={{ flex: 1, padding: '0.7rem' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteOrder}
+                style={{
+                  flex: 1,
+                  padding: '0.7rem',
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: 'var(--radius-full)',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                }}
+              >
+                Delete Order
+              </button>
+            </div>
           </div>
         </div>
       )}

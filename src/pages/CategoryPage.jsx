@@ -416,6 +416,7 @@ export default function CategoryPage({
           </div>
         ) : (
           <div
+            className="category-products-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',

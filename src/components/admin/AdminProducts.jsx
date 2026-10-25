@@ -4,6 +4,14 @@ import { Plus, Search, Edit2, Trash2, Sparkles, AlertTriangle, ArrowUpDown, Glob
 export default function AdminProducts({ products, loading, onRefresh, onEditProduct, onAddNew, token, initialCategory = 'All' }) {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState(initialCategory || 'All');
+  const [productToDelete, setProductToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [toastMsg, setToastMsg] = useState(null);
+
+  const showToast = (text, type = 'success') => {
+    setToastMsg({ text, type });
+    setTimeout(() => setToastMsg(null), 3500);
+  };
 
   useEffect(() => {
     if (initialCategory) {
@@ -21,22 +29,27 @@ export default function AdminProducts({ products, loading, onRefresh, onEditProd
     return matchesCat && matchesSearch;
   });
 
-  const handleDelete = async (id, title) => {
-    if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
+  const confirmDelete = async () => {
+    if (!productToDelete) return;
+    setDeleting(true);
 
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(`/api/products/${productToDelete.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) {
+        showToast(`"${productToDelete.title}" removed from catalog`);
+        setProductToDelete(null);
         onRefresh();
       } else {
-        alert(data.message || 'Error deleting product');
+        showToast(data.message || 'Error deleting product', 'error');
       }
     } catch (err) {
-      alert('Failed to connect to server');
+      showToast('Failed to connect to server', 'error');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -295,7 +308,7 @@ export default function AdminProducts({ products, loading, onRefresh, onEditProd
                         <Edit2 size={15} />
                       </button>
                       <button
-                        onClick={() => handleDelete(p._id, p.title)}
+                        onClick={() => setProductToDelete({ id: p._id, title: p.title })}
                         style={{
                           backgroundColor: '#ffffff',
                           border: '1px solid #fecaca',
@@ -316,6 +329,98 @@ export default function AdminProducts({ products, loading, onRefresh, onEditProd
           </tbody>
         </table>
       </div>
+
+      {/* In-app Toast Notification (No Browser Alerts) */}
+      {toastMsg && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '1.25rem',
+            right: '2rem',
+            zIndex: 3000,
+            backgroundColor: toastMsg.type === 'error' ? '#dc2626' : 'var(--maroon-900)',
+            color: '#ffffff',
+            padding: '0.75rem 1.4rem',
+            borderRadius: 'var(--radius-full)',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+            border: '1px solid var(--border-gold)',
+            fontSize: '0.88rem',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            animation: 'fadeIn 0.25s ease-out',
+          }}
+        >
+          <span>{toastMsg.type === 'error' ? '⚠️' : '✓'}</span>
+          <span>{toastMsg.text}</span>
+        </div>
+      )}
+
+      {/* In-App Delete Confirmation Modal (No Browser Native Confirm Popups) */}
+      {productToDelete && (
+        <div className="modal-backdrop" onClick={() => !deleting && setProductToDelete(null)}>
+          <div
+            className="modal-content animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '440px', padding: '2rem', textAlign: 'center' }}
+          >
+            <div
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                backgroundColor: '#fee2e2',
+                color: '#dc2626',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.25rem',
+              }}
+            >
+              <Trash2 size={26} />
+            </div>
+
+            <h3 className="font-display" style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--maroon-950)', marginBottom: '0.6rem' }}>
+              Remove Outfit from Catalog?
+            </h3>
+
+            <p style={{ color: 'var(--text-medium)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '1.75rem' }}>
+              Are you sure you want to remove <strong>"{productToDelete.title}"</strong>? This will permanently delete it from MongoDB Atlas inventory.
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button
+                type="button"
+                onClick={() => setProductToDelete(null)}
+                disabled={deleting}
+                className="btn btn-secondary"
+                style={{ flex: 1, padding: '0.7rem' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                disabled={deleting}
+                style={{
+                  flex: 1,
+                  padding: '0.7rem',
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: 'var(--radius-full)',
+                  fontWeight: 700,
+                  cursor: deleting ? 'wait' : 'pointer',
+                  boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                }}
+              >
+                {deleting ? 'Deleting...' : 'Delete Outfit'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .table-row-hover:hover {

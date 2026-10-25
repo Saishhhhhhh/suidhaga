@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { Layers, Plus, ExternalLink, Package, Tag, Edit3, Check, Eye, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { Layers, Plus, Edit2, Tag, Check, X, Eye, Package, Upload, Image as ImageIcon } from 'lucide-react';
 
-export default function AdminCategories({ products, onSelectCategoryFilter, onAddNewProductForCategory, onOpenPhonePe, token }) {
+export default function AdminCategories({
+  products,
+  token,
+  onSelectCategoryFilter,
+  onAddNewProductForCategory,
+  onOpenPhonePe,
+}) {
   const [categories, setCategories] = useState([
     {
       id: 'ethnic-wear',
       name: 'Ethnic Wear',
       tagline: 'Handcrafted Heritage Couture',
       description: 'Timeless grace crafted in rich silks, Chanderi, and Banarasi handloom weaves.',
-      bannerImage: '/assets/ethenic.webp',
+      bannerImage: '/assets/hero_banner.jpg',
       subcategories: ['Anarkali Set', 'Kurta Set', 'Lehenga Choli', 'Pure Silk Saree', 'Sharara Suit'],
       status: 'Active',
       featured: true,
@@ -18,7 +24,7 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
       name: 'Travel Ready',
       tagline: 'Resort & Travel Luxury',
       description: 'Light, breezy, wrinkle-resistant co-ord sets and effortless travel drapes.',
-      bannerImage: '/assets/travel.webp',
+      bannerImage: '/assets/travel_ready.webp',
       subcategories: ['Breezy Co-ord', 'Travel Kaftan', 'Linen Tunic', 'Resort Dress'],
       status: 'Active',
       featured: true,
@@ -36,18 +42,36 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
     {
       id: 'indo-western',
       name: 'Indo-Western',
-      tagline: 'Modern Fusion Glamour',
-      description: 'Contemporary fusion cuts blending Indian embroidery with modern silhouettes.',
-      bannerImage: '/assets/indowest.webp',
-      subcategories: ['Cape Set', 'Draped Saree', 'Dhoti Jumpsuit', 'Crop Top & Palazzo'],
+      tagline: 'Modern Fusion & Capes',
+      description: 'Contemporary chic cuts fused with Indian artisanal heritage textures.',
+      bannerImage: '/assets/hero_banner.jpg',
+      subcategories: ['Cape Gown', 'Dhoti Co-ord', 'Crop Top & Palazzos', 'Fusion Drape'],
       status: 'Active',
-      featured: true,
+      featured: false,
     },
   ]);
 
+  // Modals state (Custom in-website popups - NO browser native alerts/prompts)
   const [editingCategory, setEditingCategory] = useState(null);
   const [editFormData, setEditFormData] = useState({});
   const [newSubcatInput, setNewSubcatInput] = useState('');
+  const [uploadingBanner, setUploadingBanner] = useState(false);
+
+  // Add category modal
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newCatData, setNewCatData] = useState({
+    name: '',
+    tagline: 'Handcrafted Luxury Collection',
+    description: 'Special handcrafted edit designed by Komal for Sui-Dhaga.',
+    bannerImage: '/assets/hero_banner.jpg',
+    subcategories: 'Festive Wear, Handcrafted Edit',
+  });
+  const [toastMsg, setToastMsg] = useState(null);
+
+  const showToast = (text, type = 'success') => {
+    setToastMsg({ text, type });
+    setTimeout(() => setToastMsg(null), 3500);
+  };
 
   const handleEditClick = (cat) => {
     setEditingCategory(cat.id);
@@ -55,12 +79,81 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
     setNewSubcatInput('');
   };
 
+  const handleBannerUpload = async (e, targetForm = 'edit') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingBanner(true);
+    const bodyData = new FormData();
+    bodyData.append('image', file);
+
+    try {
+      const res = await fetch('/api/upload/image', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: bodyData,
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        if (targetForm === 'edit') {
+          setEditFormData((prev) => ({ ...prev, bannerImage: data.url }));
+        } else {
+          setNewCatData((prev) => ({ ...prev, bannerImage: data.url }));
+        }
+        showToast('Banner image uploaded successfully!');
+      } else {
+        showToast(data.message || 'Error uploading banner image', 'error');
+      }
+    } catch (err) {
+      showToast('Failed to upload image. Please check file format.', 'error');
+    } finally {
+      setUploadingBanner(false);
+      e.target.value = '';
+    }
+  };
+
   const handleSaveEdit = () => {
     setCategories((prev) =>
       prev.map((c) => (c.id === editingCategory ? { ...c, ...editFormData } : c))
     );
     setEditingCategory(null);
-    alert('Category options updated successfully!');
+    showToast('Category options updated successfully!');
+  };
+
+  const handleCreateCategory = (e) => {
+    e.preventDefault();
+    if (!newCatData.name.trim()) {
+      showToast('Please enter a collection name', 'error');
+      return;
+    }
+
+    const subcats = newCatData.subcategories
+      ? newCatData.subcategories.split(',').map((s) => s.trim()).filter(Boolean)
+      : ['Special Edit'];
+
+    const newCat = {
+      id: newCatData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      name: newCatData.name.trim(),
+      tagline: newCatData.tagline.trim(),
+      description: newCatData.description.trim(),
+      bannerImage: newCatData.bannerImage || '/assets/hero_banner.jpg',
+      subcategories: subcats,
+      status: 'Active',
+      featured: false,
+    };
+
+    setCategories((prev) => [...prev, newCat]);
+    setIsAddModalOpen(false);
+    setNewCatData({
+      name: '',
+      tagline: 'Handcrafted Luxury Collection',
+      description: 'Special handcrafted edit designed by Komal for Sui-Dhaga.',
+      bannerImage: '/assets/hero_banner.jpg',
+      subcategories: 'Festive Wear, Handcrafted Edit',
+    });
+    showToast(`Collection "${newCat.name}" added successfully!`);
   };
 
   const handleAddSubcat = () => {
@@ -94,6 +187,33 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '1.25rem',
+            right: '2rem',
+            zIndex: 3000,
+            backgroundColor: toastMsg.type === 'error' ? '#dc2626' : 'var(--maroon-900)',
+            color: '#ffffff',
+            padding: '0.75rem 1.4rem',
+            borderRadius: 'var(--radius-full)',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+            border: '1px solid var(--border-gold)',
+            fontSize: '0.88rem',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            animation: 'fadeIn 0.25s ease-out',
+          }}
+        >
+          <span>{toastMsg.type === 'error' ? '⚠️' : '✓'}</span>
+          <span>{toastMsg.text}</span>
+        </div>
+      )}
+
       {/* Top Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
@@ -107,21 +227,7 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
 
         <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <button
-            onClick={() => {
-              const newName = prompt('Enter New Category Name (e.g. Festive Special):');
-              if (!newName) return;
-              const newCat = {
-                id: newName.toLowerCase().replace(/\s+/g, '-'),
-                name: newName,
-                tagline: 'Exclusive Collection',
-                description: 'Special handcrafted edit designed by Komal.',
-                bannerImage: '/assets/hero_banner.jpg',
-                subcategories: ['Special Edit'],
-                status: 'Active',
-                featured: false,
-              };
-              setCategories([...categories, newCat]);
-            }}
+            onClick={() => setIsAddModalOpen(true)}
             className="btn btn-primary"
             style={{ padding: '0.75rem 1.4rem' }}
           >
@@ -141,28 +247,26 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
       >
         {categories.map((cat) => {
           const stats = getCategoryStats(cat.name);
-          const isEditing = editingCategory === cat.id;
 
           return (
             <div
               key={cat.id}
               className="card-luxury"
               style={{
-                borderRadius: 'var(--radius-md)',
-                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                border: '1.5px solid rgba(107, 29, 47, 0.12)',
+                overflow: 'hidden',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                border: '1px solid rgba(107, 29, 47, 0.1)',
+                borderRadius: 'var(--radius-md)',
               }}
             >
-              {/* Category Banner Header */}
+              {/* Card Banner Header */}
               <div
                 style={{
-                  height: '160px',
                   position: 'relative',
-                  backgroundImage: `linear-gradient(rgba(38, 5, 14, 0.55), rgba(38, 5, 14, 0.85)), url('${cat.bannerImage}')`,
+                  height: '140px',
+                  background: `linear-gradient(to bottom, rgba(38, 5, 14, 0.4) 0%, rgba(38, 5, 14, 0.88) 100%), url('${cat.bannerImage}')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   padding: '1.25rem',
@@ -172,37 +276,38 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
                   color: '#ffffff',
                 }}
               >
-                <div style={{ position: 'absolute', top: '12px', right: '12px', display: 'flex', gap: '0.5rem' }}>
-                  <span
-                    style={{
-                      backgroundColor: 'rgba(212, 175, 55, 0.9)',
-                      color: '#26050e',
-                      fontSize: '0.68rem',
-                      fontWeight: 800,
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: 'var(--radius-full)',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {cat.status}
-                  </span>
-                </div>
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '0.85rem',
+                    right: '0.85rem',
+                    backgroundColor: cat.status === 'Active' ? 'rgba(22, 163, 74, 0.9)' : 'rgba(100, 116, 139, 0.8)',
+                    color: '#ffffff',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    padding: '0.2rem 0.6rem',
+                    borderRadius: 'var(--radius-full)',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {cat.status}
+                </span>
 
-                <div style={{ fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ffd700', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--gold-400)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                   {cat.tagline}
                 </div>
-                <h3 className="font-display" style={{ fontSize: '1.45rem', fontWeight: 700, margin: '0.2rem 0 0' }}>
+                <h3 className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, margin: '0.2rem 0 0' }}>
                   {cat.name}
                 </h3>
               </div>
 
               {/* Card Body */}
-              <div style={{ padding: '1.25rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontSize: '0.84rem', color: 'var(--text-medium)', marginBottom: '1rem', lineHeight: 1.5 }}>
+              <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <p style={{ color: 'var(--text-medium)', fontSize: '0.86rem', lineHeight: 1.5, marginBottom: '1.25rem' }}>
                   {cat.description}
                 </p>
 
-                {/* Metrics Grid */}
+                {/* Metrics */}
                 <div
                   style={{
                     display: 'grid',
@@ -211,47 +316,46 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
                     backgroundColor: 'var(--ivory-surface)',
                     padding: '0.85rem',
                     borderRadius: 'var(--radius-sm)',
-                    marginBottom: '1rem',
+                    marginBottom: '1.25rem',
                   }}
                 >
                   <div>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Assigned Outfits</span>
-                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--maroon-900)' }}>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Assigned Outfits</div>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--maroon-900)' }}>
                       {stats.count}
                     </div>
                   </div>
                   <div>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Total Stock Units</span>
-                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#16a34a' }}>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Total Stock Units</div>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a' }}>
                       {stats.totalStock}
                     </div>
                   </div>
-                  <div style={{ gridColumn: 'span 2', borderTop: '1px solid #dcd1c6', paddingTop: '0.4rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Price Range:</span>
-                    <strong style={{ color: 'var(--maroon-800)' }}>
-                      {stats.count > 0 ? `₹${stats.minPrice.toLocaleString('en-IN')} - ₹${stats.maxPrice.toLocaleString('en-IN')}` : 'No products yet'}
-                    </strong>
-                  </div>
+                  {stats.minPrice > 0 && (
+                    <div style={{ gridColumn: 'span 2', fontSize: '0.76rem', color: 'var(--text-muted)', paddingTop: '0.4rem', borderTop: '1px dashed #dcd1c6' }}>
+                      Price Range: <strong>₹{stats.minPrice.toLocaleString('en-IN')} - ₹{stats.maxPrice.toLocaleString('en-IN')}</strong>
+                    </div>
+                  )}
                 </div>
 
-                {/* Subcategories Tags */}
+                {/* Subcategories list */}
                 <div style={{ marginBottom: '1.25rem' }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <Tag size={13} color="var(--gold-600)" />
+                  <div style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.45rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Tag size={12} color="var(--gold-600)" />
                     <span>Active Subcategories & Styles:</span>
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                    {cat.subcategories.map((sub, sIdx) => (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                    {cat.subcategories.map((sub, i) => (
                       <span
-                        key={sIdx}
+                        key={i}
                         style={{
                           backgroundColor: '#faf2f4',
-                          color: 'var(--maroon-800)',
-                          border: '1px solid rgba(107, 29, 47, 0.15)',
-                          borderRadius: 'var(--radius-full)',
-                          fontSize: '0.74rem',
-                          padding: '0.2rem 0.6rem',
+                          color: 'var(--maroon-900)',
+                          fontSize: '0.72rem',
                           fontWeight: 600,
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: 'var(--radius-full)',
+                          border: '1px solid rgba(107, 29, 47, 0.15)',
                         }}
                       >
                         {sub}
@@ -265,19 +369,16 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
                       onClick={() => onSelectCategoryFilter(cat.name)}
-                      className="btn btn-outline"
-                      style={{ flex: 1, padding: '0.55rem', fontSize: '0.8rem', justifyContent: 'center' }}
-                      title={`View all ${stats.count} products in ${cat.name}`}
+                      className="btn btn-outline btn-sm"
+                      style={{ flex: 1, padding: '0.5rem' }}
                     >
-                      <Package size={14} />
+                      <Eye size={14} />
                       <span>View Products ({stats.count})</span>
                     </button>
-
                     <button
                       onClick={() => onAddNewProductForCategory(cat.name)}
-                      className="btn btn-gold"
-                      style={{ padding: '0.55rem 0.85rem', fontSize: '0.8rem' }}
-                      title="Add outfit into this category"
+                      className="btn btn-gold btn-sm"
+                      style={{ padding: '0.5rem 0.8rem' }}
                     >
                       <Plus size={14} />
                       <span>Add Outfit</span>
@@ -288,41 +389,48 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
                     onClick={() => handleEditClick(cat)}
                     style={{
                       background: 'none',
-                      border: '1px dashed #dcd1c6',
+                      border: '1px dashed var(--border-delicate)',
                       borderRadius: 'var(--radius-sm)',
                       padding: '0.45rem',
                       fontSize: '0.78rem',
-                      color: 'var(--text-medium)',
+                      fontWeight: 600,
+                      color: 'var(--maroon-800)',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.35rem',
-                      transition: 'all 0.2s',
+                      gap: '0.4rem',
                     }}
                   >
-                    <Edit3 size={13} />
+                    <Edit2 size={13} />
                     <span>Customize Category Options & Banner</span>
                   </button>
                 </div>
-
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Edit Category Modal */}
+      {/* Modal 1: Edit Category Options (Upload Image ONLY - No URL Input) */}
       {editingCategory && (
         <div className="modal-backdrop" onClick={() => setEditingCategory(null)}>
           <div
             className="modal-content animate-fade-in"
             onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '580px', padding: '2rem' }}
+            style={{ maxWidth: '620px', padding: '2rem' }}
           >
-            <h3 className="font-display maroon-gradient-text" style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-              Edit Category Options: {editFormData.name}
-            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 className="font-display maroon-gradient-text" style={{ fontSize: '1.4rem', fontWeight: 800 }}>
+                Edit Category Options: {editFormData.name}
+              </h3>
+              <button
+                onClick={() => setEditingCategory(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-dark)' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
 
             <div className="form-group">
               <label className="form-label">Category Title</label>
@@ -344,14 +452,57 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
               />
             </div>
 
+            {/* Direct Image Upload for Category Banner (No URL Option) */}
             <div className="form-group">
-              <label className="form-label">Banner Image URL</label>
-              <input
-                type="text"
-                value={editFormData.bannerImage || ''}
-                onChange={(e) => setEditFormData({ ...editFormData, bannerImage: e.target.value })}
-                className="form-input"
-              />
+              <label className="form-label">Category Banner Image</label>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.8rem' }}>
+                <div
+                  style={{
+                    width: '120px',
+                    height: '75px',
+                    borderRadius: 'var(--radius-sm)',
+                    overflow: 'hidden',
+                    border: '1.5px solid var(--border-gold)',
+                    backgroundColor: '#f3ece7',
+                    flexShrink: 0,
+                  }}
+                >
+                  <img
+                    src={editFormData.bannerImage || '/assets/hero_banner.jpg'}
+                    alt="Banner preview"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+
+                <label
+                  style={{
+                    border: '2px dashed var(--border-gold)',
+                    backgroundColor: uploadingBanner ? 'var(--ivory-surface)' : '#faf7f3',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '0.85rem 1.25rem',
+                    textAlign: 'center',
+                    cursor: uploadingBanner ? 'wait' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    flexGrow: 1,
+                    justifyContent: 'center',
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingBanner}
+                    onChange={(e) => handleBannerUpload(e, 'edit')}
+                    style={{ display: 'none' }}
+                  />
+                  <Upload size={18} color="var(--maroon-800)" />
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--maroon-900)' }}>
+                    {uploadingBanner ? 'Uploading Banner...' : 'Upload New Banner Photo'}
+                  </span>
+                </label>
+              </div>
             </div>
 
             <div className="form-group">
@@ -438,6 +589,152 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
                 <span>Save Options</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 2: Add Custom Collection (In-app popup, replacing native prompt) */}
+      {isAddModalOpen && (
+        <div className="modal-backdrop" onClick={() => setIsAddModalOpen(false)}>
+          <div
+            className="modal-content animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '580px', padding: '2rem' }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h3 className="font-display maroon-gradient-text" style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0 }}>
+                  Create Custom Collection
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', margin: '0.2rem 0 0' }}>
+                  Define a new category showcase for the storefront.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-dark)' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateCategory}>
+              <div className="form-group">
+                <label className="form-label">Collection Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Festive Special / Wedding Edit"
+                  value={newCatData.name}
+                  onChange={(e) => setNewCatData({ ...newCatData, name: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tagline (Appears in Banner)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Royal Embroidered Couture"
+                  value={newCatData.tagline}
+                  onChange={(e) => setNewCatData({ ...newCatData, tagline: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              {/* Direct Banner Upload */}
+              <div className="form-group">
+                <label className="form-label">Collection Banner Photo</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <div
+                    style={{
+                      width: '100px',
+                      height: '65px',
+                      borderRadius: 'var(--radius-sm)',
+                      overflow: 'hidden',
+                      border: '1.5px solid var(--border-gold)',
+                      backgroundColor: '#f3ece7',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <img
+                      src={newCatData.bannerImage}
+                      alt="Banner Preview"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+
+                  <label
+                    style={{
+                      border: '2px dashed var(--border-gold)',
+                      backgroundColor: uploadingBanner ? 'var(--ivory-surface)' : '#faf7f3',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.75rem 1rem',
+                      cursor: uploadingBanner ? 'wait' : 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      flexGrow: 1,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingBanner}
+                      onChange={(e) => handleBannerUpload(e, 'add')}
+                      style={{ display: 'none' }}
+                    />
+                    <Upload size={16} color="var(--maroon-800)" />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--maroon-900)' }}>
+                      {uploadingBanner ? 'Uploading...' : 'Upload Banner Image'}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Description</label>
+                <textarea
+                  rows={2}
+                  placeholder="Brief story or styling guidance..."
+                  value={newCatData.description}
+                  onChange={(e) => setNewCatData({ ...newCatData, description: e.target.value })}
+                  className="form-textarea"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Subcategory Tags (comma-separated)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Sangeet Special, Pastel Lehenga, Festive Silk"
+                  value={newCatData.subcategories}
+                  onChange={(e) => setNewCatData({ ...newCatData, subcategories: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.75rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="btn btn-secondary"
+                  style={{ padding: '0.65rem 1.25rem' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploadingBanner}
+                  className="btn btn-primary"
+                  style={{ padding: '0.65rem 1.5rem' }}
+                >
+                  <Plus size={16} />
+                  <span>Create Collection</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

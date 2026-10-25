@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Lock, Mail, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
-  const [email, setEmail] = useState('admin@suidhaga.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -125,7 +125,7 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
             className="btn btn-primary"
             style={{ width: '100%', padding: '0.85rem', fontSize: '0.95rem' }}
           >
-            <span>{loading ? 'Authenticating...' : 'Sign In as Komal'}</span>
+            <span>{loading ? 'Authenticating...' : 'Sign In to Admin Console'}</span>
             <ArrowRight size={17} />
           </button>
         </form>
