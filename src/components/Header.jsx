@@ -289,26 +289,6 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
               </span>
             </button>
 
-            {/* Discreet Admin Concierge Icon */}
-            <button
-              onClick={() => setCurrentView(currentView === 'admin' ? 'shop' : 'admin')}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: currentView === 'admin' ? 'var(--maroon-800)' : '#b39247',
-                padding: '0.3rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'color 0.2s ease',
-              }}
-              title={currentView === 'admin' ? 'Back to Storefront' : 'Admin Portal'}
-              className="icon-action-btn"
-            >
-              <ShieldCheck size={18} />
-            </button>
-
           </div>
         </div>
 

@@ -222,16 +222,6 @@ export default function Footer({ setCurrentView }) {
                 <MapPin size={16} color="#d4af37" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <span>Atelier Studio, Mumbai, Maharashtra, India</span>
               </div>
-
-              <div style={{ marginTop: '0.5rem' }}>
-                <button
-                  onClick={() => setCurrentView('admin')}
-                  className="btn btn-outline-gold btn-sm"
-                  style={{ fontSize: '0.78rem', padding: '0.4rem 0.8rem' }}
-                >
-                  Admin Portal Login
-                </button>
-              </div>
             </div>
           </div>
 
