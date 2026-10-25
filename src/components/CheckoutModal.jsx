@@ -135,6 +135,57 @@ export default function CheckoutModal() {
     }
   };
 
+  const handlePhonePePay = async () => {
+    setLoading(true);
+    try {
+      const orderPayload = {
+        customer: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: {
+            street: formData.street,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+          },
+        },
+        items: cart.map((item) => ({
+          product: item.productId,
+          title: item.title,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity,
+          size: item.size,
+        })),
+        subtotal: cartSubtotal,
+        discount: discountAmount,
+        shippingFee,
+        totalAmount: cartTotal,
+        notes: formData.notes,
+      };
+
+      const res = await fetch('/api/payment/phonepe/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload),
+      });
+
+      const data = await res.json();
+      if (data.success && data.redirectUrl) {
+        // Redirect directly to PhonePe Official Hosted Payment Gateway
+        window.location.href = data.redirectUrl;
+      } else {
+        alert(data.message || 'Unable to initiate PhonePe session. Please try again.');
+      }
+    } catch (err) {
+      console.error('PhonePe checkout error:', err);
+      alert('Error connecting to PhonePe gateway. Please try again or select Cash on Delivery.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -144,18 +195,10 @@ export default function CheckoutModal() {
     }
 
     if (formData.paymentMethod === 'PHONEPE') {
-      // Open PhonePe Payment Gateway Modal
-      setPhonePeTimer(600);
-      setPhonePeUtr(`PP${Date.now().toString().slice(-6)}${Math.floor(1000 + Math.random() * 9000)}`);
-      setPhonePeModalOpen(true);
+      await handlePhonePePay();
     } else {
       await executeOrderPlacement(formData.paymentMethod);
     }
-  };
-
-  const handleVerifyPhonePePayment = () => {
-    const txnId = phonePeUtr || `PP${Date.now().toString().slice(-6)}`;
-    executeOrderPlacement('PHONEPE', txnId);
   };
 
   const indianStates = [

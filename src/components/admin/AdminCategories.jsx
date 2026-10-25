@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layers, Plus, ExternalLink, Package, Tag, Edit3, Check, Eye, Sparkles, Image as ImageIcon } from 'lucide-react';
 
-export default function AdminCategories({ products, onSelectCategoryFilter, onAddNewProductForCategory, token }) {
+export default function AdminCategories({ products, onSelectCategoryFilter, onAddNewProductForCategory, onOpenPhonePe, token }) {
   const [categories, setCategories] = useState([
     {
       id: 'ethnic-wear',
@@ -105,7 +105,38 @@ export default function AdminCategories({ products, onSelectCategoryFilter, onAd
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.8rem' }}>
+        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          {onOpenPhonePe && (
+            <div
+              onClick={onOpenPhonePe}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                backgroundColor: '#f5eeff',
+                border: '1px solid #d8b4fe',
+                color: '#5f259f',
+                padding: '0.55rem 1rem',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(95, 37, 159, 0.1)',
+              }}
+              title="Click to manage PhonePe Payment Gateway settings"
+            >
+              <span
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: '#16a34a',
+                  boxShadow: '0 0 6px #16a34a',
+                }}
+              />
+              <span>PhonePe PG Live • SUI DHAGA (M23I7XG44NMD3)</span>
+            </div>
+          )}
           <button
             onClick={() => {
               const newName = prompt('Enter New Category Name (e.g. Festive Special):');

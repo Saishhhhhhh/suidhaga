@@ -5,6 +5,7 @@ import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminCategories from './AdminCategories';
 import AdminWordpressImport from './AdminWordpressImport';
+import AdminPhonePe from './AdminPhonePe';
 import ProductFormModal from './ProductFormModal';
 
 export default function AdminLayout({ adminUser, token, onLogout, onBackToStore }) {
@@ -60,6 +61,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
     { id: 'categories', label: 'Categories & Options', icon: Layers, highlight: true },
     { id: 'products', label: 'Products & Inventory', icon: Package, count: products.length },
     { id: 'orders', label: 'Customer Orders', icon: ShoppingBag },
+    { id: 'phonepe', label: 'PhonePe Gateway', icon: ShieldCheck, highlight: true },
     { id: 'wordpress', label: 'WordPress Importer', icon: Globe },
   ];
 
@@ -274,6 +276,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
               token={token}
               onSelectCategoryFilter={handleSelectCategoryFilter}
               onAddNewProductForCategory={(catName) => handleAddNew(catName)}
+              onOpenPhonePe={() => setActiveTab('phonepe')}
             />
           )}
 
@@ -291,6 +294,10 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
 
           {activeTab === 'orders' && (
             <AdminOrders token={token} />
+          )}
+
+          {activeTab === 'phonepe' && (
+            <AdminPhonePe token={token} />
           )}
 
           {activeTab === 'wordpress' && (

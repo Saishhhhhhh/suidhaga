@@ -18,6 +18,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
 import CategoryPage from './pages/CategoryPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import PaymentCallbackPage from './pages/PaymentCallbackPage';
 import { getProductSlug } from './utils/slug';
 
 const slugToCategory = {
@@ -47,6 +48,9 @@ function parseCurrentRoute() {
   if (path.startsWith('/product/')) {
     const slugOrId = decodeURIComponent(path.replace('/product/', '').replace(/\/$/, ''));
     return { view: 'product', productSlugOrId: slugOrId };
+  }
+  if (path.startsWith('/payment-callback') || path.startsWith('/payment-status')) {
+    return { view: 'payment-callback' };
   }
   if (path.startsWith('/our-story') || path.startsWith('/story')) {
     return { view: 'story' };
@@ -200,7 +204,12 @@ function MainApp() {
           />
           
           <main style={{ flexGrow: 1 }}>
-            {route.view === 'category' ? (
+            {route.view === 'payment-callback' ? (
+              <PaymentCallbackPage
+                onNavigateHome={navigateToHome}
+                onOpenTracker={() => setOrderTrackerOpen(true)}
+              />
+            ) : route.view === 'category' ? (
               <CategoryPage
                 activeCategory={route.category}
                 onSelectCategory={navigateToCategory}
