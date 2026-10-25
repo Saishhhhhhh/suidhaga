@@ -7,7 +7,18 @@ const { verifyAdmin } = require('../middleware/auth');
 // POST /api/orders - Customer places an order
 router.post('/', async (req, res) => {
   try {
-    const { customer, items, subtotal, discount = 0, shippingFee = 0, totalAmount, paymentMethod = 'COD', notes } = req.body;
+    const {
+      customer,
+      items,
+      subtotal,
+      discount = 0,
+      shippingFee = 0,
+      totalAmount,
+      paymentMethod = 'COD',
+      phonePeTransactionId = '',
+      paymentStatus = 'Pending',
+      notes,
+    } = req.body;
 
     if (!customer || !customer.name || !customer.phone || !customer.email || !customer.address) {
       return res.status(400).json({ success: false, message: 'Incomplete customer details' });
@@ -26,6 +37,9 @@ router.post('/', async (req, res) => {
       shippingFee,
       totalAmount,
       paymentMethod,
+      phonePeTransactionId,
+      paymentStatus: paymentMethod === 'PHONEPE' && phonePeTransactionId ? 'Paid' : paymentStatus,
+      orderStatus: paymentMethod === 'PHONEPE' && phonePeTransactionId ? 'Confirmed' : 'Pending',
       notes,
     });
 
@@ -48,6 +62,37 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error placing order:', error);
     res.status(500).json({ success: false, message: 'Error placing order', error: error.message });
+  }
+});
+
+// POST /api/orders/phonepe/initiate - Generate PhonePe payment session / QR payload
+router.post('/phonepe/initiate', async (req, res) => {
+  try {
+    const { amount, customerName, customerPhone } = req.body;
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid payment amount' });
+    }
+
+    const merchantTransactionId = `MT_SD_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+    const upiVpa = '9773001771@ybl';
+    const merchantName = 'Sui Dhaga By Komal';
+
+    // Standard NPCI UPI URI Scheme
+    const upiString = `upi://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(`Sui-Dhaga Order ${merchantTransactionId}`)}`;
+    const phonePeIntentUri = `phonepe://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(`Sui-Dhaga Order ${merchantTransactionId}`)}`;
+
+    res.json({
+      success: true,
+      merchantTransactionId,
+      amount,
+      upiVpa,
+      merchantName,
+      upiString,
+      phonePeIntentUri,
+      status: 'INITIATED',
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error initiating PhonePe payment', error: err.message });
   }
 });
 

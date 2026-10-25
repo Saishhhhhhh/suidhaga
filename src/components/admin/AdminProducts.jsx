@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit2, Trash2, Sparkles, AlertTriangle, ArrowUpDown, Globe } from 'lucide-react';
 
-export default function AdminProducts({ products, loading, onRefresh, onEditProduct, onAddNew, token }) {
+export default function AdminProducts({ products, loading, onRefresh, onEditProduct, onAddNew, token, initialCategory = 'All' }) {
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [categoryFilter, setCategoryFilter] = useState(initialCategory || 'All');
+
+  useEffect(() => {
+    if (initialCategory) {
+      setCategoryFilter(initialCategory);
+    }
+  }, [initialCategory]);
 
   const filteredProducts = products.filter((p) => {
     const matchesCat = categoryFilter === 'All' || p.category.toLowerCase() === categoryFilter.toLowerCase();

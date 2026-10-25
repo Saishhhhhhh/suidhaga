@@ -16,14 +16,17 @@ import OrderTrackerModal from './components/OrderTrackerModal';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
+import CategoryPage from './pages/CategoryPage';
 
 function MainApp() {
-  const { notification } = useShop();
+  const { notification, setSelectedCategory } = useShop();
 
-  // Route state
+  // Route state: 'shop' | 'category' | 'admin'
   const [currentView, setCurrentView] = useState(() => {
     return window.location.pathname.startsWith('/admin') ? 'admin' : 'shop';
   });
+
+  const [activeCategory, setActiveCategory] = useState('Ethnic Wear');
 
   // Admin Auth state
   const [adminToken, setAdminToken] = useState(() => {
@@ -55,6 +58,13 @@ function MainApp() {
     } else {
       window.history.pushState({}, '', '/');
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOpenCategory = (cat) => {
+    setActiveCategory(cat);
+    setSelectedCategory(cat);
+    setCurrentView('category');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -119,15 +129,33 @@ function MainApp() {
         /* Customer Storefront View */
         <>
           <AnnouncementBar />
-          <Header currentView={currentView} setCurrentView={navigateTo} />
+          <Header
+            currentView={currentView}
+            setCurrentView={navigateTo}
+            onOpenCategory={handleOpenCategory}
+            activeCategory={activeCategory}
+          />
           
           <main style={{ flexGrow: 1 }}>
-            <HeroSection />
-            <DiwaliBanner />
-            <CollectionGrid />
-            <ProductCatalog />
-            <FounderStory />
-            <WhySuiDhaga />
+            {currentView === 'category' ? (
+              <CategoryPage
+                activeCategory={activeCategory}
+                onSelectCategory={(cat) => {
+                  setActiveCategory(cat);
+                  setSelectedCategory(cat);
+                }}
+                onBackToHome={() => navigateTo('shop')}
+              />
+            ) : (
+              <>
+                <HeroSection />
+                <DiwaliBanner />
+                <CollectionGrid onOpenCategory={handleOpenCategory} />
+                <ProductCatalog />
+                <FounderStory />
+                <WhySuiDhaga />
+              </>
+            )}
           </main>
 
           <Footer setCurrentView={navigateTo} />

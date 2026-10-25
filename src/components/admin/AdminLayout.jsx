@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Globe, ArrowLeft, LogOut, ShieldCheck, Sparkles, Plus, Layers } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
+import AdminCategories from './AdminCategories';
 import AdminWordpressImport from './AdminWordpressImport';
 import ProductFormModal from './ProductFormModal';
 
 export default function AdminLayout({ adminUser, token, onLogout, onBackToStore }) {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'products' | 'orders' | 'wordpress'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'categories' | 'products' | 'orders' | 'wordpress'
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
 
   // Modal for add/edit product
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,8 +36,12 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
     fetchAdminProducts();
   }, []);
 
-  const handleAddNew = () => {
-    setEditingProduct(null);
+  const handleAddNew = (presetCategory = null) => {
+    if (typeof presetCategory === 'string') {
+      setEditingProduct({ category: presetCategory });
+    } else {
+      setEditingProduct(null);
+    }
     setModalOpen(true);
   };
 
@@ -44,11 +50,17 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
     setModalOpen(true);
   };
 
+  const handleSelectCategoryFilter = (catName) => {
+    setSelectedCategoryFilter(catName);
+    setActiveTab('products');
+  };
+
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'categories', label: 'Categories & Options', icon: Layers, highlight: true },
     { id: 'products', label: 'Products & Inventory', icon: Package, count: products.length },
     { id: 'orders', label: 'Customer Orders', icon: ShoppingBag },
-    { id: 'wordpress', label: 'WordPress Importer', icon: Globe, highlight: true },
+    { id: 'wordpress', label: 'WordPress Importer', icon: Globe },
   ];
 
   return (
@@ -256,10 +268,20 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
             />
           )}
 
+          {activeTab === 'categories' && (
+            <AdminCategories
+              products={products}
+              token={token}
+              onSelectCategoryFilter={handleSelectCategoryFilter}
+              onAddNewProductForCategory={(catName) => handleAddNew(catName)}
+            />
+          )}
+
           {activeTab === 'products' && (
             <AdminProducts
               products={products}
               loading={loadingProducts}
+              initialCategory={selectedCategoryFilter}
               onRefresh={fetchAdminProducts}
               onAddNew={handleAddNew}
               onEditProduct={handleEdit}

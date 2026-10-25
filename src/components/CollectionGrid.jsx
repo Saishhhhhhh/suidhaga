@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function CollectionGrid() {
+export default function CollectionGrid({ onOpenCategory }) {
   const { setSelectedCategory } = useShop();
 
   const collections = [
@@ -38,8 +38,12 @@ export default function CollectionGrid() {
 
   const handleSelect = (category) => {
     setSelectedCategory(category);
-    const el = document.getElementById('collection-section');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (onOpenCategory) {
+      onOpenCategory(category);
+    } else {
+      const el = document.getElementById('collection-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (

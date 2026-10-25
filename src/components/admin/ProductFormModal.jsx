@@ -168,12 +168,39 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
 
             <div className="form-group">
               <label className="form-label">Category *</label>
-              <select name="category" value={formData.category} onChange={handleChange} className="form-select">
-                <option value="Ethnic Wear">Ethnic Wear</option>
-                <option value="Travel Ready">Travel Ready</option>
-                <option value="Shirts">Shirts</option>
-                <option value="Indo-Western">Indo-Western</option>
-              </select>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.45rem' }}>
+                {[
+                  { name: 'Ethnic Wear', icon: '👑', hint: 'Kurtas, Anarkalis, Lehengas' },
+                  { name: 'Travel Ready', icon: '✈️', hint: 'Co-ords, Resort, Kaftans' },
+                  { name: 'Shirts', icon: '👔', hint: 'Handblock Cotton & Silk' },
+                  { name: 'Indo-Western', icon: '✨', hint: 'Fusion, Capes, Drapes' },
+                ].map((cat) => (
+                  <button
+                    key={cat.name}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: cat.name })}
+                    style={{
+                      padding: '0.45rem 0.65rem',
+                      borderRadius: 'var(--radius-sm)',
+                      border: formData.category === cat.name ? '2px solid var(--maroon-800)' : '1px solid #dcd1c6',
+                      backgroundColor: formData.category === cat.name ? '#faf2f4' : '#ffffff',
+                      color: formData.category === cat.name ? 'var(--maroon-900)' : 'var(--text-dark)',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.1rem',
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700, fontSize: '0.84rem' }}>
+                      <span>{cat.icon}</span>
+                      <span>{cat.name}</span>
+                    </div>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{cat.hint}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

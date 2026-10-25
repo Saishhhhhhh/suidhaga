@@ -66,8 +66,12 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ['COD', 'UPI', 'CARD', 'ONLINE'],
+      enum: ['COD', 'UPI', 'CARD', 'ONLINE', 'PHONEPE'],
       default: 'COD',
+    },
+    phonePeTransactionId: {
+      type: String,
+      default: '',
     },
     paymentStatus: {
       type: String,

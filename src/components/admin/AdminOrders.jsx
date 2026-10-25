@@ -224,8 +224,22 @@ export default function AdminOrders({ token }) {
                     <div style={{ fontWeight: 800, color: 'var(--maroon-900)', fontSize: '0.95rem' }}>
                       ₹{ord.totalAmount.toLocaleString('en-IN')}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      {ord.paymentMethod} • <span style={{ color: ord.paymentStatus === 'Paid' ? '#16a34a' : '#d97706', fontWeight: 600 }}>{ord.paymentStatus}</span>
+                    <div style={{ fontSize: '0.75rem', marginTop: '0.2rem' }}>
+                      {ord.paymentMethod === 'PHONEPE' ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+                          <span style={{ backgroundColor: '#5f259f', color: '#fff', padding: '0.15rem 0.45rem', borderRadius: '3px', fontSize: '0.7rem', fontWeight: 800, display: 'inline-block', width: 'fit-content' }}>
+                            PhonePe UPI
+                          </span>
+                          {ord.phonePeTransactionId && (
+                            <code style={{ fontSize: '0.68rem', color: '#5f259f' }}>Txn: {ord.phonePeTransactionId}</code>
+                          )}
+                        </div>
+                      ) : (
+                        <span>{ord.paymentMethod}</span>
+                      )}
+                      <span style={{ color: ord.paymentStatus === 'Paid' ? '#16a34a' : '#d97706', fontWeight: 700, marginLeft: ord.paymentMethod === 'PHONEPE' ? 0 : '0.3rem' }}>
+                        • {ord.paymentStatus}
+                      </span>
                     </div>
                   </td>
 
