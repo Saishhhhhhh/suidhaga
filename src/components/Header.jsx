@@ -5,7 +5,6 @@ import { useShop } from '../context/ShopContext';
 export default function Header({ currentView, setCurrentView, onOpenCategory, activeCategory }) {
   const {
     cartCount,
-    cartSubtotal,
     setCartOpen,
     wishlist,
     searchQuery,
@@ -15,47 +14,41 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
   } = useShop();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  // The 4 official brand collections + All
-  const displayCategories = [
-    { label: 'All Collections', value: 'All' },
+  // Clean 4 brand collections
+  const navLinks = [
     { label: 'Ethnic Wear', value: 'Ethnic Wear' },
     { label: 'Travel Ready', value: 'Travel Ready' },
     { label: 'Shirts', value: 'Shirts' },
     { label: 'Indo-Western', value: 'Indo-Western' },
+    { label: 'Our Story', value: 'story' },
   ];
 
-  const handleCategoryClick = (catVal) => {
+  const handleNavClick = (link) => {
     setMobileMenuOpen(false);
-    if (catVal === 'All') {
-      setSelectedCategory('All');
+    if (link.value === 'story') {
       if (currentView !== 'shop') {
         setCurrentView('shop');
       }
       setTimeout(() => {
-        const el = document.getElementById('collection-section');
+        const el = document.getElementById('founder-story');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
       }, 50);
     } else {
-      setSelectedCategory(catVal);
+      setSelectedCategory(link.value);
       if (onOpenCategory) {
-        onOpenCategory(catVal);
+        onOpenCategory(link.value);
       } else {
         setCurrentView('category');
       }
     }
   };
 
-  const handleStoryClick = () => {
-    if (currentView !== 'shop') {
-      setCurrentView('shop');
-    }
-    setMobileMenuOpen(false);
-    const storyEl = document.getElementById('founder-story');
-    if (storyEl) {
-      storyEl.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleLogoClick = () => {
+    setCurrentView('shop');
+    setSelectedCategory('All');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -64,19 +57,19 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        backgroundColor: 'rgba(253, 251, 247, 0.97)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(212, 175, 55, 0.22)',
-        boxShadow: '0 4px 25px -4px rgba(107, 29, 47, 0.05)',
+        backgroundColor: 'rgba(255, 255, 255, 0.98)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
+        boxShadow: '0 2px 15px rgba(0, 0, 0, 0.03)',
         transition: 'all 0.3s ease',
       }}
       className="luxury-header"
     >
       <div className="container" style={{ padding: '0.85rem 1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '54px' }}>
           
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
@@ -84,123 +77,87 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--maroon-800)',
+              color: 'var(--maroon-900)',
               padding: '0.3rem',
             }}
             className="mobile-toggle-btn"
-            aria-label="Toggle menu"
+            aria-label="Toggle Menu"
           >
-            {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Left: Brand Identity with Authentic Logo */}
+          {/* Left: Authentic Brand Logo (Clean & Pure) */}
           <div
-            onClick={() => {
-              setCurrentView('shop');
-              setSelectedCategory('All');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onClick={handleLogoClick}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
               cursor: 'pointer',
               textDecoration: 'none',
               flexShrink: 0,
             }}
-            className="brand-logo-container"
+            title="Sui Dhaga Home"
           >
             <img
               src="/assets/logo.webp"
-              alt="Sui Dhaga Logo"
+              alt="Sui Dhaga"
               style={{
-                height: '50px',
+                height: '46px',
                 width: 'auto',
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 2px 6px rgba(107, 29, 47, 0.12))',
-                transition: 'transform 0.3s ease',
+                display: 'block',
+                transition: 'opacity 0.2s ease',
               }}
               className="brand-logo-img"
             />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                borderLeft: '1px solid rgba(107, 29, 47, 0.14)',
-                paddingLeft: '0.9rem',
-              }}
-              className="brand-text-block"
-            >
-              <span
-                className="font-royal"
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 800,
-                  color: 'var(--maroon-900)',
-                  letterSpacing: '0.14em',
-                  lineHeight: 1.1,
-                }}
-              >
-                SUI-DHAGA
-              </span>
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.22em',
-                  color: '#9e7920',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  marginTop: '0.15rem',
-                }}
-              >
-                by Komal • Couture
-              </span>
-            </div>
           </div>
 
-          {/* Center: Desktop Navigation Bar */}
+          {/* Center: Elegant, Airy Desktop Navigation */}
           <nav
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1.9rem',
+              gap: '2.4rem',
             }}
             className="desktop-nav"
           >
-            {displayCategories.map((cat) => {
+            {navLinks.map((item) => {
               const isSelected =
-                currentView === 'category'
-                  ? activeCategory === cat.value
-                  : (currentView === 'shop' && selectedCategory === cat.value);
+                item.value === 'story'
+                  ? false
+                  : currentView === 'category'
+                  ? activeCategory === item.value
+                  : selectedCategory === item.value && currentView === 'shop';
+
               return (
                 <button
-                  key={cat.value}
-                  onClick={() => handleCategoryClick(cat.value)}
+                  key={item.value}
+                  onClick={() => handleNavClick(item)}
                   style={{
                     background: 'none',
                     border: 'none',
-                    fontSize: '0.88rem',
+                    fontSize: '0.82rem',
                     fontWeight: isSelected ? 700 : 500,
-                    color: isSelected ? 'var(--maroon-800)' : '#443538',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    color: isSelected ? 'var(--maroon-800)' : '#332729',
                     cursor: 'pointer',
-                    padding: '0.55rem 0',
+                    padding: '0.4rem 0',
                     position: 'relative',
-                    letterSpacing: '0.03em',
-                    transition: 'color 0.25s ease',
+                    transition: 'color 0.2s ease',
                   }}
-                  className="nav-link-btn"
+                  className="nav-link-item"
                 >
-                  {cat.label}
+                  {item.label}
                   {isSelected && (
                     <span
                       style={{
                         position: 'absolute',
-                        bottom: 0,
-                        left: 0,
+                        bottom: '-2px',
+                        left: '0',
                         width: '100%',
-                        height: '2px',
-                        background: 'linear-gradient(90deg, #d4af37 0%, #b8912e 100%)',
+                        height: '1.5px',
+                        backgroundColor: '#d4af37',
                         borderRadius: '2px',
                       }}
                     />
@@ -208,120 +165,68 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
                 </button>
               );
             })}
+          </nav>
 
+          {/* Right: Minimal Utility Icons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            
+            {/* Search Icon Trigger */}
             <button
-              onClick={handleStoryClick}
+              onClick={() => setSearchOpen(!searchOpen)}
               style={{
                 background: 'none',
                 border: 'none',
-                fontSize: '0.88rem',
-                fontWeight: 500,
-                color: '#443538',
                 cursor: 'pointer',
-                padding: '0.55rem 0',
-                letterSpacing: '0.03em',
-                transition: 'color 0.25s ease',
-              }}
-              className="nav-link-btn"
-            >
-              Our Story
-            </button>
-          </nav>
-
-          {/* Right: Sleek Search, Wishlist, Cart & Admin Pill */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            
-            {/* Minimal Luxury Search Bar */}
-            <div
-              style={{
+                color: searchOpen ? 'var(--maroon-800)' : '#443538',
+                padding: '0.3rem',
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: searchFocused ? '#ffffff' : 'rgba(255, 255, 255, 0.85)',
-                border: searchFocused ? '1.5px solid #d4af37' : '1px solid rgba(107, 29, 47, 0.16)',
-                borderRadius: 'var(--radius-full)',
-                padding: '0.42rem 0.95rem',
-                gap: '0.5rem',
-                boxShadow: searchFocused ? '0 0 0 3px rgba(212, 175, 55, 0.16)' : 'none',
-                transition: 'all 0.25s ease',
+                justifyContent: 'center',
+                transition: 'color 0.2s ease',
               }}
-              className="desktop-search-box"
+              className="icon-action-btn"
+              title="Search Outfits"
             >
-              <Search size={15} color="var(--maroon-700)" />
-              <input
-                type="text"
-                placeholder="Search kurtas, suits..."
-                value={searchQuery}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  border: 'none',
-                  outline: 'none',
-                  fontSize: '0.83rem',
-                  width: searchFocused ? '170px' : '135px',
-                  backgroundColor: 'transparent',
-                  color: 'var(--text-dark)',
-                  transition: 'width 0.25s ease',
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '0.9rem',
-                    color: '#888',
-                    padding: '0 0.15rem',
-                  }}
-                  title="Clear search"
-                >
-                  ×
-                </button>
-              )}
-            </div>
+              {searchOpen ? <X size={20} /> : <Search size={20} />}
+            </button>
 
-            {/* Wishlist Circular Button */}
+            {/* Wishlist Icon */}
             <button
               onClick={() => {
                 alert(`You have ${wishlist.length} saved favorites in your Wishlist!`);
               }}
               style={{
                 position: 'relative',
-                background: '#ffffff',
-                border: '1px solid rgba(107, 29, 47, 0.14)',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#443538',
+                padding: '0.3rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'var(--maroon-800)',
-                transition: 'all 0.2s ease',
+                transition: 'color 0.2s ease',
               }}
-              className="action-icon-btn"
+              className="icon-action-btn"
               title="My Wishlist"
             >
-              <Heart size={18} color="var(--maroon-800)" />
+              <Heart size={20} />
               {wishlist.length > 0 && (
                 <span
                   style={{
                     position: 'absolute',
-                    top: '-3px',
-                    right: '-3px',
+                    top: '-2px',
+                    right: '-4px',
                     backgroundColor: 'var(--maroon-700)',
                     color: '#ffffff',
-                    fontSize: '0.62rem',
+                    fontSize: '0.6rem',
                     fontWeight: 800,
-                    width: '17px',
-                    height: '17px',
+                    width: '15px',
+                    height: '15px',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '1.5px solid #ffffff',
                   }}
                 >
                   {wishlist.length}
@@ -329,43 +234,42 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
               )}
             </button>
 
-            {/* Shopping Bag Luxury Pill */}
+            {/* Shopping Bag Pill */}
             <button
               onClick={() => setCartOpen(true)}
               style={{
+                position: 'relative',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#443538',
+                padding: '0.3rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.6rem',
-                backgroundColor: '#ffffff',
-                border: '1px solid rgba(107, 29, 47, 0.18)',
-                borderRadius: 'var(--radius-full)',
-                padding: '0.42rem 1rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 10px rgba(107, 29, 47, 0.04)',
+                gap: '0.4rem',
+                transition: 'color 0.2s ease',
               }}
-              className="action-cart-btn"
+              className="icon-action-btn"
               title="Shopping Bag"
             >
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <ShoppingBag size={18} color="var(--maroon-800)" />
+              <div style={{ position: 'relative' }}>
+                <ShoppingBag size={20} />
                 {cartCount > 0 && (
                   <span
                     style={{
                       position: 'absolute',
-                      top: '-7px',
-                      right: '-8px',
+                      top: '-6px',
+                      right: '-6px',
                       backgroundColor: 'var(--maroon-800)',
                       color: '#ffffff',
-                      fontSize: '0.62rem',
+                      fontSize: '0.6rem',
                       fontWeight: 800,
-                      width: '16px',
-                      height: '16px',
+                      width: '15px',
+                      height: '15px',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: '1.5px solid #ffffff',
                     }}
                   >
                     {cartCount}
@@ -374,132 +278,140 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
               </div>
               <span
                 style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
                   color: 'var(--maroon-900)',
                 }}
-                className="cart-subtotal-text"
+                className="cart-label-text"
               >
-                ₹{cartSubtotal.toLocaleString('en-IN')}
+                Bag {cartCount > 0 && `(${cartCount})`}
               </span>
             </button>
 
-            {/* Discreet Luxury Admin Concierge Badge */}
+            {/* Discreet Admin Concierge Icon */}
             <button
               onClick={() => setCurrentView(currentView === 'admin' ? 'shop' : 'admin')}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                backgroundColor: currentView === 'admin' ? 'var(--maroon-800)' : 'rgba(212, 175, 55, 0.08)',
-                color: currentView === 'admin' ? '#ffffff' : 'var(--maroon-900)',
-                border: '1px solid rgba(212, 175, 55, 0.45)',
-                borderRadius: 'var(--radius-full)',
-                padding: '0.42rem 0.9rem',
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
+                background: 'none',
+                border: 'none',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease',
+                color: currentView === 'admin' ? 'var(--maroon-800)' : '#b39247',
+                padding: '0.3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'color 0.2s ease',
               }}
-              className="admin-badge-btn"
-              title="Admin Portal"
+              title={currentView === 'admin' ? 'Back to Storefront' : 'Admin Portal'}
+              className="icon-action-btn"
             >
-              <ShieldCheck size={14} color="#d4af37" />
-              <span>{currentView === 'admin' ? 'Storefront' : 'Admin'}</span>
+              <ShieldCheck size={18} />
             </button>
+
           </div>
         </div>
+
+        {/* Expandable Clean Search Bar Dropdown */}
+        {searchOpen && (
+          <div
+            style={{
+              padding: '1rem 0 0.5rem',
+              borderTop: '1px solid rgba(0, 0, 0, 0.06)',
+              marginTop: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              animation: 'fadeIn 0.2s ease-out',
+            }}
+          >
+            <Search size={18} color="var(--maroon-800)" />
+            <input
+              type="text"
+              placeholder="Search handcrafted kurtas, anarkalis, shirts, lehengas..."
+              value={searchQuery}
+              autoFocus
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%',
+                border: 'none',
+                outline: 'none',
+                fontSize: '0.95rem',
+                backgroundColor: 'transparent',
+                color: 'var(--text-dark)',
+                fontFamily: 'inherit',
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  color: '#888',
+                  padding: '0 0.5rem',
+                }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
           <div
             style={{
-              padding: '1.25rem 0',
-              borderTop: '1px solid rgba(107, 29, 47, 0.1)',
-              marginTop: '0.85rem',
+              padding: '1.25rem 0 0.75rem',
+              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+              marginTop: '0.75rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.85rem',
-              animation: 'fadeIn 0.25s ease-out',
+              gap: '1rem',
+              animation: 'fadeIn 0.2s ease-out',
             }}
           >
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.4rem' }}>
-              <input
-                type="text"
-                placeholder="Search kurtas, suits..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-input"
-                style={{ padding: '0.6rem 0.95rem', fontSize: '0.88rem' }}
-              />
-            </div>
-            {displayCategories.map((cat) => (
+            {navLinks.map((item) => (
               <button
-                key={cat.value}
-                onClick={() => handleCategoryClick(cat.value)}
+                key={item.value}
+                onClick={() => handleNavClick(item)}
                 style={{
                   background: 'none',
                   border: 'none',
                   textAlign: 'left',
-                  fontSize: '0.95rem',
-                  fontWeight: selectedCategory === cat.value ? 700 : 500,
-                  color: selectedCategory === cat.value ? 'var(--maroon-800)' : 'var(--text-dark)',
+                  fontSize: '0.92rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--maroon-900)',
                   padding: '0.4rem 0',
                 }}
               >
-                {cat.label}
+                {item.label}
               </button>
             ))}
-            <button
-              onClick={handleStoryClick}
-              style={{
-                background: 'none',
-                border: 'none',
-                textAlign: 'left',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                color: 'var(--text-dark)',
-                padding: '0.4rem 0',
-              }}
-            >
-              Our Story
-            </button>
           </div>
         )}
+
       </div>
 
       <style>{`
         .brand-logo-img:hover {
-          transform: scale(1.04);
+          opacity: 0.88;
         }
-        .nav-link-btn:hover {
+        .nav-link-item:hover {
           color: var(--maroon-800) !important;
         }
-        .action-icon-btn:hover {
-          background-color: var(--maroon-50) !important;
-          border-color: rgba(107, 29, 47, 0.3) !important;
+        .icon-action-btn:hover {
+          color: var(--maroon-800) !important;
           transform: translateY(-1px);
         }
-        .action-cart-btn:hover {
-          background-color: var(--maroon-50) !important;
-          border-color: rgba(107, 29, 47, 0.35) !important;
-          transform: translateY(-1px);
-        }
-        .admin-badge-btn:hover {
-          background-color: var(--maroon-800) !important;
-          color: #ffffff !important;
-          border-color: var(--maroon-800) !important;
-          transform: translateY(-1px);
-        }
-        @media (max-width: 990px) {
+        @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
-          .desktop-search-box { display: none !important; }
           .mobile-toggle-btn { display: block !important; }
-          .cart-subtotal-text { display: none !important; }
-        }
-        @media (max-width: 580px) {
-          .brand-text-block { display: none !important; }
+          .cart-label-text { display: none !important; }
         }
       `}</style>
     </header>
