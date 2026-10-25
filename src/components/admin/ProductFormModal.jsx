@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { X, Save, Sparkles, Image as ImageIcon, Upload, Trash2, Plus, Star } from 'lucide-react';
 
 export default function ProductFormModal({ product, isOpen, onClose, onSave, token }) {
   const [formData, setFormData] = useState({
@@ -20,6 +20,7 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
   });
 
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -79,15 +80,62 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
     });
   };
 
-  const presetImages = [
-    { label: 'Maroon Velvet Gown', url: '/assets/hero_banner.jpg' },
-    { label: 'Maroon Anarkali', url: '/assets/maroon_anarkali.jpg' },
-    { label: 'Emerald Kurta Set', url: '/assets/emerald_kurta.jpg' },
-    { label: 'Blush Rose Lehenga', url: '/assets/blush_lehenga.jpg' },
-    { label: 'Mustard Sharara', url: '/assets/mustard_sharara.jpg' },
-    { label: 'Indo-Western Cape', url: '/assets/indowestern_cape.jpg' },
-    { label: 'Organza Saree', url: '/assets/organza_saree.jpg' },
-  ];
+  const handleFileSelect = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        uploadData.append('images', files[i]);
+      }
+
+      const res = await fetch('/api/upload/images', {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: uploadData,
+      });
+
+      const resData = await res.json();
+      if (resData.success && resData.urls) {
+        setFormData((prev) => {
+          // Filter out default placeholder if present
+          const cleanPrev = prev.images.filter((img) => img !== '/assets/maroon_anarkali.jpg');
+          return {
+            ...prev,
+            images: [...cleanPrev, ...resData.urls],
+          };
+        });
+      } else {
+        alert(resData.message || 'Error uploading images');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Failed to upload images. Please check file format.');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, idx) => idx !== indexToRemove),
+    }));
+  };
+
+  const handleSetPrimary = (idx) => {
+    setFormData((prev) => {
+      const imgs = [...prev.images];
+      const [chosen] = imgs.splice(idx, 1);
+      return {
+        ...prev,
+        images: [chosen, ...imgs],
+      };
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -300,36 +348,154 @@ export default function ProductFormModal({ product, isOpen, onClose, onSave, tok
             </div>
           </div>
 
-          {/* Image URL & Preset Selection */}
-          <div className="form-group">
-            <label className="form-label">Primary Image URL</label>
-            <input
-              type="text"
-              value={formData.images[0] || ''}
-              onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
-              placeholder="/assets/maroon_anarkali.jpg or https://..."
-              className="form-input"
-            />
-            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Quick Pick Asset:</span>
-              {presetImages.map((p) => (
-                <button
-                  type="button"
-                  key={p.url}
-                  onClick={() => setFormData({ ...formData, images: [p.url] })}
-                  style={{
-                    fontSize: '0.72rem',
-                    padding: '0.2rem 0.5rem',
-                    borderRadius: '4px',
-                    border: '1px solid #d4c8c0',
-                    backgroundColor: formData.images[0] === p.url ? 'var(--maroon-50)' : '#ffffff',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {p.label}
-                </button>
-              ))}
+          {/* Product Images Direct Upload */}
+          <div className="form-group" style={{ marginBottom: '1.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+              <label className="form-label" style={{ margin: 0, fontWeight: 700 }}>
+                Product Photos ({formData.images.length})
+              </label>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                First photo is the Cover Image • Direct Local Storage
+              </span>
             </div>
+
+            {/* Existing uploaded thumbnails gallery */}
+            {formData.images.length > 0 && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+                  gap: '0.75rem',
+                  marginBottom: '1rem',
+                }}
+              >
+                {formData.images.map((imgUrl, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      position: 'relative',
+                      borderRadius: 'var(--radius-sm)',
+                      overflow: 'hidden',
+                      border: idx === 0 ? '2.5px solid var(--gold-600)' : '1px solid #d4c8c0',
+                      aspectRatio: '3/4',
+                      backgroundColor: '#f6f0ea',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                    }}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`Product ${idx}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+
+                    {/* Primary Badge */}
+                    {idx === 0 && (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '4px',
+                          left: '4px',
+                          backgroundColor: 'var(--maroon-900)',
+                          color: '#fdfaf2',
+                          fontSize: '0.65rem',
+                          fontWeight: 700,
+                          padding: '0.15rem 0.4rem',
+                          borderRadius: '3px',
+                          border: '1px solid var(--border-gold)',
+                        }}
+                      >
+                        Cover
+                      </span>
+                    )}
+
+                    {/* Hover Overlay Controls */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.3rem 0.45rem',
+                      }}
+                    >
+                      {idx !== 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => handleSetPrimary(idx)}
+                          title="Set as Cover"
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#fbbf24',
+                            cursor: 'pointer',
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            padding: 0,
+                          }}
+                        >
+                          Make Cover
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '0.65rem', color: '#86efac', fontWeight: 600 }}>Primary</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(idx)}
+                        title="Remove Image"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#fca5a5',
+                          cursor: 'pointer',
+                          padding: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Direct File Drop / Upload Area */}
+            <label
+              style={{
+                border: '2px dashed var(--border-gold)',
+                backgroundColor: uploading ? 'var(--ivory-surface)' : '#faf7f3',
+                borderRadius: 'var(--radius-md)',
+                padding: '1.5rem',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: uploading ? 'wait' : 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                disabled={uploading}
+                onChange={handleFileSelect}
+                style={{ display: 'none' }}
+              />
+              <Upload size={26} color="var(--maroon-800)" style={{ marginBottom: '0.4rem' }} />
+              <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--maroon-900)' }}>
+                {uploading ? 'Uploading Product Images...' : 'Click to Upload Product Photos'}
+              </span>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                Select JPG, PNG, WEBP files from your computer (Multiple photos supported)
+              </span>
+            </label>
           </div>
 
           <div className="form-group">

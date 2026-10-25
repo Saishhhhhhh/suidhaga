@@ -13,6 +13,7 @@ export default function ProductQuickView({ onOpenProduct }) {
   if (!quickViewProduct) return null;
 
   const isWishlisted = wishlist.includes(quickViewProduct._id);
+  const isSoldOut = quickViewProduct.stock !== undefined ? Number(quickViewProduct.stock) <= 0 : false;
   const images = quickViewProduct.images && quickViewProduct.images.length > 0
     ? quickViewProduct.images
     : ['/assets/maroon_anarkali.jpg'];
@@ -90,13 +91,37 @@ export default function ProductQuickView({ onOpenProduct }) {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
+                  filter: isSoldOut ? 'grayscale(30%)' : 'none',
                 }}
               />
-              {quickViewProduct.discount > 0 && (
+              {isSoldOut ? (
+                <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 2 }}>
+                  <span
+                    style={{
+                      backgroundColor: '#1f2937',
+                      color: '#ffffff',
+                      border: '1px solid #4b5563',
+                      fontSize: '0.75rem',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '4px',
+                      fontWeight: 800,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
+                    Sold Out
+                  </span>
+                </div>
+              ) : quickViewProduct.discount > 0 ? (
                 <div style={{ position: 'absolute', top: '1rem', left: '1rem' }}>
                   <span className="badge-sale">{quickViewProduct.discount}% OFF</span>
                 </div>
-              )}
+              ) : null}
             </div>
 
             {/* Thumbnail selector if multiple images */}
@@ -223,14 +248,22 @@ export default function ProductQuickView({ onOpenProduct }) {
             <div style={{ display: 'flex', gap: '0.8rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
               <button
                 onClick={() => {
+                  if (isSoldOut) return;
                   addToCart(quickViewProduct, selectedSize, quantity);
                   setQuickViewProduct(null);
                 }}
+                disabled={isSoldOut}
                 className="btn btn-primary btn-lg"
-                style={{ flexGrow: 1 }}
+                style={{
+                  flexGrow: 1,
+                  opacity: isSoldOut ? 0.65 : 1,
+                  cursor: isSoldOut ? 'not-allowed' : 'pointer',
+                  backgroundColor: isSoldOut ? '#4b5563' : undefined,
+                  borderColor: isSoldOut ? '#4b5563' : undefined,
+                }}
               >
                 <ShoppingBag size={18} />
-                <span>Add to Shopping Bag</span>
+                <span>{isSoldOut ? 'Sold Out' : 'Add to Shopping Bag'}</span>
               </button>
 
               <button

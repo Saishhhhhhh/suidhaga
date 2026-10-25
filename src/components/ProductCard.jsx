@@ -8,6 +8,7 @@ export default function ProductCard({ product, onOpenProduct }) {
 
   const isWishlisted = wishlist.includes(product._id);
   const primaryImage = product.images?.[0] || '/assets/maroon_anarkali.jpg';
+  const isSoldOut = product.stock !== undefined ? Number(product.stock) <= 0 : false;
 
   const handleClickProduct = () => {
     if (onOpenProduct) {
@@ -49,6 +50,7 @@ export default function ProductCard({ product, onOpenProduct }) {
             height: '100%',
             objectFit: 'cover',
             transition: 'transform 0.5s ease',
+            filter: isSoldOut ? 'grayscale(30%)' : 'none',
           }}
           className="product-img"
         />
@@ -65,14 +67,39 @@ export default function ProductCard({ product, onOpenProduct }) {
             zIndex: 2,
           }}
         >
-          {product.discount > 0 && (
-            <span className="badge-sale">{product.discount}% OFF</span>
-          )}
-          {product.isBestseller && (
-            <span className="badge-gold">Bestseller</span>
-          )}
-          {product.isNewArrival && (
-            <span className="badge-maroon">New Launch</span>
+          {isSoldOut ? (
+            <span
+              style={{
+                backgroundColor: '#1f2937',
+                color: '#ffffff',
+                border: '1px solid #4b5563',
+                padding: '0.25rem 0.65rem',
+                borderRadius: '4px',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
+              Sold Out
+            </span>
+          ) : (
+            <>
+              {product.discount > 0 && (
+                <span className="badge-sale">{product.discount}% OFF</span>
+              )}
+              {product.isBestseller && (
+                <span className="badge-gold">Bestseller</span>
+              )}
+              {product.isNewArrival && (
+                <span className="badge-maroon">New Launch</span>
+              )}
+            </>
           )}
         </div>
 
@@ -229,12 +256,20 @@ export default function ProductCard({ product, onOpenProduct }) {
         {/* Actions Button Row */}
         <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem' }}>
           <button
-            onClick={() => addToCart(product, selectedSize, 1)}
+            onClick={() => !isSoldOut && addToCart(product, selectedSize, 1)}
+            disabled={isSoldOut}
             className="btn btn-primary btn-sm"
-            style={{ flexGrow: 1, padding: '0.65rem 0.8rem' }}
+            style={{
+              flexGrow: 1,
+              padding: '0.65rem 0.8rem',
+              opacity: isSoldOut ? 0.65 : 1,
+              cursor: isSoldOut ? 'not-allowed' : 'pointer',
+              backgroundColor: isSoldOut ? '#4b5563' : undefined,
+              borderColor: isSoldOut ? '#4b5563' : undefined,
+            }}
           >
             <ShoppingBag size={15} />
-            <span>Add to Bag</span>
+            <span>{isSoldOut ? 'Sold Out' : 'Add to Bag'}</span>
           </button>
 
           <button

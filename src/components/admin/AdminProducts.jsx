@@ -184,34 +184,71 @@ export default function AdminProducts({ products, loading, onRefresh, onEditProd
 
                   {/* Stock with quick adjust */}
                   <td style={{ padding: '0.85rem 1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <button
-                        onClick={() => handleStockAdjust(p, -1)}
-                        style={{ border: '1px solid #ccc', background: '#fff', borderRadius: '3px', width: '22px', height: '22px', cursor: 'pointer', fontWeight: 700 }}
-                      >
-                        -
-                      </button>
-                      <span
-                        style={{
-                          fontWeight: 700,
-                          minWidth: '26px',
-                          textAlign: 'center',
-                          color: (p.stock || 0) <= 5 ? '#dc2626' : 'var(--text-dark)',
-                        }}
-                      >
-                        {p.stock !== undefined ? p.stock : 15}
-                      </span>
-                      <button
-                        onClick={() => handleStockAdjust(p, 1)}
-                        style={{ border: '1px solid #ccc', background: '#fff', borderRadius: '3px', width: '22px', height: '22px', cursor: 'pointer', fontWeight: 700 }}
-                      >
-                        +
-                      </button>
-                      {(p.stock || 0) <= 5 && (
-                        <span title="Low stock alert" style={{ color: '#dc2626' }}>
-                          <AlertTriangle size={15} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <button
+                          onClick={() => handleStockAdjust(p, -1)}
+                          style={{ border: '1px solid #ccc', background: '#fff', borderRadius: '3px', width: '22px', height: '22px', cursor: 'pointer', fontWeight: 700 }}
+                        >
+                          -
+                        </button>
+                        <span
+                          style={{
+                            fontWeight: 700,
+                            minWidth: '26px',
+                            textAlign: 'center',
+                            color: (p.stock !== undefined ? p.stock : 15) <= 0 ? '#dc2626' : (p.stock || 0) <= 5 ? '#b45309' : 'var(--text-dark)',
+                          }}
+                        >
+                          {p.stock !== undefined ? p.stock : 15}
                         </span>
-                      )}
+                        <button
+                          onClick={() => handleStockAdjust(p, 1)}
+                          style={{ border: '1px solid #ccc', background: '#fff', borderRadius: '3px', width: '22px', height: '22px', cursor: 'pointer', fontWeight: 700 }}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      {/* Stock Status Badge */}
+                      {(p.stock !== undefined ? p.stock : 15) <= 0 ? (
+                        <span
+                          style={{
+                            fontSize: '0.68rem',
+                            padding: '0.15rem 0.5rem',
+                            borderRadius: '3px',
+                            backgroundColor: '#dc2626',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            letterSpacing: '0.04em',
+                            textTransform: 'uppercase',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            width: 'fit-content',
+                          }}
+                        >
+                          <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: '#ffffff' }}></span>
+                          Sold Out
+                        </span>
+                      ) : (p.stock || 0) <= 5 ? (
+                        <span
+                          style={{
+                            fontSize: '0.68rem',
+                            padding: '0.15rem 0.5rem',
+                            borderRadius: '3px',
+                            backgroundColor: '#fef3c7',
+                            color: '#b45309',
+                            fontWeight: 700,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            width: 'fit-content',
+                          }}
+                        >
+                          <AlertTriangle size={11} /> Low Stock
+                        </span>
+                      ) : null}
                     </div>
                   </td>
 

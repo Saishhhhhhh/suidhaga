@@ -140,11 +140,15 @@ export default function ProductDetailPage({
     ? product.originalPrice - product.price
     : 0;
 
+  const isSoldOut = product.stock !== undefined ? Number(product.stock) <= 0 : false;
+
   const handleAddToCart = () => {
+    if (isSoldOut) return;
     addToCart(product, selectedSize, quantity);
   };
 
   const handleBuyNow = () => {
+    if (isSoldOut) return;
     addToCart(product, selectedSize, quantity);
     setCheckoutOpen(true);
   };
@@ -235,25 +239,51 @@ export default function ProductDetailPage({
                   objectFit: 'cover',
                   display: 'block',
                   transition: 'transform 0.4s ease',
+                  filter: isSoldOut ? 'grayscale(30%)' : 'none',
                 }}
               />
 
               {/* Floating Badges */}
               <div style={{ position: 'absolute', top: '1rem', left: '1rem', display: 'flex', flexDirection: 'column', gap: '0.45rem', zIndex: 2 }}>
-                {discountVal > 0 && (
-                  <span className="badge-sale" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                    {discountVal}% OFF
+                {isSoldOut ? (
+                  <span
+                    style={{
+                      backgroundColor: '#1f2937',
+                      color: '#ffffff',
+                      border: '1px solid #4b5563',
+                      fontSize: '0.82rem',
+                      padding: '0.35rem 0.85rem',
+                      borderRadius: '4px',
+                      fontWeight: 800,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
+                    SOLD OUT
                   </span>
-                )}
-                {product.isBestseller && (
-                  <span className="badge-gold" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                    Bestseller
-                  </span>
-                )}
-                {product.isNewArrival && (
-                  <span className="badge-maroon" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                    Festive Edit
-                  </span>
+                ) : (
+                  <>
+                    {discountVal > 0 && (
+                      <span className="badge-sale" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
+                        {discountVal}% OFF
+                      </span>
+                    )}
+                    {product.isBestseller && (
+                      <span className="badge-gold" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
+                        Bestseller
+                      </span>
+                    )}
+                    {product.isNewArrival && (
+                      <span className="badge-maroon" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
+                        Festive Edit
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -527,31 +557,62 @@ export default function ProductDetailPage({
               </div>
             </div>
 
+            {/* Sold Out Notice if stock <= 0 */}
+            {isSoldOut && (
+              <div
+                style={{
+                  backgroundColor: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.85rem 1rem',
+                  marginBottom: '1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.65rem',
+                  color: '#991b1b',
+                  fontSize: '0.88rem',
+                }}
+              >
+                <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>⚠️</span>
+                <div>
+                  <strong>Currently Sold Out in Stock.</strong>{' '}
+                  <span style={{ color: '#7f1d1d' }}>
+                    You can still place a custom order or inquire for restock via WhatsApp.
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Primary Action Buttons */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 
                 {/* Add to Cart */}
                 <button
-                  onClick={handleAddToCart}
+                  onClick={!isSoldOut ? handleAddToCart : undefined}
+                  disabled={isSoldOut}
                   className="btn btn-outline"
                   style={{
                     flex: '1 1 200px',
                     padding: '0.95rem 1.5rem',
                     fontSize: '0.95rem',
                     fontWeight: 700,
-                    borderColor: 'var(--maroon-800)',
-                    color: 'var(--maroon-800)',
+                    borderColor: isSoldOut ? '#9ca3af' : 'var(--maroon-800)',
+                    color: isSoldOut ? '#6b7280' : 'var(--maroon-800)',
+                    backgroundColor: isSoldOut ? '#f3f4f6' : 'transparent',
+                    cursor: isSoldOut ? 'not-allowed' : 'pointer',
+                    opacity: isSoldOut ? 0.7 : 1,
                     justifyContent: 'center',
                   }}
                 >
                   <ShoppingBag size={18} />
-                  <span>Add to Bag</span>
+                  <span>{isSoldOut ? 'Sold Out' : 'Add to Bag'}</span>
                 </button>
 
                 {/* Buy Now with PhonePe / COD */}
                 <button
-                  onClick={handleBuyNow}
+                  onClick={!isSoldOut ? handleBuyNow : undefined}
+                  disabled={isSoldOut}
                   className="btn btn-primary"
                   style={{
                     flex: '1 1 240px',
@@ -559,11 +620,15 @@ export default function ProductDetailPage({
                     fontSize: '0.95rem',
                     fontWeight: 700,
                     justifyContent: 'center',
-                    boxShadow: '0 6px 20px rgba(107, 29, 47, 0.3)',
+                    cursor: isSoldOut ? 'not-allowed' : 'pointer',
+                    backgroundColor: isSoldOut ? '#6b7280' : undefined,
+                    borderColor: isSoldOut ? '#6b7280' : undefined,
+                    opacity: isSoldOut ? 0.65 : 1,
+                    boxShadow: isSoldOut ? 'none' : '0 6px 20px rgba(107, 29, 47, 0.3)',
                   }}
                 >
                   <Lock size={16} />
-                  <span>Instant Checkout (PhonePe / COD)</span>
+                  <span>{isSoldOut ? 'Out of Stock' : 'Instant Checkout (PhonePe / COD)'}</span>
                 </button>
               </div>
 

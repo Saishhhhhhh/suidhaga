@@ -426,4 +426,23 @@ router.post('/seed-demo', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/import/download-wp-images
+ * Download all external WordPress images locally and update MongoDB
+ */
+router.post('/download-wp-images', async (req, res) => {
+  try {
+    const migrateAllWpImages = require('../scripts/downloadWpImagesLocally');
+    const result = await migrateAllWpImages();
+    res.json({
+      success: true,
+      message: `Successfully migrated ${result.totalDownloaded} images locally across ${result.totalProductsUpdated} products!`,
+      ...result,
+    });
+  } catch (err) {
+    console.error('Error migrating images:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;

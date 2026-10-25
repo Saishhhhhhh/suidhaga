@@ -8,11 +8,29 @@ import AdminWordpressImport from './AdminWordpressImport';
 import AdminPhonePe from './AdminPhonePe';
 import ProductFormModal from './ProductFormModal';
 
-export default function AdminLayout({ adminUser, token, onLogout, onBackToStore }) {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'categories' | 'products' | 'orders' | 'wordpress'
+export default function AdminLayout({ adminUser, token, onLogout, onBackToStore, initialTab = 'overview', onNavigateTab }) {
+  const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
+
+  // Sync state if initialTab changes (e.g. from browser back/forward or route update)
+  useEffect(() => {
+    if (initialTab && initialTab !== activeTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    const targetUrl = tabId === 'overview' ? '/admin' : `/admin/${tabId}`;
+    if (window.location.pathname !== targetUrl) {
+      window.history.pushState(null, '', targetUrl);
+    }
+    if (onNavigateTab) {
+      onNavigateTab(tabId);
+    }
+  };
 
   // Modal for add/edit product
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,7 +71,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
 
   const handleSelectCategoryFilter = (catName) => {
     setSelectedCategoryFilter(catName);
-    setActiveTab('products');
+    handleTabChange('products');
   };
 
   const navItems = [
@@ -133,7 +151,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabChange(item.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -265,7 +283,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
           {activeTab === 'overview' && (
             <AdminOverview
               token={token}
-              setActiveTab={setActiveTab}
+              setActiveTab={handleTabChange}
               onAddNewProduct={handleAddNew}
             />
           )}
@@ -276,7 +294,7 @@ export default function AdminLayout({ adminUser, token, onLogout, onBackToStore 
               token={token}
               onSelectCategoryFilter={handleSelectCategoryFilter}
               onAddNewProductForCategory={(catName) => handleAddNew(catName)}
-              onOpenPhonePe={() => setActiveTab('phonepe')}
+              onOpenPhonePe={() => handleTabChange('phonepe')}
             />
           )}
 

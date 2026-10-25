@@ -38,7 +38,10 @@ const categoryToSlug = {
 function parseCurrentRoute() {
   const path = window.location.pathname;
   if (path.startsWith('/admin')) {
-    return { view: 'admin' };
+    const rawTab = path.replace(/^\/admin\/?/, '').split('/')[0] || '';
+    const validTabs = ['overview', 'categories', 'products', 'orders', 'phonepe', 'wordpress'];
+    const adminTab = validTabs.includes(rawTab) ? rawTab : 'overview';
+    return { view: 'admin', adminTab };
   }
   if (path.startsWith('/category/')) {
     const slug = path.replace('/category/', '').replace(/\/$/, '');
@@ -128,9 +131,10 @@ function MainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigateToAdmin = () => {
-    window.history.pushState({}, '', '/admin');
-    setRoute({ view: 'admin' });
+  const navigateToAdmin = (tab = 'overview') => {
+    const targetUrl = tab === 'overview' ? '/admin' : `/admin/${tab}`;
+    window.history.pushState({}, '', targetUrl);
+    setRoute({ view: 'admin', adminTab: tab });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -182,6 +186,8 @@ function MainApp() {
           <AdminLayout
             adminUser={adminUser}
             token={adminToken}
+            initialTab={route.adminTab || 'overview'}
+            onNavigateTab={(tab) => setRoute({ view: 'admin', adminTab: tab })}
             onLogout={handleAdminLogout}
             onBackToStore={navigateToHome}
           />
