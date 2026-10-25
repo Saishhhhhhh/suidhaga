@@ -7,13 +7,20 @@ const csv = require('csv-parser');
 const Product = require('../models/Product');
 const { verifyAdmin } = require('../middleware/auth');
 
-// Multer setup for temporary CSV upload
-const upload = multer({ dest: 'uploads/' });
+const path = require('path');
+const os = require('os');
 
-// Ensure uploads directory exists
-if (!fs.existsSync('uploads')) {
-  fs.mkdirSync('uploads', { recursive: true });
+// Multer setup for temporary CSV upload in serverless/local environment
+const tmpUploadDir = path.join(os.tmpdir(), 'uploads');
+try {
+  if (!fs.existsSync(tmpUploadDir)) {
+    fs.mkdirSync(tmpUploadDir, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless
 }
+const upload = multer({ dest: tmpUploadDir });
+
 
 function makeSlug(text) {
   return (

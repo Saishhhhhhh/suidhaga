@@ -32,18 +32,29 @@ router.post('/login', async (req, res) => {
     }
 
     const cleanEmail = email.trim().toLowerCase();
-    const admin = await getOrCreateAdmin();
+    const defaultAdminEmail = (process.env.ADMIN_EMAIL || 'admin@suidhaga.com').toLowerCase();
+    const defaultAdminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+    let admin = null;
+    try {
+      admin = await getOrCreateAdmin();
+    } catch (dbErr) {
+      console.warn('DB connection notice during admin login, using fallback credentials:', dbErr.message);
+    }
 
     // Match credentials from DB (or env fallback)
     const isMatch =
-      (admin.email.toLowerCase() === cleanEmail && admin.password === password) ||
-      (cleanEmail === (process.env.ADMIN_EMAIL || 'admin@suidhaga.com').toLowerCase() &&
-        password === (process.env.ADMIN_PASSWORD || 'admin123'));
+      (admin && admin.email.toLowerCase() === cleanEmail && admin.password === password) ||
+      (cleanEmail === defaultAdminEmail && password === defaultAdminPassword);
 
     if (isMatch) {
+      const adminId = admin ? admin._id : 'admin_default_id';
+      const adminName = admin ? admin.name : 'Komal (Store Owner)';
+      const adminPhone = admin ? (admin.phone || '+91 97730 01771') : '+91 97730 01771';
+
       const token = jwt.sign(
-        { id: admin._id, email: admin.email, role: 'admin' },
-        process.env.JWT_SECRET || 'suidhaga_secret',
+        { id: adminId, email: cleanEmail, role: 'admin' },
+        process.env.JWT_SECRET || 'suidhaga_super_secret_jwt_key_2026_festive',
         { expiresIn: '7d' }
       );
 
@@ -52,10 +63,10 @@ router.post('/login', async (req, res) => {
         message: 'Admin logged in successfully',
         token,
         admin: {
-          id: admin._id,
-          email: admin.email,
-          name: admin.name,
-          phone: admin.phone || '+91 97730 01771',
+          id: adminId,
+          email: cleanEmail,
+          name: adminName,
+          phone: adminPhone,
           role: 'admin',
         },
       });

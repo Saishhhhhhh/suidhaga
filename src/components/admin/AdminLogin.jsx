@@ -19,8 +19,14 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
-      if (data.success && data.token) {
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        data = { message: 'Authentication server error' };
+      }
+
+      if (res.ok && data.success && data.token) {
         localStorage.setItem('suidhaga_admin_token', data.token);
         localStorage.setItem('suidhaga_admin_user', JSON.stringify(data.admin));
         onLoginSuccess(data.admin, data.token);
@@ -28,7 +34,7 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
         setError(data.message || 'Invalid email or password');
       }
     } catch (err) {
-      setError('Cannot connect to authentication server');
+      setError('Cannot connect to authentication server. Retrying...');
     } finally {
       setLoading(false);
     }

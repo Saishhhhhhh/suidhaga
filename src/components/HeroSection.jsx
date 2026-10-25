@@ -44,6 +44,7 @@ export default function HeroSection() {
 
   const bannerImg = heroSettings.heroBannerUrl || '/assets/hero_banner.jpg';
   const cleanPhone = (heroSettings.whatsappNumber || '919773001771').replace(/\D/g, '');
+  const bannerPos = heroSettings.bannerPosition || 'center center';
 
   return (
     <section
@@ -52,16 +53,48 @@ export default function HeroSection() {
         minHeight: '82vh',
         display: 'flex',
         alignItems: 'center',
-        background: `linear-gradient(to right, rgba(31, 10, 16, 0.92) 0%, rgba(54, 7, 18, 0.78) 50%, rgba(54, 7, 18, 0.35) 100%), url('${bannerImg}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 20%',
         color: '#ffffff',
         overflow: 'hidden',
         borderBottom: '1px solid rgba(212, 175, 55, 0.35)',
+        backgroundColor: '#1c080e',
       }}
       className="hero-section-luxury"
     >
+      {/* Background Banner Image with Full Cover & Precise Positioning */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+          overflow: 'hidden',
+        }}
+      >
+        <img
+          src={bannerImg}
+          alt="Sui Dhaga Hero Banner"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: bannerPos,
+            display: 'block',
+          }}
+          className="hero-banner-image"
+        />
+        {/* Soft elegant gradient overlay to keep text readable without cutting the banner */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'linear-gradient(to right, rgba(28, 8, 14, 0.90) 0%, rgba(28, 8, 14, 0.65) 45%, rgba(28, 8, 14, 0.20) 100%)',
+          }}
+          className="hero-gradient-overlay"
+        />
+      </div>
+
       <div className="container" style={{ position: 'relative', zIndex: 10, padding: '4.5rem 1.5rem' }}>
+
         <div style={{ maxWidth: '680px' }}>
           
           {/* Badge */}
@@ -143,10 +176,15 @@ export default function HeroSection() {
       </div>
 
       <style>{`
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
           .hero-section-luxury {
-            min-height: 70vh !important;
-            background-position: center center !important;
+            min-height: 72vh !important;
+          }
+          .hero-gradient-overlay {
+            background: linear-gradient(to bottom, rgba(28, 8, 14, 0.88) 0%, rgba(28, 8, 14, 0.72) 50%, rgba(28, 8, 14, 0.85) 100%) !important;
+          }
+          .hero-banner-image {
+            object-position: center center !important;
           }
           .hero-btn-group {
             flex-direction: column !important;

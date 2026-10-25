@@ -32,6 +32,10 @@ const siteSettingsSchema = new mongoose.Schema(
       type: String,
       default: '919773001771',
     },
+    bannerPosition: {
+      type: String,
+      default: 'center center',
+    },
   },
   { timestamps: true }
 );

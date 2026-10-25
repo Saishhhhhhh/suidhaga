@@ -9,6 +9,7 @@ export default function AdminHeroSettings({ token }) {
     heroBadge: 'Grand Festive Edit 2026',
     ctaText: 'Explore Collection',
     whatsappNumber: '+91 97730 01771',
+    bannerPosition: 'center center',
   });
 
   const [loading, setLoading] = useState(true);
@@ -199,6 +200,29 @@ export default function AdminHeroSettings({ token }) {
               </label>
             </div>
 
+            {/* Banner Alignment / Focal Point */}
+            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+              <label className="form-label" style={{ fontWeight: 700 }}>
+                Banner Alignment (Focal Point)
+              </label>
+              <select
+                name="bannerPosition"
+                value={formData.bannerPosition || 'center center'}
+                onChange={handleChange}
+                className="form-input"
+                style={{ backgroundColor: '#ffffff', fontWeight: 600 }}
+              >
+                <option value="center center">Center (Default - Full balanced view)</option>
+                <option value="center top">Top Center (Focus on top of banner)</option>
+                <option value="center bottom">Bottom Center (Focus on bottom of banner)</option>
+                <option value="right center">Right Side (Focus on right-side model/subject)</option>
+                <option value="left center">Left Side (Focus on left-side model/subject)</option>
+              </select>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                Prevents the banner from getting pushed into the corner or cropped awkwardly.
+              </span>
+            </div>
+
             {/* Headline Title */}
             <div className="form-group">
               <label className="form-label">Main Heading Title *</label>
@@ -305,12 +329,34 @@ export default function AdminHeroSettings({ token }) {
               color: '#ffffff',
               boxShadow: '0 12px 35px rgba(0,0,0,0.2)',
               border: '2px solid var(--border-gold)',
-              background: `linear-gradient(to right, rgba(31, 10, 16, 0.92) 0%, rgba(54, 7, 18, 0.78) 55%, rgba(54, 7, 18, 0.35) 100%), url('${formData.heroBannerUrl || '/assets/hero_banner.jpg'}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundColor: '#1c080e',
             }}
           >
-            {formData.heroBadge && (
+            {/* Background Image Layer */}
+            <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+              <img
+                src={formData.heroBannerUrl || '/assets/hero_banner.jpg'}
+                alt="Banner Preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: formData.bannerPosition || 'center center',
+                  display: 'block',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'linear-gradient(to right, rgba(28, 8, 14, 0.90) 0%, rgba(28, 8, 14, 0.65) 50%, rgba(28, 8, 14, 0.20) 100%)',
+                }}
+              />
+            </div>
+
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              {formData.heroBadge && (
               <div
                 style={{
                   display: 'inline-flex',
@@ -402,5 +448,7 @@ export default function AdminHeroSettings({ token }) {
         </div>
       </div>
     </div>
+  </div>
   );
 }
+
