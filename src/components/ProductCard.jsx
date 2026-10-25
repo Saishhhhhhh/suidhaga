@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { Heart, Eye, ShoppingBag, MessageCircle, Star } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onOpenProduct }) {
   const { addToCart, wishlist, toggleWishlist, setQuickViewProduct } = useShop();
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || 'M');
 
   const isWishlisted = wishlist.includes(product._id);
   const primaryImage = product.images?.[0] || '/assets/maroon_anarkali.jpg';
+
+  const handleClickProduct = () => {
+    if (onOpenProduct) {
+      onOpenProduct(product._id);
+    } else {
+      setQuickViewProduct(product);
+    }
+  };
 
   const handleWhatsAppEnquiry = (e) => {
     e.stopPropagation();
@@ -28,7 +36,7 @@ export default function ProductCard({ product }) {
           backgroundColor: '#f3ece7',
           cursor: 'pointer',
         }}
-        onClick={() => setQuickViewProduct(product)}
+        onClick={handleClickProduct}
       >
         <img
           src={primaryImage}
@@ -148,7 +156,7 @@ export default function ProductCard({ product }) {
 
         {/* Title */}
         <h3
-          onClick={() => setQuickViewProduct(product)}
+          onClick={handleClickProduct}
           className="font-display"
           style={{
             fontSize: '1.05rem',

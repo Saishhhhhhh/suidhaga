@@ -17,16 +17,47 @@ import WhatsAppFloat from './components/WhatsAppFloat';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
 import CategoryPage from './pages/CategoryPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+
+const slugToCategory = {
+  'ethnic-wear': 'Ethnic Wear',
+  'travel-ready': 'Travel Ready',
+  'shirts': 'Shirts',
+  'indo-western': 'Indo-Western',
+};
+
+const categoryToSlug = {
+  'Ethnic Wear': 'ethnic-wear',
+  'Travel Ready': 'travel-ready',
+  'Shirts': 'shirts',
+  'Indo-Western': 'indo-western',
+};
+
+function parseCurrentRoute() {
+  const path = window.location.pathname;
+  if (path.startsWith('/admin')) {
+    return { view: 'admin' };
+  }
+  if (path.startsWith('/category/')) {
+    const slug = path.replace('/category/', '').replace(/\/$/, '');
+    const catName = slugToCategory[slug] || 'Ethnic Wear';
+    return { view: 'category', category: catName };
+  }
+  if (path.startsWith('/product/')) {
+    const id = path.replace('/product/', '').replace(/\/$/, '');
+    return { view: 'product', productId: id };
+  }
+  if (path.startsWith('/our-story') || path.startsWith('/story')) {
+    return { view: 'story' };
+  }
+  return { view: 'shop' };
+}
 
 function MainApp() {
   const { notification, setSelectedCategory } = useShop();
 
-  // Route state: 'shop' | 'category' | 'admin'
-  const [currentView, setCurrentView] = useState(() => {
-    return window.location.pathname.startsWith('/admin') ? 'admin' : 'shop';
-  });
-
-  const [activeCategory, setActiveCategory] = useState('Ethnic Wear');
+  // Multi-page route state: { view, category?, productId? }
+  const [route, setRoute] = useState(() => parseCurrentRoute());
 
   // Admin Auth state
   const [adminToken, setAdminToken] = useState(() => {
@@ -42,29 +73,50 @@ function MainApp() {
     }
   });
 
-  // Handle URL history state
+  // Handle browser back/forward buttons with real URL updates
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentView(window.location.pathname.startsWith('/admin') ? 'admin' : 'shop');
+      const newRoute = parseCurrentRoute();
+      setRoute(newRoute);
+      if (newRoute.category) {
+        setSelectedCategory(newRoute.category);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [setSelectedCategory]);
 
-  const navigateTo = (view) => {
-    setCurrentView(view);
-    if (view === 'admin') {
-      window.history.pushState({}, '', '/admin');
-    } else {
-      window.history.pushState({}, '', '/');
-    }
+  // Route Navigation Handlers
+  const navigateToHome = () => {
+    window.history.pushState({}, '', '/');
+    setRoute({ view: 'shop' });
+    setSelectedCategory('All');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenCategory = (cat) => {
-    setActiveCategory(cat);
-    setSelectedCategory(cat);
-    setCurrentView('category');
+  const navigateToCategory = (catName) => {
+    const slug = categoryToSlug[catName] || 'ethnic-wear';
+    window.history.pushState({}, '', `/category/${slug}`);
+    setRoute({ view: 'category', category: catName });
+    setSelectedCategory(catName);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToProduct = (productId) => {
+    window.history.pushState({}, '', `/product/${productId}`);
+    setRoute({ view: 'product', productId });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToStory = () => {
+    window.history.pushState({}, '', '/our-story');
+    setRoute({ view: 'story' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToAdmin = () => {
+    window.history.pushState({}, '', '/admin');
+    setRoute({ view: 'admin' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -78,7 +130,7 @@ function MainApp() {
     localStorage.removeItem('suidhaga_admin_user');
     setAdminToken(null);
     setAdminUser(null);
-    navigateTo('shop');
+    navigateToHome();
   };
 
   return (
@@ -111,54 +163,72 @@ function MainApp() {
         </div>
       )}
 
-      {currentView === 'admin' ? (
+      {route.view === 'admin' ? (
         adminToken ? (
           <AdminLayout
             adminUser={adminUser}
             token={adminToken}
             onLogout={handleAdminLogout}
-            onBackToStore={() => navigateTo('shop')}
+            onBackToStore={navigateToHome}
           />
         ) : (
           <AdminLogin
             onLoginSuccess={handleAdminLoginSuccess}
-            onBackToStore={() => navigateTo('shop')}
+            onBackToStore={navigateToHome}
           />
         )
       ) : (
-        /* Customer Storefront View */
+        /* Customer Multi-page Storefront View */
         <>
           <AnnouncementBar />
           <Header
-            currentView={currentView}
-            setCurrentView={navigateTo}
-            onOpenCategory={handleOpenCategory}
-            activeCategory={activeCategory}
+            currentView={route.view}
+            activeCategory={route.category}
+            onNavigateHome={navigateToHome}
+            onOpenCategory={navigateToCategory}
+            onOpenStory={navigateToStory}
           />
           
           <main style={{ flexGrow: 1 }}>
-            {currentView === 'category' ? (
+            {route.view === 'category' ? (
               <CategoryPage
-                activeCategory={activeCategory}
-                onSelectCategory={(cat) => {
-                  setActiveCategory(cat);
-                  setSelectedCategory(cat);
-                }}
-                onBackToHome={() => navigateTo('shop')}
+                activeCategory={route.category}
+                onSelectCategory={navigateToCategory}
+                onBackToHome={navigateToHome}
+                onOpenProduct={navigateToProduct}
               />
+            ) : route.view === 'product' ? (
+              <ProductDetailPage
+                productId={route.productId}
+                onNavigateHome={navigateToHome}
+                onNavigateCategory={navigateToCategory}
+                onNavigateProduct={navigateToProduct}
+              />
+            ) : route.view === 'story' ? (
+              <div style={{ padding: '3rem 0' }}>
+                <FounderStory />
+                <WhySuiDhaga />
+              </div>
             ) : (
+              /* Home Page */
               <>
                 <HeroSection />
                 <DiwaliBanner />
-                <CollectionGrid onOpenCategory={handleOpenCategory} />
-                <ProductCatalog />
+                <CollectionGrid onOpenCategory={navigateToCategory} />
+                <ProductCatalog
+                  onOpenProduct={navigateToProduct}
+                  onOpenCategory={navigateToCategory}
+                />
                 <FounderStory />
                 <WhySuiDhaga />
               </>
             )}
           </main>
 
-          <Footer setCurrentView={navigateTo} />
+          <Footer
+            setCurrentView={(v) => v === 'admin' ? navigateToAdmin() : navigateToHome()}
+            onOpenCategory={navigateToCategory}
+          />
 
           {/* Modals & Drawers */}
           <CartDrawer />

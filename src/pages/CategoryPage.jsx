@@ -3,7 +3,12 @@ import { ArrowLeft, Sparkles, Filter, SlidersHorizontal, MessageCircle, ChevronR
 import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
 
-export default function CategoryPage({ activeCategory = 'Ethnic Wear', onSelectCategory, onBackToHome }) {
+export default function CategoryPage({
+  activeCategory = 'Ethnic Wear',
+  onSelectCategory,
+  onBackToHome,
+  onOpenProduct,
+}) {
   const { products, loading } = useShop();
 
   const [sortBy, setSortBy] = useState('featured');
@@ -418,7 +423,7 @@ export default function CategoryPage({ activeCategory = 'Ethnic Wear', onSelectC
             }}
           >
             {sortedProducts.map((prod) => (
-              <ProductCard key={prod._id} product={prod} />
+              <ProductCard key={prod._id} product={prod} onOpenProduct={onOpenProduct} />
             ))}
           </div>
         )}

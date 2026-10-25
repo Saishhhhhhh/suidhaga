@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Sparkles, SlidersHorizontal, Flame, Compass } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Sparkles, ChevronLeft, ChevronRight, SlidersHorizontal, ArrowRight, Compass } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import ProductCard from './ProductCard';
 
-export default function ProductCatalog() {
+export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
   const {
     products,
     loading,
     selectedCategory,
     setSelectedCategory,
     searchQuery,
-    categories: apiCategories,
   } = useShop();
 
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'bestsellers' | 'new'
   const [sortBy, setSortBy] = useState('featured');
+  const sliderRef = useRef(null);
 
   const categories = ['All', 'Ethnic Wear', 'Travel Ready', 'Shirts', 'Indo-Western'];
 
@@ -33,51 +33,116 @@ export default function ProductCatalog() {
     return 0;
   });
 
+  const scrollSlider = (direction) => {
+    if (sliderRef.current) {
+      const scrollAmount = direction === 'left' ? -340 : 340;
+      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section id="collection-section" style={{ padding: '4rem 0 5rem', backgroundColor: 'var(--ivory-base)' }}>
+    <section id="collection-section" style={{ padding: '4.5rem 0 5rem', backgroundColor: 'var(--ivory-base)', overflow: 'hidden' }}>
       <div className="container">
         
-        {/* Section Title */}
-        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 2.5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              color: 'var(--gold-600)',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              marginBottom: '0.5rem',
-            }}
-          >
-            <Sparkles size={14} />
-            <span>The Festive Couture Collection</span>
+        {/* Section Header with Slider Navigation Controls */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '2rem',
+            flexWrap: 'wrap',
+            gap: '1.5rem',
+          }}
+        >
+          <div>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                color: 'var(--gold-600)',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                marginBottom: '0.5rem',
+              }}
+            >
+              <Sparkles size={14} color="#d4af37" />
+              <span>The Festive Couture Collection</span>
+            </div>
+
+            <h2
+              className="font-display maroon-gradient-text"
+              style={{ fontSize: 'clamp(2rem, 3.8vw, 2.8rem)', fontWeight: 700, lineHeight: 1.2 }}
+            >
+              Signature Handcrafted Outfits
+            </h2>
+
+            <p style={{ color: 'var(--text-medium)', fontSize: '0.94rem', marginTop: '0.4rem', maxWidth: '580px' }}>
+              {searchQuery
+                ? `Showing handcrafted matches for "${searchQuery}"`
+                : 'Slide through our ready-to-ship royal anarkalis, festive kurta sets, breezy vacation co-ords, and tailored cotton shirts.'}
+            </p>
           </div>
 
-          <h2
-            className="font-display maroon-gradient-text"
-            style={{ fontSize: 'clamp(2rem, 3.5vw, 2.7rem)', fontWeight: 700, marginBottom: '0.6rem' }}
-          >
-            {selectedCategory === 'All' ? 'Signature Handcrafted Outfits' : selectedCategory}
-          </h2>
+          {/* Slider Prev / Next Arrows */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button
+              onClick={() => scrollSlider('left')}
+              style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                border: '1.5px solid rgba(107, 29, 47, 0.2)',
+                color: 'var(--maroon-900)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                transition: 'all 0.2s',
+              }}
+              className="slider-nav-btn"
+              title="Previous Outfits"
+            >
+              <ChevronLeft size={22} />
+            </button>
 
-          <p style={{ color: 'var(--text-medium)', fontSize: '0.95rem' }}>
-            {searchQuery
-              ? `Showing results for "${searchQuery}"`
-              : 'Rooted in Indian traditions, tailored with love. Explore our latest ready-to-ship ethnic silhouettes.'}
-          </p>
+            <button
+              onClick={() => scrollSlider('right')}
+              style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--maroon-800)',
+                border: '1.5px solid var(--maroon-800)',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(107, 29, 47, 0.25)',
+                transition: 'all 0.2s',
+              }}
+              className="slider-nav-btn"
+              title="Next Outfits"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </div>
         </div>
 
         {/* Category Filter Pills Bar */}
         <div
           style={{
             display: 'flex',
-            justifyContent: 'center',
+            alignItems: 'center',
             gap: '0.6rem',
             flexWrap: 'wrap',
-            marginBottom: '1.5rem',
+            marginBottom: '1.75rem',
           }}
         >
           {categories.map((cat) => (
@@ -85,12 +150,12 @@ export default function ProductCatalog() {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               style={{
-                padding: '0.5rem 1.2rem',
+                padding: '0.5rem 1.25rem',
                 borderRadius: 'var(--radius-full)',
                 border: selectedCategory === cat ? '1.5px solid var(--maroon-800)' : '1px solid #dcd3cb',
                 backgroundColor: selectedCategory === cat ? 'var(--maroon-800)' : '#ffffff',
                 color: selectedCategory === cat ? '#ffffff' : 'var(--text-dark)',
-                fontSize: '0.85rem',
+                fontSize: '0.84rem',
                 fontWeight: selectedCategory === cat ? 700 : 500,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
@@ -108,15 +173,15 @@ export default function ProductCatalog() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '1px solid rgba(107, 29, 47, 0.12)',
-            paddingBottom: '1rem',
-            marginBottom: '2.5rem',
+            borderBottom: '1px solid rgba(107, 29, 47, 0.1)',
+            paddingBottom: '0.85rem',
+            marginBottom: '1.5rem',
             flexWrap: 'wrap',
             gap: '1rem',
           }}
         >
           {/* Sub Filters */}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <button
               onClick={() => setActiveFilter('all')}
               style={{
@@ -185,37 +250,92 @@ export default function ProductCatalog() {
           </div>
         </div>
 
-        {/* Loading Skeleton */}
+        {/* Loading Skeletons */}
         {loading && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-              gap: '2rem',
-            }}
-          >
+          <div style={{ display: 'flex', gap: '1.5rem', overflowX: 'hidden' }}>
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
                 className="card-luxury"
-                style={{ height: '420px', backgroundColor: '#efe7df', opacity: 0.6 }}
+                style={{ flex: '0 0 290px', height: '420px', backgroundColor: '#efe7df', opacity: 0.6 }}
               />
             ))}
           </div>
         )}
 
-        {/* Product Cards Grid */}
+        {/* Product Cards Slider (Horizontal Scroll Track) */}
         {!loading && sorted.length > 0 && (
           <div
+            ref={sliderRef}
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))',
-              gap: '2rem',
+              display: 'flex',
+              gap: '1.75rem',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              scrollBehavior: 'smooth',
+              padding: '0.5rem 0.25rem 1.5rem',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
             }}
+            className="product-slider-scroll"
           >
             {sorted.map((prod) => (
-              <ProductCard key={prod._id} product={prod} />
+              <div
+                key={prod._id}
+                style={{
+                  flex: '0 0 295px',
+                  scrollSnapAlign: 'start',
+                }}
+              >
+                <ProductCard product={prod} onOpenProduct={onOpenProduct} />
+              </div>
             ))}
+
+            {/* Final Slide: Explore Full Category Card */}
+            {selectedCategory !== 'All' && onOpenCategory && (
+              <div
+                onClick={() => onOpenCategory(selectedCategory)}
+                style={{
+                  flex: '0 0 250px',
+                  scrollSnapAlign: 'start',
+                  borderRadius: 'var(--radius-md)',
+                  backgroundColor: '#ffffff',
+                  border: '1.5px dashed var(--border-gold)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '2rem',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                }}
+                className="view-more-slide"
+              >
+                <div
+                  style={{
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--maroon-50)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    color: 'var(--maroon-800)',
+                  }}
+                >
+                  <ArrowRight size={24} />
+                </div>
+                <h4 className="font-display" style={{ fontSize: '1.15rem', color: 'var(--maroon-900)', marginBottom: '0.5rem' }}>
+                  Explore All in {selectedCategory}
+                </h4>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  View complete collection with advanced filters
+                </p>
+              </div>
+            )}
           </div>
         )}
 
@@ -227,7 +347,7 @@ export default function ProductCatalog() {
               No outfits found in this selection
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-              Try clearing your search query or selecting "All Collections".
+              Try selecting "All Collections" to see our signature outfits.
             </p>
             <button
               onClick={() => {
@@ -242,6 +362,20 @@ export default function ProductCatalog() {
         )}
 
       </div>
+
+      <style>{`
+        .product-slider-scroll::-webkit-scrollbar {
+          display: none;
+        }
+        .slider-nav-btn:hover {
+          transform: scale(1.06);
+        }
+        .view-more-slide:hover {
+          border-color: var(--maroon-800) !important;
+          background-color: var(--maroon-50) !important;
+          transform: translateY(-2px);
+        }
+      `}</style>
     </section>
   );
 }

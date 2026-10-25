@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Heart, Sparkles, Send, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function Footer({ setCurrentView }) {
+export default function Footer({ setCurrentView, onOpenCategory }) {
   const { setSelectedCategory, setOrderTrackerOpen } = useShop();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -148,9 +148,13 @@ export default function Footer({ setCurrentView }) {
                 <li key={cat}>
                   <button
                     onClick={() => {
-                      setSelectedCategory(cat);
-                      setCurrentView('shop');
-                      window.scrollTo({ top: 600, behavior: 'smooth' });
+                      if (onOpenCategory) {
+                        onOpenCategory(cat);
+                      } else {
+                        setSelectedCategory(cat);
+                        setCurrentView('shop');
+                        window.scrollTo({ top: 600, behavior: 'smooth' });
+                      }
                     }}
                     style={{
                       background: 'none',

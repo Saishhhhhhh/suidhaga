@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, ShoppingBag, Heart, ShieldCheck, Menu, X, ArrowRight } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function Header({ currentView, setCurrentView, onOpenCategory, activeCategory }) {
+export default function Header({ currentView, onNavigateHome, onOpenCategory, onOpenStory, activeCategory }) {
   const {
     cartCount,
     setCartOpen,
@@ -28,27 +28,23 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
   const handleNavClick = (link) => {
     setMobileMenuOpen(false);
     if (link.value === 'story') {
-      if (currentView !== 'shop') {
-        setCurrentView('shop');
-      }
-      setTimeout(() => {
+      if (onOpenStory) {
+        onOpenStory();
+      } else {
         const el = document.getElementById('founder-story');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
+      }
     } else {
-      setSelectedCategory(link.value);
       if (onOpenCategory) {
         onOpenCategory(link.value);
-      } else {
-        setCurrentView('category');
       }
     }
   };
 
   const handleLogoClick = () => {
-    setCurrentView('shop');
-    setSelectedCategory('All');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (onNavigateHome) {
+      onNavigateHome();
+    }
   };
 
   return (
@@ -124,10 +120,10 @@ export default function Header({ currentView, setCurrentView, onOpenCategory, ac
             {navLinks.map((item) => {
               const isSelected =
                 item.value === 'story'
-                  ? false
+                  ? currentView === 'story'
                   : currentView === 'category'
                   ? activeCategory === item.value
-                  : selectedCategory === item.value && currentView === 'shop';
+                  : false;
 
               return (
                 <button
