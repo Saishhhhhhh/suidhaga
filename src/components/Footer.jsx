@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Heart, Sparkles, Send, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
 export default function Footer({ setCurrentView, onOpenCategory }) {
@@ -201,7 +202,7 @@ export default function Footer({ setCurrentView, onOpenCategory }) {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem', fontSize: '0.88rem', color: '#e5d7d0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <Phone size={16} color="#25D366" />
+                <OfficialWhatsAppIcon size={16} color="#25D366" />
                 <a
                   href="https://wa.me/919773001771"
                   target="_blank"

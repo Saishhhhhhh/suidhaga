@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, Eye, ShoppingBag, MessageCircle, Star } from 'lucide-react';
+import { Heart, Eye, ShoppingBag, Star } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
 export default function ProductCard({ product, onOpenProduct }) {
@@ -163,7 +164,7 @@ export default function ProductCard({ product, onOpenProduct }) {
             }}
             title="Chat on WhatsApp about this outfit"
           >
-            <MessageCircle size={16} color="#25D366" />
+            <OfficialWhatsAppIcon size={16} color="#25D366" />
           </button>
         </div>
 

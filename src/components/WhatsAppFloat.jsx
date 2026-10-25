@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 
 export default function WhatsAppFloat() {
   const whatsappNumber = '919773001771';
@@ -11,13 +11,14 @@ export default function WhatsAppFloat() {
     <div
       style={{
         position: 'fixed',
-        bottom: '2rem',
-        right: '2rem',
+        bottom: '1.75rem',
+        right: '1.5rem',
         zIndex: 850,
         display: 'flex',
         alignItems: 'center',
         gap: '0.6rem',
       }}
+      className="whatsapp-float-container"
     >
       <a
         href={`https://wa.me/${whatsappNumber}?text=${defaultMessage}`}
@@ -26,7 +27,7 @@ export default function WhatsAppFloat() {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem',
+          gap: '0.65rem',
           backgroundColor: '#25D366',
           color: '#ffffff',
           borderRadius: 'var(--radius-full)',
@@ -39,8 +40,9 @@ export default function WhatsAppFloat() {
           animation: 'pulseGlow 2.5s infinite',
         }}
         className="whatsapp-float-btn"
+        title="Chat with Komal on WhatsApp"
       >
-        <MessageCircle size={22} fill="#ffffff" color="#25D366" />
+        <OfficialWhatsAppIcon size={24} color="#ffffff" />
         <span className="whatsapp-text">Chat with Komal</span>
       </a>
 
@@ -50,12 +52,20 @@ export default function WhatsAppFloat() {
           box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
         }
         @media (max-width: 600px) {
+          .whatsapp-float-container {
+            bottom: 1.25rem !important;
+            right: 1.25rem !important;
+          }
           .whatsapp-text {
-            display: none;
+            display: none !important;
           }
           .whatsapp-float-btn {
-            padding: 0.8rem;
-            border-radius: 50%;
+            width: 48px !important;
+            height: 48px !important;
+            padding: 0 !important;
+            border-radius: 50% !important;
+            justify-content: center !important;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
           }
         }
       `}</style>

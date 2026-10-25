@@ -11,31 +11,34 @@ export default function AnnouncementBar() {
         backgroundColor: '#26050e',
         color: '#fdfaf2',
         fontSize: '0.74rem',
-        padding: '0.4rem 1.5rem',
+        padding: '0.35rem 1.25rem',
         borderBottom: '1px solid rgba(212, 175, 55, 0.25)',
-        letterSpacing: '0.04em',
+        letterSpacing: '0.03em',
       }}
+      className="top-announcement-bar"
     >
       <div
-        className="container"
+        className="container announcement-bar-container"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          flexWrap: 'wrap',
           gap: '0.5rem',
         }}
       >
         {/* Left: Clean Festive Message */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span>🪔</span>
-          <span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', overflow: 'hidden' }} className="announcement-msg">
+          <span style={{ fontSize: '0.9rem' }}>🪔</span>
+          <span className="desktop-announcement-text">
             Shubh Deepavali Offer: Use code <strong style={{ color: '#ffd700', letterSpacing: '0.08em' }}>DIWALI15</strong> for 15% Off • Complimentary Shipping across India
+          </span>
+          <span className="mobile-announcement-text">
+            Festive Offer: 15% Off (Code: <strong style={{ color: '#ffd700' }}>DIWALI15</strong>) • Free Shipping
           </span>
         </div>
 
         {/* Right: Clean WhatsApp & Track Order */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }} className="announcement-right">
           <a
             href="https://wa.me/919773001771?text=Hi%20Komal!%20I'm%20browsing%20Sui-Dhaga%20and%20would%20love%20some%20guidance."
             target="_blank"
@@ -50,6 +53,7 @@ export default function AnnouncementBar() {
               opacity: 0.9,
               transition: 'opacity 0.2s',
             }}
+            className="announcement-phone"
           >
             <Phone size={12} color="#25D366" />
             <span>+91 97730 01771</span>
@@ -64,17 +68,46 @@ export default function AnnouncementBar() {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.3rem',
-              fontSize: '0.74rem',
+              gap: '0.25rem',
+              fontSize: '0.72rem',
               fontWeight: 600,
               padding: 0,
+              whiteSpace: 'nowrap',
             }}
           >
-            <Clock size={12} />
+            <Clock size={11} />
             <span>Track Order</span>
           </button>
         </div>
       </div>
+
+      <style>{`
+        .mobile-announcement-text {
+          display: none;
+        }
+        @media (max-width: 768px) {
+          .top-announcement-bar {
+            padding: 0.28rem 0.5rem !important;
+          }
+          .announcement-bar-container {
+            justify-content: space-between !important;
+          }
+          .desktop-announcement-text {
+            display: none !important;
+          }
+          .mobile-announcement-text {
+            display: inline !important;
+            font-size: 0.68rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+          }
+          .announcement-phone {
+            display: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
+

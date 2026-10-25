@@ -1,5 +1,6 @@
 import React from 'react';
-import { Heart, Sparkles, MessageCircle, Mail } from 'lucide-react';
+import { Heart, Sparkles, Mail } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 
 export default function FounderStory() {
   return (
@@ -104,8 +105,11 @@ export default function FounderStory() {
               Welcome to <strong>SUI-DHAGA by Komal</strong> — your destination for affordable Indo-Western and ethnic wear blending timeless Indian tradition with modern style. Born from a love for exquisite fabrics, needle craftsmanship, and authentic fits, our collections are created to empower every woman to shine effortlessly.
             </p>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-              <div>
+            <div
+              className="founder-contact-wrapper"
+              style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem', flexWrap: 'wrap' }}
+            >
+              <div className="founder-signature-box">
                 <div className="font-cursive" style={{ fontSize: '2.5rem', color: 'var(--maroon-800)', lineHeight: 1 }}>
                   Komal
                 </div>
@@ -114,24 +118,26 @@ export default function FounderStory() {
                 </div>
               </div>
 
-              <div style={{ height: '40px', width: '1px', backgroundColor: '#ddd' }} />
+              <div className="founder-divider" style={{ height: '40px', width: '1px', backgroundColor: '#ddd' }} />
 
-              <div style={{ display: 'flex', gap: '0.8rem' }}>
+              <div className="founder-contact-actions" style={{ display: 'flex', gap: '0.8rem' }}>
                 <a
                   href="https://wa.me/919773001771?text=Hi%20Komal!%20I'd%20love%20to%20know%20more%20about%20Sui-Dhaga%20designs."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-outline btn-sm"
+                  className="btn btn-outline btn-sm founder-contact-btn"
+                  title="Chat directly on WhatsApp"
                 >
-                  <MessageCircle size={15} color="#25D366" />
+                  <OfficialWhatsAppIcon size={16} color="#25D366" />
                   <span>+91 97730 01771</span>
                 </a>
 
                 <a
                   href="mailto:help@connectsuidhaga.com"
-                  className="btn btn-outline btn-sm"
+                  className="btn btn-outline btn-sm founder-contact-btn"
+                  title="Send email"
                 >
-                  <Mail size={15} />
+                  <Mail size={15} color="var(--maroon-800)" />
                   <span>help@connectsuidhaga.com</span>
                 </a>
               </div>
@@ -140,6 +146,35 @@ export default function FounderStory() {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .founder-contact-wrapper {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1.15rem !important;
+            margin-bottom: 1.5rem !important;
+          }
+          .founder-divider {
+            display: none !important;
+          }
+          .founder-contact-actions {
+            width: 100% !important;
+            flex-direction: column !important;
+            gap: 0.65rem !important;
+          }
+          .founder-contact-btn {
+            width: 100% !important;
+            height: 42px !important;
+            border-radius: 8px !important;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            white-space: nowrap !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

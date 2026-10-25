@@ -54,6 +54,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
             flexWrap: 'wrap',
             gap: '1.5rem',
           }}
+          className="catalog-header-bar"
         >
           <div>
             <div
@@ -68,19 +69,20 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
                 textTransform: 'uppercase',
                 marginBottom: '0.5rem',
               }}
+              className="catalog-badge"
             >
               <Sparkles size={14} color="#d4af37" />
               <span>The Festive Couture Collection</span>
             </div>
 
             <h2
-              className="font-display maroon-gradient-text"
+              className="font-display maroon-gradient-text catalog-title"
               style={{ fontSize: 'clamp(2rem, 3.8vw, 2.8rem)', fontWeight: 700, lineHeight: 1.2 }}
             >
               Signature Handcrafted Outfits
             </h2>
 
-            <p style={{ color: 'var(--text-medium)', fontSize: '0.94rem', marginTop: '0.4rem', maxWidth: '580px' }}>
+            <p className="catalog-subtitle" style={{ color: 'var(--text-medium)', fontSize: '0.94rem', marginTop: '0.4rem', maxWidth: '580px' }}>
               {searchQuery
                 ? `Showing handcrafted matches for "${searchQuery}"`
                 : 'Slide through our ready-to-ship royal anarkalis, festive kurta sets, breezy vacation co-ords, and tailored cotton shirts.'}
@@ -88,7 +90,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
           </div>
 
           {/* Slider Prev / Next Arrows */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="slider-nav-arrows" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <button
               onClick={() => scrollSlider('left')}
               style={{
@@ -137,6 +139,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
 
         {/* Category Filter Pills Bar */}
         <div
+          className="category-pills-bar"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -149,6 +152,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
+              className="category-pill-btn"
               style={{
                 padding: '0.5rem 1.25rem',
                 borderRadius: 'var(--radius-full)',
@@ -160,6 +164,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 boxShadow: selectedCategory === cat ? '0 4px 12px rgba(107, 29, 47, 0.2)' : 'none',
+                whiteSpace: 'nowrap',
               }}
             >
               {cat}
@@ -169,6 +174,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
 
         {/* Sub-Filters & Sort Bar */}
         <div
+          className="catalog-subfilter-bar"
           style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -181,7 +187,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
           }}
         >
           {/* Sub Filters */}
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div className="catalog-subfilters-group" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <button
               onClick={() => setActiveFilter('all')}
               style={{
@@ -233,7 +239,7 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
           </div>
 
           {/* Sort Dropdown */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="catalog-sort-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <SlidersHorizontal size={14} color="var(--maroon-800)" />
             <span style={{ fontSize: '0.82rem', color: 'var(--text-medium)', fontWeight: 600 }}>Sort By:</span>
             <select
@@ -374,6 +380,83 @@ export default function ProductCatalog({ onOpenProduct, onOpenCategory }) {
           border-color: var(--maroon-800) !important;
           background-color: var(--maroon-50) !important;
           transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+          .catalog-header-bar {
+            margin-bottom: 0.85rem !important;
+            gap: 0.6rem !important;
+          }
+          .catalog-badge {
+            font-size: 0.7rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+          .catalog-title {
+            font-size: 1.5rem !important;
+            line-height: 1.18 !important;
+          }
+          .catalog-subtitle {
+            font-size: 0.8rem !important;
+            line-height: 1.35 !important;
+            margin-top: 0.25rem !important;
+          }
+          .slider-nav-arrows {
+            gap: 0.5rem !important;
+          }
+          .slider-nav-btn {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          .slider-nav-btn svg {
+            width: 17px !important;
+            height: 17px !important;
+          }
+
+          /* Single row horizontal scroll for category tabs on mobile */
+          .category-pills-bar {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            padding-bottom: 0.45rem !important;
+            margin-bottom: 0.9rem !important;
+            gap: 0.45rem !important;
+          }
+          .category-pills-bar::-webkit-scrollbar {
+            display: none !important;
+          }
+          .category-pill-btn {
+            padding: 0.35rem 0.85rem !important;
+            font-size: 0.76rem !important;
+            border-radius: 20px !important;
+            flex-shrink: 0 !important;
+          }
+
+          /* Sub-filter row on mobile */
+          .catalog-subfilter-bar {
+            padding-bottom: 0.55rem !important;
+            margin-bottom: 1rem !important;
+            gap: 0.5rem !important;
+          }
+          .catalog-subfilters-group {
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            scrollbar-width: none !important;
+            gap: 0.5rem !important;
+          }
+          .catalog-subfilters-group::-webkit-scrollbar {
+            display: none !important;
+          }
+          .catalog-subfilters-group button {
+            font-size: 0.74rem !important;
+          }
+          .catalog-sort-group {
+            font-size: 0.74rem !important;
+          }
+          .catalog-sort-group select {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.74rem !important;
+          }
         }
       `}</style>
     </section>
