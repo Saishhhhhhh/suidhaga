@@ -3,8 +3,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(() => {
+    try {
+      const saved = localStorage.getItem('suidhaga_cached_products');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !localStorage.getItem('suidhaga_cached_products');
+    } catch {
+      return true;
+    }
+  });
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,9 +62,8 @@ export const ShopProvider = ({ children }) => {
     localStorage.setItem('suidhaga_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Fetch products from backend
-  const fetchProducts = async () => {
-    setLoading(true);
+  // Fetch products from backend with retry
+  const fetchProducts = async (retryCount = 0) => {
     try {
       let url = '/api/products?limit=50';
       if (selectedCategory && selectedCategory !== 'All') {
@@ -62,15 +74,24 @@ export const ShopProvider = ({ children }) => {
       }
 
       const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      if (data.success) {
-        setProducts(data.products || []);
+      if (data.success && Array.isArray(data.products) && data.products.length > 0) {
+        setProducts(data.products);
+        try {
+          localStorage.setItem('suidhaga_cached_products', JSON.stringify(data.products));
+        } catch (e) {}
         if (data.categories && data.categories.length > 0) {
           setCategories(data.categories);
         }
+      } else if (retryCount < 2) {
+        setTimeout(() => fetchProducts(retryCount + 1), 1500);
       }
     } catch (err) {
-      console.error('Error fetching products:', err);
+      console.warn('Notice fetching products:', err.message);
+      if (retryCount < 2) {
+        setTimeout(() => fetchProducts(retryCount + 1), 2000);
+      }
     } finally {
       setLoading(false);
     }
@@ -79,6 +100,7 @@ export const ShopProvider = ({ children }) => {
   useEffect(() => {
     fetchProducts();
   }, [selectedCategory, searchQuery]);
+
 
   // Show toast notification
   const showNotification = (msg, type = 'success') => {

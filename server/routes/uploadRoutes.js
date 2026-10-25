@@ -4,19 +4,25 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure destination folder exists
+// Ensure destination folder exists (with safe try-catch for read-only serverless filesystems)
 const uploadDir = path.join(__dirname, '../../public/uploads/products');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+let diskAvailable = true;
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  diskAvailable = false;
 }
 
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION || !diskAvailable);
+
 // Configure Multer storage
-const storage = multer.diskStorage({
+const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // Generate clean safe filename: sd-[timestamp]-[random].[ext]
     const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
     const cleanBase = path
       .basename(file.originalname, ext)
@@ -27,6 +33,8 @@ const storage = multer.diskStorage({
     cb(null, `sd-${cleanBase}-${uniqueSuffix}${ext}`);
   },
 });
+
+const storage = isVercel ? multer.memoryStorage() : diskStorage;
 
 // File filter: only images allowed
 const fileFilter = (req, file, cb) => {
@@ -44,8 +52,18 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB max per image
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max per image
 });
+
+const getFileUrl = (file) => {
+  if (file.buffer) {
+    // Memory storage (Vercel serverless) -> return base64 Data URL
+    return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+  }
+  // Disk storage -> return public path
+  return `/uploads/products/${file.filename}`;
+};
+
 
 /**
  * POST /api/upload/image (Single image upload)
@@ -55,12 +73,12 @@ router.post('/image', upload.single('image'), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No image file uploaded' });
     }
-    const publicUrl = `/uploads/products/${req.file.filename}`;
+    const publicUrl = getFileUrl(req.file);
     res.json({
       success: true,
       message: 'Image uploaded successfully',
       url: publicUrl,
-      filename: req.file.filename,
+      filename: req.file.filename || req.file.originalname,
       size: req.file.size,
     });
   } catch (err) {
@@ -76,14 +94,14 @@ router.post('/images', upload.array('images', 10), (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: 'No image files uploaded' });
     }
-    const urls = req.files.map((f) => `/uploads/products/${f.filename}`);
+    const urls = req.files.map(getFileUrl);
     res.json({
       success: true,
       message: `${req.files.length} images uploaded successfully`,
       urls: urls,
       files: req.files.map((f) => ({
-        url: `/uploads/products/${f.filename}`,
-        filename: f.filename,
+        url: getFileUrl(f),
+        filename: f.filename || f.originalname,
         size: f.size,
       })),
     });
@@ -91,5 +109,6 @@ router.post('/images', upload.array('images', 10), (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
 
 module.exports = router;
