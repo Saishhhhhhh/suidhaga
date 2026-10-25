@@ -11,7 +11,7 @@ export default function ProductCard({ product, onOpenProduct }) {
 
   const handleClickProduct = () => {
     if (onOpenProduct) {
-      onOpenProduct(product._id);
+      onOpenProduct(product);
     } else {
       setQuickViewProduct(product);
     }

@@ -131,6 +131,18 @@ router.get('/:idOrSlug', async (req, res) => {
     if (!product) {
       product = await Product.findOne({ slug: idOrSlug });
     }
+    if (!product) {
+      // Try prefix match (e.g. slug without random suffix)
+      product = await Product.findOne({ slug: new RegExp(`^${idOrSlug}`, 'i') });
+    }
+    if (!product) {
+      // Try title match from slugified words
+      const words = idOrSlug.replace(/-\d+$/, '').split('-').filter(Boolean);
+      if (words.length > 0) {
+        const regexStr = words.map((w) => `(?=.*${w})`).join('');
+        product = await Product.findOne({ title: new RegExp(regexStr, 'i') });
+      }
+    }
 
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });

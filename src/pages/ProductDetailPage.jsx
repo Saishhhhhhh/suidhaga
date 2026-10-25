@@ -17,17 +17,83 @@ import {
 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
+import { getProductSlug, slugify } from '../utils/slug';
 
 export default function ProductDetailPage({
-  productId,
+  productSlugOrId,
   onNavigateHome,
   onNavigateCategory,
   onNavigateProduct
 }) {
   const { products, addToCart, wishlist, toggleWishlist, setCheckoutOpen } = useShop();
 
-  // Find product from list or fallback
-  const product = products.find((p) => p._id === productId) || products[0];
+  const findProductMatch = (identifier) => {
+    if (!identifier) return null;
+    const clean = identifier.toString().trim().toLowerCase();
+    return (
+      products.find(
+        (p) =>
+          p._id === identifier ||
+          (p.slug && p.slug.toLowerCase() === clean) ||
+          slugify(p.title) === clean ||
+          (p.slug && p.slug.toLowerCase().startsWith(clean))
+      ) || null
+    );
+  };
+
+  const [activeProduct, setActiveProduct] = useState(() => findProductMatch(productSlugOrId));
+  const [serverRelated, setServerRelated] = useState([]);
+  const [loading, setLoading] = useState(!activeProduct);
+
+  // Sync / fetch product
+  useEffect(() => {
+    let isMounted = true;
+    const matched = findProductMatch(productSlugOrId);
+
+    if (matched) {
+      setActiveProduct(matched);
+      setLoading(false);
+      // Canonicalize browser URL to clean SEO slug if currently viewing raw ID or old slug
+      const canonicalSlug = getProductSlug(matched);
+      if (canonicalSlug && window.location.pathname !== `/product/${canonicalSlug}`) {
+        window.history.replaceState({}, '', `/product/${canonicalSlug}`);
+      }
+      return;
+    }
+
+    // If not in memory yet (e.g. direct load, deep link, page refresh), fetch from API
+    const fetchFromApi = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/products/${encodeURIComponent(productSlugOrId)}`);
+        const data = await res.json();
+        if (isMounted && data.success && data.product) {
+          setActiveProduct(data.product);
+          if (data.related) setServerRelated(data.related);
+          // Canonicalize browser URL to clean SEO slug
+          const canonicalSlug = getProductSlug(data.product);
+          if (canonicalSlug && window.location.pathname !== `/product/${canonicalSlug}`) {
+            window.history.replaceState({}, '', `/product/${canonicalSlug}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading product details:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    if (productSlugOrId) {
+      fetchFromApi();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [productSlugOrId, products]);
+
+  // Product to render
+  const product = activeProduct || products[0];
 
   const [selectedImage, setSelectedImage] = useState(
     product?.images?.[0] || '/assets/maroon_anarkali.jpg'
@@ -43,9 +109,10 @@ export default function ProductDetailPage({
       setSelectedImage(product.images?.[0] || '/assets/maroon_anarkali.jpg');
       setSelectedSize(product.sizes?.[0] || 'M');
       setQuantity(1);
+      document.title = `${product.title} | Sui Dhaga Pure Handcrafted Outfits`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [product, productId]);
+  }, [product]);
 
   if (!product) {
     return (
@@ -621,7 +688,7 @@ export default function ProductDetailPage({
         </div>
 
         {/* You May Also Like Slider / Grid */}
-        {relatedProducts.length > 0 && (
+        {((serverRelated && serverRelated.length > 0) || relatedProducts.length > 0) && (
           <div style={{ marginTop: '5rem', borderTop: '1px solid rgba(107, 29, 47, 0.12)', paddingTop: '3.5rem' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <div style={{ fontSize: '0.78rem', color: 'var(--gold-600)', letterSpacing: '0.15em', fontWeight: 700, textTransform: 'uppercase' }}>
@@ -639,9 +706,9 @@ export default function ProductDetailPage({
                 gap: '2rem',
               }}
             >
-              {relatedProducts.map((rel) => (
-                <div key={rel._id} onClick={() => onNavigateProduct(rel._id)} style={{ cursor: 'pointer' }}>
-                  <ProductCard product={rel} />
+              {(serverRelated && serverRelated.length > 0 ? serverRelated : relatedProducts).map((rel) => (
+                <div key={rel._id} onClick={() => onNavigateProduct(rel)} style={{ cursor: 'pointer' }}>
+                  <ProductCard product={rel} onOpenProduct={onNavigateProduct} />
                 </div>
               ))}
             </div>

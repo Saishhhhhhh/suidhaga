@@ -18,6 +18,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
 import CategoryPage from './pages/CategoryPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import { getProductSlug } from './utils/slug';
 
 const slugToCategory = {
   'ethnic-wear': 'Ethnic Wear',
@@ -44,8 +45,8 @@ function parseCurrentRoute() {
     return { view: 'category', category: catName };
   }
   if (path.startsWith('/product/')) {
-    const id = path.replace('/product/', '').replace(/\/$/, '');
-    return { view: 'product', productId: id };
+    const slugOrId = decodeURIComponent(path.replace('/product/', '').replace(/\/$/, ''));
+    return { view: 'product', productSlugOrId: slugOrId };
   }
   if (path.startsWith('/our-story') || path.startsWith('/story')) {
     return { view: 'story' };
@@ -54,7 +55,7 @@ function parseCurrentRoute() {
 }
 
 function MainApp() {
-  const { notification, setSelectedCategory } = useShop();
+  const { notification, setSelectedCategory, products } = useShop();
 
   // Multi-page route state: { view, category?, productId? }
   const [route, setRoute] = useState(() => parseCurrentRoute());
@@ -102,9 +103,18 @@ function MainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigateToProduct = (productId) => {
-    window.history.pushState({}, '', `/product/${productId}`);
-    setRoute({ view: 'product', productId });
+  const navigateToProduct = (productOrSlugOrId) => {
+    let slug = '';
+    if (typeof productOrSlugOrId === 'object' && productOrSlugOrId !== null) {
+      slug = getProductSlug(productOrSlugOrId);
+    } else if (typeof productOrSlugOrId === 'string') {
+      const found = products.find(
+        (p) => p._id === productOrSlugOrId || p.slug === productOrSlugOrId
+      );
+      slug = found ? getProductSlug(found) : productOrSlugOrId;
+    }
+    window.history.pushState({}, '', `/product/${slug}`);
+    setRoute({ view: 'product', productSlugOrId: slug });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -199,7 +209,7 @@ function MainApp() {
               />
             ) : route.view === 'product' ? (
               <ProductDetailPage
-                productId={route.productId}
+                productSlugOrId={route.productSlugOrId}
                 onNavigateHome={navigateToHome}
                 onNavigateCategory={navigateToCategory}
                 onNavigateProduct={navigateToProduct}
@@ -232,7 +242,7 @@ function MainApp() {
 
           {/* Modals & Drawers */}
           <CartDrawer />
-          <ProductQuickView />
+          <ProductQuickView onOpenProduct={navigateToProduct} />
           <CheckoutModal />
           <OrderTrackerModal />
           <WhatsAppFloat />

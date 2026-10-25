@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, ShoppingBag, MessageCircle, Star, ShieldCheck, Truck, RotateCcw, Heart } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
-export default function ProductQuickView() {
+export default function ProductQuickView({ onOpenProduct }) {
   const { quickViewProduct, setQuickViewProduct, addToCart, wishlist, toggleWishlist } = useShop();
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
@@ -259,6 +259,30 @@ export default function ProductQuickView() {
                 <Heart size={20} color={isWishlisted ? '#c23b4b' : '#6b1d2f'} fill={isWishlisted ? '#c23b4b' : 'none'} />
               </button>
             </div>
+
+            {onOpenProduct && (
+              <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenProduct(quickViewProduct);
+                    setQuickViewProduct(null);
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--maroon-800)',
+                    fontWeight: 700,
+                    fontSize: '0.88rem',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                  }}
+                >
+                  View Full Product Details & Craftsmanship Guide →
+                </button>
+              </div>
+            )}
 
             {/* Pincode Check */}
             <div style={{ backgroundColor: '#faf6f0', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem' }}>
