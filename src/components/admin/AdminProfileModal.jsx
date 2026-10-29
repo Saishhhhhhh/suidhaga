@@ -5,7 +5,7 @@ export default function AdminProfileModal({ isOpen, onClose, token, adminUser, o
   const [profileData, setProfileData] = useState({
     name: adminUser?.name || 'Komal (Store Owner)',
     email: adminUser?.email || 'admin@suidhaga.com',
-    phone: adminUser?.phone || '+91 97730 01771',
+    phone: adminUser?.phone || '+91 87675 47514',
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -23,7 +23,7 @@ export default function AdminProfileModal({ isOpen, onClose, token, adminUser, o
       setProfileData({
         name: adminUser.name || 'Komal (Store Owner)',
         email: adminUser.email || 'admin@suidhaga.com',
-        phone: adminUser.phone || '+91 97730 01771',
+        phone: adminUser.phone || '+91 87675 47514',
       });
     }
   }, [adminUser]);
@@ -214,7 +214,7 @@ export default function AdminProfileModal({ isOpen, onClose, token, adminUser, o
                 value={profileData.phone}
                 onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
                 className="form-input"
-                placeholder="+91 97730 01771"
+                placeholder="+91 87675 47514"
               />
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Search, Package, CheckCircle, Clock, Truck, MessageCircle } from 'lucide-react';
+import { X, Search, Package, CheckCircle, Clock, Truck } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
 export default function OrderTrackerModal() {
@@ -186,15 +187,15 @@ export default function OrderTrackerModal() {
 
                   {/* WhatsApp Support button for this order */}
                   <a
-                    href={`https://wa.me/919773001771?text=${encodeURIComponent(
-                      `Hi Komal! I am inquiring about my Sui-Dhaga order #${ord.orderId}. Could you please share an update?`
+                    href={`https://wa.me/918767547514?text=${encodeURIComponent(
+                      `Hi SuiDhaga / Komal! I am inquiring about my Sui-Dhaga order #${ord.orderId}. Could you please share an update?`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-outline-gold btn-sm"
                     style={{ width: '100%', marginTop: '1rem', color: 'var(--maroon-800)', borderColor: 'var(--border-gold)' }}
                   >
-                    <MessageCircle size={15} color="#25D366" />
+                    <OfficialWhatsAppIcon size={15} color="#25D366" />
                     <span>Inquire on WhatsApp about Order #{ord.orderId}</span>
                   </a>
                 </div>

@@ -12,7 +12,7 @@ export default function HeroSection() {
     heroBannerUrl: '/assets/hero_banner.jpg',
     heroBadge: 'Grand Festive Edit 2026',
     ctaText: 'Explore Collection',
-    whatsappNumber: '919773001771',
+    whatsappNumber: '918767547514',
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function HeroSection() {
   };
 
   const bannerImg = heroSettings.heroBannerUrl || '/assets/hero_banner.jpg';
-  const cleanPhone = (heroSettings.whatsappNumber || '919773001771').replace(/\D/g, '');
+  const cleanPhone = (heroSettings.whatsappNumber || '918767547514').replace(/\D/g, '');
   const bannerPos = heroSettings.bannerPosition || 'center center';
 
   return (
@@ -164,14 +164,14 @@ export default function HeroSection() {
             </button>
 
             <a
-              href={`https://wa.me/${cleanPhone}?text=Hi%20Komal!%20I'm%20interested%20in%20customizing%20an%20outfit%20from%20Sui-Dhaga.`}
+              href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20interested%20in%20customizing%20an%20outfit%20from%20Sui-Dhaga.`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline-gold btn-lg hero-wa-btn"
               style={{ backdropFilter: 'blur(8px)' }}
             >
               <OfficialWhatsAppIcon size={18} color="#25D366" />
-              <span>Talk to Komal</span>
+              <span>Talk to Sui Dhaga Team</span>
             </a>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, ShieldCheck, Truck, ShoppingBag, ArrowRight, MessageCircle, QrCode, Smartphone, CreditCard, Lock, Copy, Check, ExternalLink } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import confetti from 'canvas-confetti';
 import { useShop } from '../context/ShopContext';
 
@@ -58,7 +59,7 @@ export default function CheckoutModal() {
   };
 
   const handleCopyVpa = () => {
-    navigator.clipboard?.writeText('9773001771@ybl');
+    navigator.clipboard?.writeText('8767547514@ybl');
     setCopiedVpa(true);
     setTimeout(() => setCopiedVpa(false), 2500);
   };
@@ -213,7 +214,7 @@ export default function CheckoutModal() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const upiDeepLink = `upi://pay?pa=9773001771@ybl&pn=SuiDhagaByKomal&am=${cartTotal}&cu=INR&tn=SuiDhagaOrder`;
+  const upiDeepLink = `upi://pay?pa=8767547514@ybl&pn=SuiDhaga&am=${cartTotal}&cu=INR&tn=SuiDhagaOrder`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiDeepLink)}`;
 
   return (
@@ -318,15 +319,15 @@ export default function CheckoutModal() {
             {/* Action Buttons */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a
-                href={`https://wa.me/919773001771?text=${encodeURIComponent(
-                  `Hi Komal! I just placed order ${orderSuccess.orderId} via ${orderSuccess.paymentMethod} on Sui-Dhaga for ₹${orderSuccess.totalAmount}. Please confirm!`
+                href={`https://wa.me/918767547514?text=${encodeURIComponent(
+                  `Hi SuiDhaga / Komal! I just placed order ${orderSuccess.orderId} via ${orderSuccess.paymentMethod} on Sui-Dhaga for ₹${orderSuccess.totalAmount}. Please confirm!`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-gold"
                 style={{ padding: '0.75rem 1.6rem' }}
               >
-                <MessageCircle size={18} color="#25D366" />
+                <OfficialWhatsAppIcon size={18} color="#25D366" />
                 <span>Get Order Updates on WhatsApp</span>
               </a>
 
@@ -752,7 +753,7 @@ export default function CheckoutModal() {
                     }}
                     title="Click to copy UPI ID"
                   >
-                    <span>UPI ID: <strong>9773001771@ybl</strong></span>
+                    <span>UPI ID: <strong>8767547514@ybl</strong></span>
                     {copiedVpa ? <Check size={13} color="#16a34a" /> : <Copy size={13} />}
                   </div>
                 </div>

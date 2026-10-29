@@ -15,6 +15,7 @@ import {
   Star,
   Share2
 } from 'lucide-react';
+import OfficialWhatsAppIcon from '../components/OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
 import { getProductSlug, slugify } from '../utils/slug';
@@ -155,16 +156,16 @@ export default function ProductDetailPage({
 
   const handleWhatsAppEnquiry = () => {
     const text = encodeURIComponent(
-      `Hi Komal! I am looking at "${product.title}" (₹${product.price}) on Sui-Dhaga. Can you help me with measurements for size ${selectedSize}?`
+      `Hi SuiDhaga / Komal! I am looking at "${product.title}" (₹${product.price}) on Sui-Dhaga. Can you help me with measurements for size ${selectedSize}?`
     );
-    window.open(`https://wa.me/919773001771?text=${text}`, '_blank');
+    window.open(`https://wa.me/918767547514?text=${text}`, '_blank');
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
         title: product.title,
-        text: `Check out ${product.title} on Sui-Dhaga by Komal`,
+        text: `Check out ${product.title} on Sui-Dhaga`,
         url: window.location.href,
       }).catch(() => {});
     } else {
@@ -653,8 +654,8 @@ export default function ProductDetailPage({
                   transition: 'all 0.2s',
                 }}
               >
-                <MessageCircle size={18} />
-                <span>Chat with Komal on WhatsApp for Custom Sizing</span>
+                <OfficialWhatsAppIcon size={18} color="#ffffff" />
+                <span>Chat with SuiDhaga on WhatsApp for Custom Sizing</span>
               </button>
 
               <button

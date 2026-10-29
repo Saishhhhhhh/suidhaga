@@ -212,7 +212,7 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
                   If you have questions about our privacy practices, or if you would like to make a complaint, please contact us:
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem' }}>
-                  <div>📞 <strong>Phone:</strong> <a href="tel:+919773001771" style={{ color: 'var(--maroon-800)' }}>+91 97730 01771</a></div>
+                  <div>📞 <strong>Phone:</strong> <a href="tel:+918767547514" style={{ color: 'var(--maroon-800)' }}>+91 87675 47514</a></div>
                   <div>✉️ <strong>Email:</strong> <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)' }}>help@connectsuidhaga.com</a></div>
                   <div>📍 <strong>Address:</strong> SUI-DHAGA, Vasai – Virar (East), Maharashtra, India.</div>
                 </div>
@@ -293,7 +293,7 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
                   <strong>Eligibility:</strong> Items must be unused, unwashed, and have all original tags attached.
                 </li>
                 <li style={{ marginBottom: '0.5rem' }}>
-                  <strong>Process:</strong> To initiate a return or exchange, please contact us at <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)' }}>help@connectsuidhaga.com</a> or via WhatsApp at <a href="https://wa.me/919773001771" style={{ color: '#25D366' }}>+91 97730 01771</a> within <strong>7 days</strong> of delivery.
+                  <strong>Process:</strong> To initiate a return or exchange, please contact us at <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)' }}>help@connectsuidhaga.com</a> or via WhatsApp at <a href="https://wa.me/918767547514" style={{ color: '#25D366' }}>+91 87675 47514</a> within <strong>7 days</strong> of delivery.
                 </li>
                 <li style={{ marginBottom: '0.5rem' }}>
                   <strong>Non-Returnable:</strong> Customized outfits or items bought during a “Clearance Sale” may not be eligible for return.
@@ -335,7 +335,7 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
                   Contact Information
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem' }}>
-                  <div>📞 <strong>Phone:</strong> <a href="tel:+919773001771" style={{ color: 'var(--maroon-800)' }}>+91 97730 01771</a></div>
+                  <div>📞 <strong>Phone:</strong> <a href="tel:+918767547514" style={{ color: 'var(--maroon-800)' }}>+91 87675 47514</a></div>
                   <div>✉️ <strong>Email:</strong> <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)' }}>help@connectsuidhaga.com</a></div>
                   <div>📍 <strong>Address:</strong> Vasai – Virar (East), Maharashtra, India.</div>
                 </div>
@@ -395,7 +395,7 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
               </h2>
               <ul style={{ paddingLeft: '1.4rem', marginBottom: '1.5rem' }}>
                 <li style={{ marginBottom: '0.6rem' }}>
-                  <strong>Request:</strong> Email us at <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)', fontWeight: 600 }}>help@connectsuidhaga.com</a> or WhatsApp us at <a href="https://wa.me/919773001771" style={{ color: '#25D366', fontWeight: 600 }}>+91 97730 01771</a> with your Order ID and photos of the product.
+                  <strong>Request:</strong> Email us at <a href="mailto:help@connectsuidhaga.com" style={{ color: 'var(--maroon-800)', fontWeight: 600 }}>help@connectsuidhaga.com</a> or WhatsApp us at <a href="https://wa.me/918767547514" style={{ color: '#25D366', fontWeight: 600 }}>+91 87675 47514</a> with your Order ID and photos of the product.
                 </li>
                 <li style={{ marginBottom: '0.6rem' }}>
                   <strong>Pickup / Shipping:</strong> Once approved, we will arrange a reverse pickup from your address (serviceable pin codes only). If a pickup is not available in your location, you may ship the item back to our Vasai – Virar address.
@@ -469,18 +469,18 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
                 </p>
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <a
-                    href="https://wa.me/919773001771?text=Hi%20Komal!%20I%20have%20a%20question%20regarding%20my%20order%20return/exchange."
+                    href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I%20have%20a%20question%20regarding%20my%20order%20return/exchange."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-outline btn-sm"
                     style={{ borderColor: '#25D366', color: '#16a34a', fontWeight: 700 }}
                   >
                     <OfficialWhatsAppIcon size={16} color="#25D366" />
-                    <span>WhatsApp: +91 97730 01771</span>
+                    <span>WhatsApp: +91 87675 47514</span>
                   </a>
-                  <a href="tel:+919773001771" className="btn btn-outline btn-sm">
+                  <a href="tel:+918767547514" className="btn btn-outline btn-sm">
                     <Phone size={14} />
-                    <span>Call: +91 97730 01771</span>
+                    <span>Call: +91 87675 47514</span>
                   </a>
                   <a href="mailto:help@connectsuidhaga.com" className="btn btn-outline btn-sm">
                     <Mail size={14} />

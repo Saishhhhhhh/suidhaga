@@ -89,7 +89,7 @@ export default function ContactPage({ onBackToHome }) {
             }}
           >
             <Sparkles size={14} color="#d4af37" />
-            <span>Connect with Komal</span>
+            <span>Connect with Sui Dhaga Team</span>
           </div>
 
           <h1 className="font-display maroon-gradient-text" style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: 700, lineHeight: 1.2, marginBottom: '0.8rem' }}>
@@ -146,8 +146,8 @@ export default function ContactPage({ onBackToHome }) {
                     WhatsApp & Phone
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginTop: '2px' }}>
-                    <a href="https://wa.me/919773001771" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                      +91 97730 01771
+                    <a href="https://wa.me/918767547514" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                      +91 87675 47514
                     </a>
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#bfae9c', marginTop: '2px' }}>Instant response during business hours</div>
@@ -205,7 +205,7 @@ export default function ContactPage({ onBackToHome }) {
             {/* Direct WhatsApp CTA Button */}
             <div style={{ marginTop: '2.5rem', paddingTop: '1.75rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <a
-                href="https://wa.me/919773001771?text=Hi%20Komal!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
+                href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -225,7 +225,7 @@ export default function ContactPage({ onBackToHome }) {
                 }}
               >
                 <OfficialWhatsAppIcon size={18} color="#ffffff" />
-                <span>Chat with Komal on WhatsApp</span>
+                <span>Chat with SuiDhaga on WhatsApp</span>
               </a>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default function ContactPage({ onBackToHome }) {
                   Thank You for Reaching Out!
                 </h3>
                 <p style={{ color: 'var(--text-medium)', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '400px', margin: '0 auto 2rem' }}>
-                  Your message has been received by Komal and our atelier team. We will contact you via WhatsApp or email within 24 hours.
+                  Your message has been received by our atelier team. We will contact you via WhatsApp or email within 24 hours.
                 </p>
                 <button onClick={() => setSubmitted(false)} className="btn btn-outline btn-sm">
                   Send Another Message

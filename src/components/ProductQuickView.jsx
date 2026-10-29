@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, ShoppingBag, MessageCircle, Star, ShieldCheck, Truck, RotateCcw, Heart } from 'lucide-react';
+import { X, ShoppingBag, Star, ShieldCheck, Truck, RotateCcw, Heart } from 'lucide-react';
+import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
 export default function ProductQuickView({ onOpenProduct }) {
@@ -29,9 +30,9 @@ export default function ProductQuickView({ onOpenProduct }) {
 
   const handleWhatsAppChat = () => {
     const text = encodeURIComponent(
-      `Hello Komal! I'm looking at "${quickViewProduct.title}" (₹${quickViewProduct.price}) on Sui-Dhaga. Can you help me with customization and order?`
+      `Hi SuiDhaga / Komal! I'm looking at "${quickViewProduct.title}" (₹${quickViewProduct.price}) on Sui-Dhaga. Can you help me with customization and order?`
     );
-    window.open(`https://wa.me/919773001771?text=${text}`, '_blank');
+    window.open(`https://wa.me/918767547514?text=${text}`, '_blank');
   };
 
   return (
@@ -271,7 +272,7 @@ export default function ProductQuickView({ onOpenProduct }) {
                 className="btn btn-gold btn-lg"
                 style={{ flexGrow: 1 }}
               >
-                <MessageCircle size={18} color="#25D366" />
+                <OfficialWhatsAppIcon size={18} color="#25D366" />
                 <span>Order via WhatsApp</span>
               </button>
 

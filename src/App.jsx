@@ -7,6 +7,7 @@ import DiwaliBanner from './components/DiwaliBanner';
 import CollectionGrid from './components/CollectionGrid';
 import ProductCatalog from './components/ProductCatalog';
 import FounderStory from './components/FounderStory';
+import CustomerReviews from './components/CustomerReviews';
 import WhySuiDhaga from './components/WhySuiDhaga';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
@@ -285,6 +286,7 @@ function MainApp() {
                   onOpenProduct={navigateToProduct}
                   onOpenCategory={navigateToCategory}
                 />
+                <CustomerReviews />
                 <FounderStory />
                 <WhySuiDhaga />
               </>

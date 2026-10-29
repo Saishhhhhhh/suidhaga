@@ -2,9 +2,9 @@ import React from 'react';
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 
 export default function WhatsAppFloat() {
-  const whatsappNumber = '919773001771';
+  const whatsappNumber = '918767547514';
   const defaultMessage = encodeURIComponent(
-    "Hi Komal! I'm browsing the Sui-Dhaga collection and would love styling guidance on your Indian ethnic and Indo-Western outfits."
+    "Hi SuiDhaga / Komal! I'm browsing the Sui-Dhaga collection and would love styling guidance on your Indian ethnic and Indo-Western outfits."
   );
 
   return (
@@ -12,8 +12,8 @@ export default function WhatsAppFloat() {
       style={{
         position: 'fixed',
         bottom: '1.75rem',
-        right: '1.5rem',
-        zIndex: 850,
+        right: '1.75rem',
+        zIndex: 999,
         display: 'flex',
         alignItems: 'center',
         gap: '0.6rem',
@@ -40,10 +40,10 @@ export default function WhatsAppFloat() {
           animation: 'pulseGlow 2.5s infinite',
         }}
         className="whatsapp-float-btn"
-        title="Chat with Komal on WhatsApp"
+        title="Chat with SuiDhaga on WhatsApp"
       >
         <OfficialWhatsAppIcon size={24} color="#ffffff" />
-        <span className="whatsapp-text">Chat with Komal</span>
+        <span className="whatsapp-text">Chat with Us</span>
       </a>
 
       <style>{`

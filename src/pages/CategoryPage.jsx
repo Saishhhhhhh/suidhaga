@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { ArrowLeft, Sparkles, Filter, SlidersHorizontal, MessageCircle, ChevronRight, Check } from 'lucide-react';
+import { ArrowLeft, Sparkles, Filter, SlidersHorizontal, ChevronRight, Check } from 'lucide-react';
+import OfficialWhatsAppIcon from '../components/OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
 
@@ -471,20 +472,20 @@ export default function CategoryPage({
             </h3>
 
             <p style={{ color: '#eed9de', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
-              Every outfit can be tailored to your precise measurements by founder Komal. We craft with extra fabric margins for effortless future adjustments.
+              Every outfit can be tailored to your precise measurements by our master design team. We craft with extra fabric margins for effortless future adjustments.
             </p>
 
             <a
-              href={`https://wa.me/919773001771?text=${encodeURIComponent(
-                `Hi Komal! I am browsing the ${activeCategory} collection on Sui-Dhaga and would love some guidance on custom measurements and sizing.`
+              href={`https://wa.me/918767547514?text=${encodeURIComponent(
+                `Hi SuiDhaga / Komal! I am browsing the ${activeCategory} collection on Sui-Dhaga and would love styling guidance on custom measurements and sizing.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-gold btn-lg"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
             >
-              <MessageCircle size={18} color="#25D366" />
-              <span>Connect with Komal on WhatsApp (+91 97730 01771)</span>
+              <OfficialWhatsAppIcon size={18} color="#25D366" />
+              <span>Connect with Sui Dhaga Team (+91 87675 47514)</span>
             </a>
           </div>
         </div>

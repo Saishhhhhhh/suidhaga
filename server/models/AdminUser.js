@@ -23,7 +23,7 @@ const adminUserSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      default: '+91 97730 01771',
+      default: '+91 87675 47514',
       trim: true,
     },
     role: {

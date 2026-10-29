@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Heart, Sparkles, Send, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
+import { InstagramIcon, FacebookIcon, YoutubeIcon } from './SocialIcons';
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 
@@ -25,6 +26,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
         padding: '4.5rem 0 2rem',
         borderTop: '2px solid rgba(212, 175, 55, 0.4)',
       }}
+      className="footer-luxury-wrapper"
     >
       <div className="container">
         
@@ -134,6 +136,52 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               <Heart size={16} fill="#d4af37" />
               <span>#madewithheart</span>
             </div>
+
+            {/* Social Media Channels */}
+            <div style={{ marginTop: '1.4rem' }}>
+              <div style={{ fontSize: '0.74rem', color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700, marginBottom: '0.65rem' }}>
+                Follow Sui-Dhaga
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Follow us on Instagram"
+                >
+                  <InstagramIcon size={16} />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Join our Facebook community"
+                >
+                  <FacebookIcon size={16} />
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Watch festive edits on YouTube"
+                >
+                  <YoutubeIcon size={16} />
+                </a>
+                <a
+                  href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  style={{ backgroundColor: 'rgba(37, 211, 102, 0.15)', borderColor: 'rgba(37, 211, 102, 0.4)' }}
+                  title="Chat with SuiDhaga on WhatsApp"
+                >
+                  <OfficialWhatsAppIcon size={16} color="#25D366" />
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Col 2: Collections */}
@@ -222,12 +270,12 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <OfficialWhatsAppIcon size={16} color="#25D366" />
                 <a
-                  href="https://wa.me/919773001771"
+                  href="https://wa.me/918767547514"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}
                 >
-                  +91 97730 01771
+                  +91 8767547514
                 </a>
               </div>
 
@@ -244,6 +292,33 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
                 <MapPin size={16} color="#d4af37" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <span>Atelier Studio, Vasai – Virar (East), Maharashtra, India</span>
+              </div>
+
+              {/* Dedicated WhatsApp Contact Button in Footer */}
+              <div style={{ marginTop: '0.4rem' }}>
+                <a
+                  href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#25D366',
+                    color: '#ffffff',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    borderRadius: 'var(--radius-full)',
+                    padding: '0.55rem 1.15rem',
+                    fontWeight: 700,
+                    fontSize: '0.82rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                  }}
+                  className="footer-whatsapp-cta"
+                >
+                  <OfficialWhatsAppIcon size={16} color="#ffffff" />
+                  <span>Chat with SuiDhaga</span>
+                </a>
               </div>
             </div>
           </div>
@@ -346,6 +421,34 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
         .policy-link-btn:hover, .footer-link-btn:hover {
           color: #ffffff !important;
           text-decoration: underline;
+        }
+        .social-icon-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(212, 175, 55, 0.35);
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          transition: all 0.25s ease;
+        }
+        .social-icon-btn:hover {
+          background-color: #d4af37;
+          color: #26050e !important;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+        .footer-whatsapp-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
+        }
+        @media (max-width: 640px) {
+          .footer-luxury-wrapper {
+            padding-bottom: 5.5rem !important;
+          }
         }
       `}</style>
     </footer>
