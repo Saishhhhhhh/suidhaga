@@ -275,7 +275,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
                   rel="noopener noreferrer"
                   style={{ color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}
                 >
-                  +91 8767547514
+                  +91 87675 47514
                 </a>
               </div>
 
