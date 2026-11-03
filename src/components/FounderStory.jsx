@@ -122,7 +122,7 @@ export default function FounderStory() {
 
               <div className="founder-contact-actions" style={{ display: 'flex', gap: '0.8rem' }}>
                 <a
-                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'd%20love%20to%20know%20more%20about%20Sui-Dhaga%20designs."
+                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20Team!%20I'd%20love%20to%20know%20more%20about%20Sui-Dhaga%20designs."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline btn-sm founder-contact-btn"

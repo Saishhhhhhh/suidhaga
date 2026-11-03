@@ -171,7 +171,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
                   <YoutubeIcon size={16} />
                 </a>
                 <a
-                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection."
+                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20Team!%20I'm%20browsing%20the%20Sui-Dhaga%20collection."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-btn"
@@ -297,7 +297,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               {/* Dedicated WhatsApp Contact Button in Footer */}
               <div style={{ marginTop: '0.4rem' }}>
                 <a
-                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
+                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20Team!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -337,7 +337,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
 
             {subscribed ? (
               <div style={{ padding: '0.7rem', backgroundColor: 'rgba(34, 197, 94, 0.2)', border: '1px solid #22c55e', borderRadius: 'var(--radius-sm)', color: '#4ade80', fontSize: '0.82rem' }}>
-                ✨ Thank you for subscribing to Komal's newsletter!
+                ✨ Thank you for subscribing to Sui-Dhaga's newsletter!
               </div>
             ) : (
               <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '0.4rem' }}>

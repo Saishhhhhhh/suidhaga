@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Thank you for reaching out! Komal and our styling team will get back to you shortly.',
+      message: 'Thank you for reaching out! Our SuiDhaga styling team will get back to you shortly.',
       inquiry: saved,
     });
   } catch (error) {

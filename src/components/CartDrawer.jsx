@@ -145,7 +145,7 @@ export default function CartDrawer() {
                 Your bag is empty
               </h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
-                Discover Komal’s handcrafted festive collections and find your perfect outfit.
+                Discover SuiDhaga’s handcrafted festive collections and find your perfect outfit.
               </p>
               <button
                 onClick={() => setCartOpen(false)}

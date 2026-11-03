@@ -477,7 +477,7 @@ export default function CategoryPage({
 
             <a
               href={`https://wa.me/918767547517?text=${encodeURIComponent(
-                `Hi SuiDhaga / Komal! I am browsing the ${activeCategory} collection on Sui-Dhaga and would love styling guidance on custom measurements and sizing.`
+                `Hi SuiDhaga Team! I am browsing the ${activeCategory} collection on Sui-Dhaga and would love styling guidance on custom measurements and sizing.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

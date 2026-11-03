@@ -320,7 +320,7 @@ export default function CheckoutModal() {
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a
                 href={`https://wa.me/918767547517?text=${encodeURIComponent(
-                  `Hi SuiDhaga / Komal! I just placed order ${orderSuccess.orderId} via ${orderSuccess.paymentMethod} on Sui-Dhaga for ₹${orderSuccess.totalAmount}. Please confirm!`
+                  `Hi SuiDhaga Team! I just placed order ${orderSuccess.orderId} via ${orderSuccess.paymentMethod} on Sui-Dhaga for ₹${orderSuccess.totalAmount}. Please confirm!`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

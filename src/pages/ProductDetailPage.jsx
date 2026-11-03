@@ -156,7 +156,7 @@ export default function ProductDetailPage({
 
   const handleWhatsAppEnquiry = () => {
     const text = encodeURIComponent(
-      `Hi SuiDhaga / Komal! I am looking at "${product.title}" (₹${product.price}) on Sui-Dhaga. Can you help me with measurements for size ${selectedSize}?`
+      `Hi SuiDhaga Team! I am looking at "${product.title}" (₹${product.price}) on Sui-Dhaga. Can you help me with measurements for size ${selectedSize}?`
     );
     window.open(`https://wa.me/918767547517?text=${text}`, '_blank');
   };

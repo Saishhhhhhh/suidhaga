@@ -164,7 +164,7 @@ export default function HeroSection() {
             </button>
 
             <a
-              href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20interested%20in%20customizing%20an%20outfit%20from%20Sui-Dhaga.`}
+              href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20Team!%20I'm%20interested%20in%20customizing%20an%20outfit%20from%20Sui-Dhaga.`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline-gold btn-lg hero-wa-btn"

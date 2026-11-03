@@ -469,7 +469,7 @@ export default function PolicyPage({ type = 'privacy', onSelectType, onBackToHom
                 </p>
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <a
-                    href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I%20have%20a%20question%20regarding%20my%20order%20return/exchange."
+                    href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20Team!%20I%20have%20a%20question%20regarding%20my%20order%20return/exchange."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-outline btn-sm"

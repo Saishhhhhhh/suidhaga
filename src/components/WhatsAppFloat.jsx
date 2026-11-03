@@ -4,7 +4,7 @@ import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 export default function WhatsAppFloat() {
   const whatsappNumber = '918767547517';
   const defaultMessage = encodeURIComponent(
-    "Hi SuiDhaga / Komal! I'm browsing the Sui-Dhaga collection and would love styling guidance on your Indian ethnic and Indo-Western outfits."
+    "Hi SuiDhaga Team! I'm browsing the Sui-Dhaga collection and would love styling guidance on your Indian ethnic and Indo-Western outfits."
   );
 
   return (

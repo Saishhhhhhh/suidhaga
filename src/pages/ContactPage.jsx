@@ -205,7 +205,7 @@ export default function ContactPage({ onBackToHome }) {
             {/* Direct WhatsApp CTA Button */}
             <div style={{ marginTop: '2.5rem', paddingTop: '1.75rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <a
-                href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
+                href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20Team!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

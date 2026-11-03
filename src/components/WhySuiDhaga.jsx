@@ -21,7 +21,7 @@ export default function WhySuiDhaga() {
     {
       icon: Sparkles,
       title: 'Direct Stylist Assistance',
-      desc: 'Chat directly with founder Komal on WhatsApp for color matching and event styling guidance.',
+      desc: 'Chat directly with the SuiDhaga Team on WhatsApp for color matching and event styling guidance.',
     },
   ];
 
