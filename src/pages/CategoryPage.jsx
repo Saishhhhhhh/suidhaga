@@ -476,7 +476,7 @@ export default function CategoryPage({
             </p>
 
             <a
-              href={`https://wa.me/918767547514?text=${encodeURIComponent(
+              href={`https://wa.me/918767547517?text=${encodeURIComponent(
                 `Hi SuiDhaga / Komal! I am browsing the ${activeCategory} collection on Sui-Dhaga and would love styling guidance on custom measurements and sizing.`
               )}`}
               target="_blank"
@@ -485,7 +485,7 @@ export default function CategoryPage({
               style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
             >
               <OfficialWhatsAppIcon size={18} color="#25D366" />
-              <span>Connect with Sui Dhaga Team (+91 87675 47514)</span>
+              <span>Connect with Sui Dhaga Team (+91 87675 47517)</span>
             </a>
           </div>
         </div>

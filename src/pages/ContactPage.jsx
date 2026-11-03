@@ -146,8 +146,8 @@ export default function ContactPage({ onBackToHome }) {
                     WhatsApp & Phone
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginTop: '2px' }}>
-                    <a href="https://wa.me/918767547514" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                      +91 87675 47514
+                    <a href="https://wa.me/918767547517" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                      +91 87675 47517
                     </a>
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#bfae9c', marginTop: '2px' }}>Instant response during business hours</div>
@@ -205,7 +205,7 @@ export default function ContactPage({ onBackToHome }) {
             {/* Direct WhatsApp CTA Button */}
             <div style={{ marginTop: '2.5rem', paddingTop: '1.75rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <a
-                href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
+                href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20visiting%20the%20Sui-Dhaga%20website%20and%20would%20love%20some%20help."
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

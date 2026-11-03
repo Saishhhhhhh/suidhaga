@@ -8,7 +8,7 @@ export default function AdminHeroSettings({ token }) {
     heroBannerUrl: '/assets/hero_banner.jpg',
     heroBadge: 'Grand Festive Edit 2026',
     ctaText: 'Explore Collection',
-    whatsappNumber: '+91 87675 47514',
+    whatsappNumber: '+91 87675 47517',
     bannerPosition: 'center center',
   });
 
@@ -289,7 +289,7 @@ export default function AdminHeroSettings({ token }) {
                   name="whatsappNumber"
                   value={formData.whatsappNumber}
                   onChange={handleChange}
-                  placeholder="+91 87675 47514"
+                  placeholder="+91 87675 47517"
                   className="form-input"
                 />
               </div>

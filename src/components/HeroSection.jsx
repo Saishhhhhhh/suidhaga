@@ -12,7 +12,7 @@ export default function HeroSection() {
     heroBannerUrl: '/assets/hero_banner.jpg',
     heroBadge: 'Grand Festive Edit 2026',
     ctaText: 'Explore Collection',
-    whatsappNumber: '918767547514',
+    whatsappNumber: '918767547517',
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function HeroSection() {
   };
 
   const bannerImg = heroSettings.heroBannerUrl || '/assets/hero_banner.jpg';
-  const cleanPhone = (heroSettings.whatsappNumber || '918767547514').replace(/\D/g, '');
+  const cleanPhone = (heroSettings.whatsappNumber || '918767547517').replace(/\D/g, '');
   const bannerPos = heroSettings.bannerPosition || 'center center';
 
   return (

@@ -15,7 +15,7 @@ async function getOrCreateAdmin() {
       name: 'Komal (Store Owner)',
       email: defaultEmail,
       password: defaultPassword,
-      phone: '+91 87675 47514',
+      phone: '+91 87675 47517',
       role: 'admin',
     });
   }
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
     if (isMatch) {
       const adminId = admin ? admin._id : 'admin_default_id';
       const adminName = admin ? admin.name : 'Komal (Store Owner)';
-      const adminPhone = admin ? (admin.phone || '+91 87675 47514') : '+91 87675 47514';
+      const adminPhone = admin ? (admin.phone || '+91 87675 47517') : '+91 87675 47517';
 
       const token = jwt.sign(
         { id: adminId, email: cleanEmail, role: 'admin' },

@@ -24,7 +24,7 @@ export default function ProductCard({ product, onOpenProduct }) {
     const text = encodeURIComponent(
       `Hi SuiDhaga / Komal! I'm interested in "${product.title}" (₹${product.price}). Is it available in size ${selectedSize}?`
     );
-    window.open(`https://wa.me/918767547514?text=${text}`, '_blank');
+    window.open(`https://wa.me/918767547517?text=${text}`, '_blank');
   };
 
   return (

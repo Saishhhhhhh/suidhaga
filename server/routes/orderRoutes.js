@@ -80,7 +80,7 @@ router.post('/phonepe/initiate', async (req, res) => {
     }
 
     const merchantTransactionId = `MT_SD_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-    const upiVpa = '8767547514@ybl';
+    const upiVpa = '8767547517@ybl';
     const merchantName = 'Sui Dhaga';
 
     // Standard NPCI UPI URI Scheme

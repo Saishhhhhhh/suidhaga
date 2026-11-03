@@ -9,7 +9,7 @@ const DEFAULT_HERO = {
   heroBannerUrl: '/assets/hero_banner.jpg',
   heroBadge: 'Grand Festive Edit 2026',
   ctaText: 'Explore Collection',
-  whatsappNumber: '918767547514',
+  whatsappNumber: '918767547517',
   bannerPosition: 'center center',
 };
 

@@ -32,7 +32,7 @@ export default function ProductQuickView({ onOpenProduct }) {
     const text = encodeURIComponent(
       `Hi SuiDhaga / Komal! I'm looking at "${quickViewProduct.title}" (₹${quickViewProduct.price}) on Sui-Dhaga. Can you help me with customization and order?`
     );
-    window.open(`https://wa.me/918767547514?text=${text}`, '_blank');
+    window.open(`https://wa.me/918767547517?text=${text}`, '_blank');
   };
 
   return (

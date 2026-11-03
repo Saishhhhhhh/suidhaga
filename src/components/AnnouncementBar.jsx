@@ -40,7 +40,7 @@ export default function AnnouncementBar() {
         {/* Right: Clean WhatsApp & Track Order */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }} className="announcement-right">
           <a
-            href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
+            href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -56,7 +56,7 @@ export default function AnnouncementBar() {
             className="announcement-phone"
           >
             <Phone size={12} color="#25D366" />
-            <span>+91 87675 47514</span>
+            <span>+91 87675 47517</span>
           </a>
 
           <button

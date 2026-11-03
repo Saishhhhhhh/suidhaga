@@ -59,7 +59,7 @@ export default function CheckoutModal() {
   };
 
   const handleCopyVpa = () => {
-    navigator.clipboard?.writeText('8767547514@ybl');
+    navigator.clipboard?.writeText('8767547517@ybl');
     setCopiedVpa(true);
     setTimeout(() => setCopiedVpa(false), 2500);
   };
@@ -214,7 +214,7 @@ export default function CheckoutModal() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const upiDeepLink = `upi://pay?pa=8767547514@ybl&pn=SuiDhaga&am=${cartTotal}&cu=INR&tn=SuiDhagaOrder`;
+  const upiDeepLink = `upi://pay?pa=8767547517@ybl&pn=SuiDhaga&am=${cartTotal}&cu=INR&tn=SuiDhagaOrder`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiDeepLink)}`;
 
   return (
@@ -319,7 +319,7 @@ export default function CheckoutModal() {
             {/* Action Buttons */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a
-                href={`https://wa.me/918767547514?text=${encodeURIComponent(
+                href={`https://wa.me/918767547517?text=${encodeURIComponent(
                   `Hi SuiDhaga / Komal! I just placed order ${orderSuccess.orderId} via ${orderSuccess.paymentMethod} on Sui-Dhaga for ₹${orderSuccess.totalAmount}. Please confirm!`
                 )}`}
                 target="_blank"
@@ -753,7 +753,7 @@ export default function CheckoutModal() {
                     }}
                     title="Click to copy UPI ID"
                   >
-                    <span>UPI ID: <strong>8767547514@ybl</strong></span>
+                    <span>UPI ID: <strong>8767547517@ybl</strong></span>
                     {copiedVpa ? <Check size={13} color="#16a34a" /> : <Copy size={13} />}
                   </div>
                 </div>

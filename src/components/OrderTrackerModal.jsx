@@ -187,7 +187,7 @@ export default function OrderTrackerModal() {
 
                   {/* WhatsApp Support button for this order */}
                   <a
-                    href={`https://wa.me/918767547514?text=${encodeURIComponent(
+                    href={`https://wa.me/918767547517?text=${encodeURIComponent(
                       `Hi SuiDhaga / Komal! I am inquiring about my Sui-Dhaga order #${ord.orderId}. Could you please share an update?`
                     )}`}
                     target="_blank"

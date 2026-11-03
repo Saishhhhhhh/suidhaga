@@ -171,7 +171,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
                   <YoutubeIcon size={16} />
                 </a>
                 <a
-                  href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection."
+                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-btn"
@@ -270,12 +270,12 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <OfficialWhatsAppIcon size={16} color="#25D366" />
                 <a
-                  href="https://wa.me/918767547514"
+                  href="https://wa.me/918767547517"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}
                 >
-                  +91 87675 47514
+                  +91 87675 47517
                 </a>
               </div>
 
@@ -297,7 +297,7 @@ export default function Footer({ setCurrentView, onOpenCategory, onOpenPolicy, o
               {/* Dedicated WhatsApp Contact Button in Footer */}
               <div style={{ marginTop: '0.4rem' }}>
                 <a
-                  href="https://wa.me/918767547514?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
+                  href="https://wa.me/918767547517?text=Hi%20SuiDhaga%20%2F%20Komal!%20I'm%20browsing%20the%20Sui-Dhaga%20collection%20and%20would%20love%20styling%20guidance."
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

@@ -30,7 +30,7 @@ const siteSettingsSchema = new mongoose.Schema(
     },
     whatsappNumber: {
       type: String,
-      default: '918767547514',
+      default: '918767547517',
     },
     bannerPosition: {
       type: String,
