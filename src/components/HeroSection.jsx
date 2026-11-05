@@ -1,19 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
+
+const DEFAULT_SLIDES = [
+  {
+    id: 1,
+    image: '/assets/hero_banner_1.jpg',
+    alt: 'Diwali Festive Threads - Flat 15% Off On All Our Products',
+    badge: 'Diwali Festive Offer • Code: DIWALI15',
+    headline: 'Diwali Festive Threads',
+    subtext: 'Flat 15% Off on pure handloom silks & regal silhouettes',
+  },
+  {
+    id: 2,
+    image: '/assets/hero_banner_2.jpg',
+    alt: 'The Diwali Edit - Handcrafted Indian Ethnic & Indo-Western Sets',
+    badge: 'Grand Festive Edit 2026',
+    headline: 'The Diwali Edit',
+    subtext: 'Handcrafted kurtas, shararas and luxury festive coordinates',
+  },
+  {
+    id: 3,
+    image: '/assets/hero_banner_3.jpg',
+    alt: 'The Diwali Edit - Regal Handloom Silks and Artisanal Needlework',
+    badge: 'Artisanal Needlework • Limited Edition',
+    headline: 'Timeless Festive Glamour',
+    subtext: 'Crafted with fine French seams and mindful custom fits',
+  },
+];
 
 export default function HeroSection() {
   const { setSelectedCategory } = useShop();
 
+  const [slides, setSlides] = useState(DEFAULT_SLIDES);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [heroSettings, setHeroSettings] = useState({
-    heroTitle: 'Crafted by hand, grounded in care.',
-    heroSubtitle: 'Pure handloom silks, intricate zardozi needlework, and timeless luxury silhouettes curated for your special celebrations.',
-    heroBannerUrl: '/assets/hero_banner.jpg',
-    heroBadge: 'Grand Festive Edit 2026',
-    ctaText: 'Explore Collection',
     whatsappNumber: '918767547517',
   });
+
+  // Touch swipe handling
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -26,6 +55,20 @@ export default function HeroSection() {
             ...prev,
             ...data.hero,
           }));
+
+          // If custom banners are provided by backend, use them
+          if (Array.isArray(data.hero.banners) && data.hero.banners.length > 0) {
+            setSlides(
+              data.hero.banners.map((img, idx) => ({
+                id: idx + 1,
+                image: img,
+                alt: `Sui Dhaga Hero Banner ${idx + 1}`,
+                badge: 'Grand Festive Edit 2026',
+                headline: 'Sui-Dhaga Festive Collection',
+                subtext: 'Pure handloom silks and royal silhouettes',
+              }))
+            );
+          }
         }
       } catch (err) {
         console.warn('Hero settings load notice:', err.message);
@@ -37,212 +80,326 @@ export default function HeroSection() {
     };
   }, []);
 
+  // Autoplay timer (5 seconds)
+  useEffect(() => {
+    if (isPaused || slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isPaused, slides.length]);
+
   const scrollToProducts = () => {
     setSelectedCategory('All');
     const el = document.getElementById('collection-section');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bannerImg = heroSettings.heroBannerUrl || '/assets/hero_banner.jpg';
+  const handlePrev = (e) => {
+    e?.stopPropagation();
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e) => {
+    e?.stopPropagation();
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  // Touch handlers for mobile swipe
+  const onTouchStart = (e) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+  const onTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    if (diff > 50) {
+      handleNext();
+    } else if (diff < -50) {
+      handlePrev();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   const cleanPhone = (heroSettings.whatsappNumber || '918767547517').replace(/\D/g, '');
-  const bannerPos = heroSettings.bannerPosition || 'center center';
 
   return (
     <section
+      className="hero-slider-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
       style={{
         position: 'relative',
-        minHeight: '82vh',
-        display: 'flex',
-        alignItems: 'center',
-        color: '#ffffff',
+        width: '100%',
+        backgroundColor: '#1c080e',
         overflow: 'hidden',
         borderBottom: '1px solid rgba(212, 175, 55, 0.35)',
-        backgroundColor: '#1c080e',
       }}
-      className="hero-section-luxury"
     >
-      {/* Background Banner Image with Full Cover & Precise Positioning */}
+      {/* Slides Container */}
       <div
+        className="hero-carousel-viewport"
+        onClick={scrollToProducts}
         style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
+          position: 'relative',
+          width: '100%',
+          cursor: 'pointer',
           overflow: 'hidden',
         }}
+        title="Click to explore the Festive Collection"
       >
-        <img
-          src={bannerImg}
-          alt="Sui Dhaga Hero Banner"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: bannerPos,
-            display: 'block',
-          }}
-          className="hero-banner-image"
-        />
-        {/* Soft elegant gradient overlay to keep text readable without cutting the banner */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(to right, rgba(28, 8, 14, 0.90) 0%, rgba(28, 8, 14, 0.65) 45%, rgba(28, 8, 14, 0.20) 100%)',
-          }}
-          className="hero-gradient-overlay"
-        />
-      </div>
-
-      <div className="container" style={{ position: 'relative', zIndex: 10, padding: '4.5rem 1.5rem' }}>
-
-        <div style={{ maxWidth: '680px' }} className="hero-content-box">
-          
-          {/* Badge */}
-          {heroSettings.heroBadge && (
+        {slides.map((slide, idx) => {
+          const isActive = idx === currentSlide;
+          return (
             <div
+              key={slide.id || idx}
+              className={`hero-slide-item ${isActive ? 'active' : ''}`}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                backgroundColor: 'rgba(212, 175, 55, 0.15)',
-                border: '1px solid rgba(212, 175, 55, 0.4)',
-                borderRadius: 'var(--radius-full)',
-                padding: '0.35rem 0.9rem',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                color: 'var(--gold-400)',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                marginBottom: '1.25rem',
-                backdropFilter: 'blur(4px)',
+                position: idx === 0 ? 'relative' : 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                opacity: isActive ? 1 : 0,
+                visibility: isActive ? 'visible' : 'hidden',
+                transition: 'opacity 0.7s ease-in-out, transform 0.7s ease-in-out',
+                transform: isActive ? 'scale(1)' : 'scale(1.02)',
+                zIndex: isActive ? 2 : 1,
               }}
-              className="hero-badge"
             >
-              <Sparkles size={14} color="#d4af37" />
-              <span>{heroSettings.heroBadge}</span>
+              <img
+                src={slide.image}
+                alt={slide.alt}
+                className="hero-banner-img"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  objectFit: 'cover',
+                  objectPosition: 'center center',
+                  maxHeight: '680px',
+                }}
+              />
             </div>
-          )}
+          );
+        })}
 
-          {/* Main Title - Clean & Grand */}
-          <h1
-            className="font-display hero-title-text"
-            style={{
-              fontSize: 'clamp(2.2rem, 5.2vw, 4.2rem)',
-              fontWeight: 700,
-              lineHeight: 1.18,
-              marginBottom: '1.25rem',
-              color: '#ffffff',
-              textShadow: '0 4px 25px rgba(0,0,0,0.5)',
-            }}
-          >
-            {heroSettings.heroTitle}
-          </h1>
+        {/* Previous Arrow Button */}
+        <button
+          onClick={handlePrev}
+          aria-label="Previous slide"
+          className="hero-arrow-btn hero-arrow-prev"
+        >
+          <ChevronLeft size={24} />
+        </button>
 
-          {/* Subtitle */}
-          {heroSettings.heroSubtitle && (
-            <p
-              className="hero-subtitle-text"
-              style={{
-                fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
-                color: '#f3ece7',
-                lineHeight: 1.6,
-                marginBottom: '2.25rem',
-                maxWidth: '560px',
-                textShadow: '0 2px 10px rgba(0,0,0,0.4)',
-              }}
-            >
-              {heroSettings.heroSubtitle}
-            </p>
-          )}
+        {/* Next Arrow Button */}
+        <button
+          onClick={handleNext}
+          aria-label="Next slide"
+          className="hero-arrow-btn hero-arrow-next"
+        >
+          <ChevronRight size={24} />
+        </button>
 
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }} className="hero-btn-group">
-            <button onClick={scrollToProducts} className="btn btn-gold btn-lg hero-cta-btn">
-              <span>{heroSettings.ctaText || 'Explore Collection'}</span>
-              <ArrowRight size={18} />
-            </button>
-
-            <a
-              href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20Team!%20I'm%20interested%20in%20customizing%20an%20outfit%20from%20Sui-Dhaga.`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-outline-gold btn-lg hero-wa-btn"
-              style={{ backdropFilter: 'blur(8px)' }}
-            >
-              <OfficialWhatsAppIcon size={18} color="#25D366" />
-              <span>Talk to Sui Dhaga Team</span>
-            </a>
+        {/* Floating Controls at Bottom: Dots & WhatsApp Styling Pill */}
+        <div
+          className="hero-bottom-controls"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Slide Indicator Dots */}
+          <div className="hero-dots-container">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentSlide(idx);
+                }}
+                className={`hero-dot-indicator ${idx === currentSlide ? 'active' : ''}`}
+                aria-label={`Go to banner ${idx + 1}`}
+              />
+            ))}
           </div>
 
+          {/* Quick WhatsApp Styling Assistance Chip */}
+          <a
+            href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20Team!%20I'm%20browsing%20the%20Diwali%20collection%20on%20the%20website%20and%20would%20love%20styling%20guidance.`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-wa-chip"
+            title="Chat directly on WhatsApp with SuiDhaga Styling Team"
+          >
+            <OfficialWhatsAppIcon size={16} color="#25D366" />
+            <span>Talk to Sui Dhaga Team</span>
+          </a>
         </div>
       </div>
 
       <style>{`
+        .hero-slider-section {
+          user-select: none;
+        }
+
+        .hero-carousel-viewport {
+          position: relative;
+          background: #1c080e;
+          min-height: 220px;
+        }
+
+        .hero-banner-img {
+          width: 100%;
+          display: block;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        /* Navigation Arrows */
+        .hero-arrow-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: rgba(28, 8, 14, 0.45);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          border: 1px solid rgba(212, 175, 55, 0.45);
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10;
+          transition: background 0.25s, transform 0.2s, border-color 0.2s;
+          opacity: 0.85;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+        }
+        .hero-arrow-btn:hover {
+          background: rgba(107, 29, 47, 0.85);
+          border-color: #ffd700;
+          color: #ffd700;
+          transform: translateY(-50%) scale(1.08);
+          opacity: 1;
+        }
+        .hero-arrow-prev {
+          left: 1.5rem;
+        }
+        .hero-arrow-next {
+          right: 1.5rem;
+        }
+
+        /* Bottom Controls (Dots + WhatsApp Chip) */
+        .hero-bottom-controls {
+          position: absolute;
+          bottom: 1.25rem;
+          left: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2rem;
+          z-index: 10;
+          pointer-events: auto;
+        }
+
+        .hero-dots-container {
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          background: rgba(28, 8, 14, 0.55);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          padding: 0.4rem 0.8rem;
+          border-radius: var(--radius-full);
+          border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        .hero-dot-indicator {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.4);
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-radius 0.3s;
+        }
+        .hero-dot-indicator:hover {
+          background: rgba(255, 215, 0, 0.8);
+        }
+        .hero-dot-indicator.active {
+          width: 26px;
+          border-radius: 6px;
+          background: #ffd700;
+          box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+
+        .hero-wa-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(28, 8, 14, 0.75);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          color: #ffffff;
+          border: 1px solid rgba(37, 211, 102, 0.5);
+          padding: 0.5rem 1rem;
+          border-radius: var(--radius-full);
+          font-size: 0.82rem;
+          font-weight: 700;
+          text-decoration: none;
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+          transition: transform 0.2s, background 0.2s, border-color 0.2s;
+        }
+        .hero-wa-chip:hover {
+          background: rgba(37, 211, 102, 0.25);
+          border-color: #25D366;
+          color: #25D366;
+          transform: translateY(-2px);
+        }
+
+        /* Responsive Mobile Styling */
         @media (max-width: 768px) {
-          .hero-section-luxury {
-            min-height: 75vh !important;
-            display: flex !important;
-            align-items: flex-end !important;
-            padding-bottom: 2rem !important;
+          .hero-arrow-btn {
+            width: 34px;
+            height: 34px;
           }
-          .hero-gradient-overlay {
-            background: linear-gradient(
-              to bottom,
-              rgba(22, 6, 12, 0.45) 0%,
-              rgba(22, 6, 12, 0.25) 30%,
-              rgba(22, 6, 12, 0.65) 60%,
-              rgba(22, 6, 12, 0.92) 100%
-            ) !important;
+          .hero-arrow-prev {
+            left: 0.6rem;
           }
-          .hero-banner-image {
-            object-position: center top !important;
+          .hero-arrow-next {
+            right: 0.6rem;
           }
-          .hero-content-box {
-            padding: 0 !important;
+          .hero-bottom-controls {
+            bottom: 0.75rem;
+            padding: 0 0.85rem;
           }
-          .hero-badge {
-            margin-bottom: 0.65rem !important;
-            padding: 0.22rem 0.65rem !important;
-            font-size: 0.7rem !important;
+          .hero-dots-container {
+            padding: 0.3rem 0.6rem;
+            gap: 0.4rem;
           }
-          .hero-title-text {
-            font-size: clamp(1.75rem, 6.8vw, 2.25rem) !important;
-            line-height: 1.16 !important;
-            margin-bottom: 0.55rem !important;
-            text-shadow: 0 3px 20px rgba(0,0,0,0.85) !important;
+          .hero-dot-indicator {
+            width: 7px;
+            height: 7px;
           }
-          .hero-subtitle-text {
-            font-size: 0.84rem !important;
-            line-height: 1.4 !important;
-            margin-bottom: 1.15rem !important;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.7) !important;
-            max-width: 95% !important;
+          .hero-dot-indicator.active {
+            width: 18px;
           }
-          .hero-btn-group {
-            flex-direction: row !important;
-            width: 100% !important;
-            gap: 0.65rem !important;
-          }
-          .hero-btn-group .btn {
-            flex: 1 1 0 !important;
-            width: auto !important;
-            height: 42px !important;
-            padding: 0 0.75rem !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            border-radius: 8px !important;
-            white-space: nowrap !important;
-            justify-content: center !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-          }
-          .hero-btn-group .btn span {
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
+          .hero-wa-chip {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.72rem;
+            gap: 0.35rem;
           }
         }
       `}</style>
     </section>
   );
 }
-

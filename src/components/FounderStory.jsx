@@ -26,8 +26,8 @@ export default function FounderStory() {
               }}
             >
               <img
-                src="/assets/founder_komal.jpg"
-                alt="Komal - Founder of Sui Dhaga"
+                src="/assets/founder_atelier.jpg"
+                alt="Sui Dhaga Founder Atelier"
                 style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
               />
             </div>

@@ -18,7 +18,15 @@ const siteSettingsSchema = new mongoose.Schema(
     },
     heroBannerUrl: {
       type: String,
-      default: '/assets/hero_banner.jpg',
+      default: '/assets/hero_banner_1.jpg',
+    },
+    banners: {
+      type: [String],
+      default: [
+        '/assets/hero_banner_1.jpg',
+        '/assets/hero_banner_2.jpg',
+        '/assets/hero_banner_3.jpg',
+      ],
     },
     heroBadge: {
       type: String,

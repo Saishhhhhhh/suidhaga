@@ -6,7 +6,12 @@ const SiteSettings = require('../models/SiteSettings');
 const DEFAULT_HERO = {
   heroTitle: 'Crafted by hand, grounded in care.',
   heroSubtitle: 'Curated pure silks, artisanal handloom fabrics, and regal silhouettes.',
-  heroBannerUrl: '/assets/hero_banner.jpg',
+  heroBannerUrl: '/assets/hero_banner_1.jpg',
+  banners: [
+    '/assets/hero_banner_1.jpg',
+    '/assets/hero_banner_2.jpg',
+    '/assets/hero_banner_3.jpg',
+  ],
   heroBadge: 'Grand Festive Edit 2026',
   ctaText: 'Explore Collection',
   whatsappNumber: '918767547517',
@@ -44,6 +49,7 @@ router.get('/hero', async (req, res) => {
         ctaText: settings.ctaText || DEFAULT_HERO.ctaText,
         whatsappNumber: settings.whatsappNumber || DEFAULT_HERO.whatsappNumber,
         bannerPosition: settings.bannerPosition || DEFAULT_HERO.bannerPosition,
+        banners: settings.banners && settings.banners.length > 0 ? settings.banners : DEFAULT_HERO.banners,
       },
     });
   } catch (err) {
@@ -54,7 +60,7 @@ router.get('/hero', async (req, res) => {
 // PUT /api/settings/hero - Protected (Admin only)
 router.put('/hero', verifyAdmin, async (req, res) => {
   try {
-    const { heroTitle, heroSubtitle, heroBannerUrl, heroBadge, ctaText, whatsappNumber, bannerPosition } = req.body;
+    const { heroTitle, heroSubtitle, heroBannerUrl, banners, heroBadge, ctaText, whatsappNumber, bannerPosition } = req.body;
     let settings = await SiteSettings.findOne({ key: 'homepage_hero' });
     if (!settings) {
       settings = new SiteSettings({ key: 'homepage_hero', ...DEFAULT_HERO });
@@ -63,6 +69,7 @@ router.put('/hero', verifyAdmin, async (req, res) => {
     if (heroTitle !== undefined) settings.heroTitle = heroTitle.trim();
     if (heroSubtitle !== undefined) settings.heroSubtitle = heroSubtitle.trim();
     if (heroBannerUrl !== undefined) settings.heroBannerUrl = heroBannerUrl.trim();
+    if (Array.isArray(banners) && banners.length > 0) settings.banners = banners;
     if (heroBadge !== undefined) settings.heroBadge = heroBadge.trim();
     if (ctaText !== undefined) settings.ctaText = ctaText.trim();
     if (whatsappNumber !== undefined) settings.whatsappNumber = whatsappNumber.trim();
@@ -77,6 +84,7 @@ router.put('/hero', verifyAdmin, async (req, res) => {
         heroTitle: settings.heroTitle,
         heroSubtitle: settings.heroSubtitle,
         heroBannerUrl: settings.heroBannerUrl,
+        banners: settings.banners && settings.banners.length > 0 ? settings.banners : DEFAULT_HERO.banners,
         heroBadge: settings.heroBadge,
         ctaText: settings.ctaText,
         whatsappNumber: settings.whatsappNumber,
