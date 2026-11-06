@@ -42,7 +42,7 @@ function parseCurrentRoute() {
   const path = window.location.pathname;
   if (path.startsWith('/admin')) {
     const rawTab = path.replace(/^\/admin\/?/, '').split('/')[0] || '';
-    const validTabs = ['overview', 'hero', 'categories', 'products', 'orders', 'phonepe', 'wordpress', 'inquiries'];
+    const validTabs = ['overview', 'hero', 'categories', 'products', 'orders', 'coupons', 'phonepe', 'wordpress', 'inquiries'];
     const adminTab = validTabs.includes(rawTab) ? rawTab : 'overview';
     return { view: 'admin', adminTab };
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle, ShieldCheck, Truck, ShoppingBag, ArrowRight, MessageCircle, QrCode, Smartphone, CreditCard, Lock, Copy, Check, ExternalLink } from 'lucide-react';
+import { X, CheckCircle, ShieldCheck, Truck, ShoppingBag, ArrowRight, MessageCircle, QrCode, Smartphone, CreditCard, Lock, Copy, Check, ExternalLink, Tag } from 'lucide-react';
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import confetti from 'canvas-confetti';
 import { useShop } from '../context/ShopContext';
@@ -15,8 +15,15 @@ export default function CheckoutModal() {
     shippingFee,
     cartTotal,
     appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    couponCode,
+    setCouponCode,
     showNotification,
   } = useShop();
+
+  const [localCouponInput, setLocalCouponInput] = useState('');
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -89,6 +96,7 @@ export default function CheckoutModal() {
         })),
         subtotal: cartSubtotal,
         discount: discountAmount,
+        couponCode: appliedCoupon ? appliedCoupon.code : '',
         shippingFee,
         totalAmount: cartTotal,
         paymentMethod: paymentMethod,
@@ -161,6 +169,7 @@ export default function CheckoutModal() {
         })),
         subtotal: cartSubtotal,
         discount: discountAmount,
+        couponCode: appliedCoupon ? appliedCoupon.code : '',
         shippingFee,
         totalAmount: cartTotal,
         notes: formData.notes,
@@ -481,6 +490,73 @@ export default function CheckoutModal() {
                       <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>₹{(item.price * item.quantity).toLocaleString('en-IN')}</div>
                     </div>
                   ))}
+                </div>
+
+                {/* Coupon Code Section */}
+                <div style={{ marginBottom: '1rem', borderTop: '1px solid #ede4dc', paddingTop: '0.8rem' }}>
+                  {appliedCoupon ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        backgroundColor: '#eef8ef',
+                        border: '1px dashed #22c55e',
+                        padding: '0.5rem 0.8rem',
+                        borderRadius: 'var(--radius-sm)',
+                        fontSize: '0.82rem',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#16a34a', fontWeight: 700 }}>
+                        <Tag size={15} />
+                        <span>Coupon <strong>{appliedCoupon.code}</strong> applied (-{appliedCoupon.percent ? `${appliedCoupon.percent}%` : `₹${appliedCoupon.discountValue}`})</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={removeCoupon}
+                        style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 700 }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', gap: '0.4rem' }}>
+                      <input
+                        type="text"
+                        placeholder="Coupon code (e.g. SUI-DIWALI50)"
+                        value={localCouponInput}
+                        onChange={(e) => setLocalCouponInput(e.target.value)}
+                        onKeyDown={async (e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (localCouponInput.trim()) {
+                              setApplyingCoupon(true);
+                              await applyCoupon(localCouponInput);
+                              setApplyingCoupon(false);
+                            }
+                          }
+                        }}
+                        className="form-input"
+                        style={{ padding: '0.45rem 0.75rem', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}
+                      />
+                      <button
+                        type="button"
+                        disabled={applyingCoupon || !localCouponInput.trim()}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          if (localCouponInput.trim()) {
+                            setApplyingCoupon(true);
+                            await applyCoupon(localCouponInput);
+                            setApplyingCoupon(false);
+                          }
+                        }}
+                        className="btn btn-outline btn-sm"
+                        style={{ padding: '0.45rem 0.9rem', fontSize: '0.82rem' }}
+                      >
+                        {applyingCoupon ? '...' : 'Apply'}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Totals */}

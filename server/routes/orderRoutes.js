@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const Coupon = require('../models/Coupon');
 const { verifyAdmin } = require('../middleware/auth');
 const { sendOrderNotificationToAdmin } = require('../services/emailService');
 
@@ -13,6 +14,7 @@ router.post('/', async (req, res) => {
       items,
       subtotal,
       discount = 0,
+      couponCode = '',
       shippingFee = 0,
       totalAmount,
       paymentMethod = 'COD',
@@ -29,12 +31,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Cart items cannot be empty' });
     }
 
+    const cleanCoupon = couponCode ? couponCode.trim().toUpperCase() : '';
+
     // Create order
     const order = new Order({
       customer,
       items,
       subtotal,
       discount,
+      couponCode: cleanCoupon,
       shippingFee,
       totalAmount,
       paymentMethod,
@@ -45,6 +50,11 @@ router.post('/', async (req, res) => {
     });
 
     const savedOrder = await order.save();
+
+    // Increment coupon redemption count if applicable
+    if (cleanCoupon) {
+      Coupon.findOneAndUpdate({ code: cleanCoupon }, { $inc: { timesUsed: 1 } }).catch(() => {});
+    }
 
     // Trigger email notification to Komal (sahamatekomal@gmail.com)
     sendOrderNotificationToAdmin(savedOrder).catch((err) =>

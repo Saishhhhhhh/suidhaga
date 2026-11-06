@@ -27,10 +27,10 @@ export default function CartDrawer() {
   const freeShippingLeft = Math.max(0, freeShippingThreshold - cartSubtotal);
   const freeShippingProgress = Math.min(100, Math.round((cartSubtotal / freeShippingThreshold) * 100));
 
-  const handleApplyCoupon = (e) => {
+  const handleApplyCoupon = async (e) => {
     e.preventDefault();
     if (couponCode.trim()) {
-      applyCoupon(couponCode);
+      await applyCoupon(couponCode);
     }
   };
 
@@ -286,18 +286,18 @@ export default function CartDrawer() {
                     justifyContent: 'space-between',
                     backgroundColor: '#eef8ef',
                     border: '1px dashed #22c55e',
-                    padding: '0.45rem 0.8rem',
+                    padding: '0.55rem 0.85rem',
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.82rem',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#16a34a', fontWeight: 700 }}>
-                    <Tag size={14} />
-                    <span>Coupon {appliedCoupon.code} applied (-{appliedCoupon.percent}%)</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#16a34a', fontWeight: 700 }}>
+                    <Tag size={15} />
+                    <span>Coupon <strong>{appliedCoupon.code}</strong> applied (-{appliedCoupon.percent ? `${appliedCoupon.percent}%` : `₹${appliedCoupon.discountValue}`})</span>
                   </div>
                   <button
                     onClick={removeCoupon}
-                    style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}
+                    style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 700 }}
                   >
                     Remove
                   </button>
@@ -306,13 +306,13 @@ export default function CartDrawer() {
                 <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '0.4rem' }}>
                   <input
                     type="text"
-                    placeholder="Coupon code (Try SUIDHAGA10)"
+                    placeholder="Enter Coupon Code (e.g. SUI-DIWALI50)"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value)}
                     className="form-input"
-                    style={{ padding: '0.45rem 0.8rem', fontSize: '0.82rem', textTransform: 'uppercase' }}
+                    style={{ padding: '0.5rem 0.8rem', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}
                   />
-                  <button type="submit" className="btn btn-outline btn-sm">
+                  <button type="submit" className="btn btn-outline btn-sm" style={{ padding: '0.5rem 1rem' }}>
                     Apply
                   </button>
                 </form>

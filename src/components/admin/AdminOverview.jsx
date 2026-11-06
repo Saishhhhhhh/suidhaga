@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, ShoppingBag, Package, AlertTriangle, Globe, ArrowRight, TrendingUp, Sparkles } from 'lucide-react';
+import { DollarSign, ShoppingBag, Package, AlertTriangle, Globe, ArrowRight, TrendingUp, Sparkles, Tag } from 'lucide-react';
 
 export default function AdminOverview({ token, setActiveTab, onAddNewProduct }) {
   const [stats, setStats] = useState({
@@ -101,6 +101,10 @@ export default function AdminOverview({ token, setActiveTab, onAddNewProduct }) 
         </div>
 
         <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
+          <button onClick={() => setActiveTab('coupons')} className="btn btn-outline btn-sm">
+            <Tag size={15} />
+            <span>Manage Coupons</span>
+          </button>
           <button onClick={() => setActiveTab('wordpress')} className="btn btn-gold btn-sm">
             <Globe size={15} />
             <span>Import from WordPress</span>

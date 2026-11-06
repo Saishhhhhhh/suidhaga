@@ -386,7 +386,7 @@ export default function AdminOrders({ token }) {
               </div>
               {selectedOrder.discount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a' }}>
-                  <span>Discount:</span>
+                  <span>Discount {selectedOrder.couponCode ? `(${selectedOrder.couponCode})` : ''}:</span>
                   <span>-₹{selectedOrder.discount.toLocaleString('en-IN')}</span>
                 </div>
               )}

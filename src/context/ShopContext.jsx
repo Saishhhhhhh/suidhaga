@@ -176,22 +176,58 @@ export const ShopProvider = ({ children }) => {
     });
   };
 
-  const applyCoupon = (code) => {
+  const applyCoupon = async (code) => {
+    if (!code || !code.trim()) {
+      showNotification('Please enter a coupon code', 'error');
+      return false;
+    }
     const clean = code.trim().toUpperCase();
-    if (clean === 'DIWALI15') {
-      setAppliedCoupon({ code: clean, percent: 15 });
+
+    // 1. Validate with backend API (MongoDB Coupon collection)
+    try {
+      const res = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: clean, subtotal: cartSubtotal }),
+      });
+      const data = await res.json();
+      if (data.success && data.coupon) {
+        setAppliedCoupon({
+          code: data.coupon.code,
+          percent: data.coupon.percent || (data.coupon.discountType === 'percentage' ? data.coupon.discountValue : 0),
+          discountType: data.coupon.discountType || 'percentage',
+          discountValue: data.coupon.discountValue,
+          discountAmount: data.coupon.discountAmount,
+        });
+        showNotification(data.message || `🎉 Coupon "${data.coupon.code}" applied!`);
+        return true;
+      } else if (data.message) {
+        showNotification(data.message, 'error');
+        return false;
+      }
+    } catch (err) {
+      console.warn('Coupon API check notice:', err.message);
+    }
+
+    // 2. Reliable fallback if offline or network glitch
+    if (clean === 'SUI-DIWALI50') {
+      setAppliedCoupon({ code: clean, percent: 50, discountType: 'percentage', discountValue: 50 });
+      showNotification('🎉 Special 50% Diwali Discount Applied! 50% off added to your cart.');
+      return true;
+    } else if (clean === 'DIWALI15') {
+      setAppliedCoupon({ code: clean, percent: 15, discountType: 'percentage', discountValue: 15 });
       showNotification('🪔 Diwali Special Coupon Applied! 15% discount added.');
       return true;
     } else if (clean === 'SUIDHAGA10') {
-      setAppliedCoupon({ code: clean, percent: 10 });
+      setAppliedCoupon({ code: clean, percent: 10, discountType: 'percentage', discountValue: 10 });
       showNotification('Coupon applied! 10% Festive discount added.');
       return true;
     } else if (clean === 'KOMAL20') {
-      setAppliedCoupon({ code: clean, percent: 20 });
+      setAppliedCoupon({ code: clean, percent: 20, discountType: 'percentage', discountValue: 20 });
       showNotification('VIP Coupon applied! 20% Founder discount added.');
       return true;
     } else {
-      showNotification('Invalid coupon. Try DIWALI15 or SUIDHAGA10', 'error');
+      showNotification('Invalid coupon code. Please check and try again.', 'error');
       return false;
     }
   };
@@ -203,7 +239,11 @@ export const ShopProvider = ({ children }) => {
 
   // Calculations
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const discountAmount = appliedCoupon ? Math.round((cartSubtotal * appliedCoupon.percent) / 100) : 0;
+  const discountAmount = appliedCoupon
+    ? appliedCoupon.discountType === 'fixed'
+      ? Math.min(cartSubtotal, appliedCoupon.discountValue)
+      : Math.round((cartSubtotal * (appliedCoupon.percent || appliedCoupon.discountValue || 0)) / 100)
+    : 0;
   const shippingFee = cartSubtotal >= 1999 || cartSubtotal === 0 ? 0 : 99;
   const cartTotal = Math.max(0, cartSubtotal - discountAmount + shippingFee);
   const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
