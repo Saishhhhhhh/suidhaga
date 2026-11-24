@@ -523,7 +523,7 @@ export default function CheckoutModal() {
                     <div style={{ display: 'flex', gap: '0.4rem' }}>
                       <input
                         type="text"
-                        placeholder="Coupon code (e.g. SUI-DIWALI50)"
+                        placeholder="Enter coupon code"
                         value={localCouponInput}
                         onChange={(e) => setLocalCouponInput(e.target.value)}
                         onKeyDown={async (e) => {

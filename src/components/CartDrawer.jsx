@@ -306,7 +306,7 @@ export default function CartDrawer() {
                 <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '0.4rem' }}>
                   <input
                     type="text"
-                    placeholder="Enter Coupon Code (e.g. SUI-DIWALI50)"
+                    placeholder="Enter Coupon Code"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value)}
                     className="form-input"
