@@ -6,27 +6,19 @@ import { useShop } from '../context/ShopContext';
 const DEFAULT_SLIDES = [
   {
     id: 1,
-    image: '/assets/hero_banner_1.jpg',
-    alt: 'Diwali Festive Threads - Flat 15% Off On All Our Products',
-    badge: 'Diwali Festive Offer • Code: DIWALI15',
-    headline: 'Diwali Festive Threads',
-    subtext: 'Flat 15% Off on pure handloom silks & regal silhouettes',
+    image: '/assets/black_friday_banner_1.jpg',
+    alt: 'Black Friday Sale - Up to 40% Off Across Shirts, Ethnic Wear and Indo Western Outfits',
+    badge: 'Black Friday Deals • Up to 40% Off',
+    headline: 'Black Friday Sale',
+    subtext: 'Up to 40% Off across shirts, ethnic wear and Indo-Western outfits',
   },
   {
     id: 2,
-    image: '/assets/hero_banner_2.jpg',
-    alt: 'The Diwali Edit - Handcrafted Indian Ethnic & Indo-Western Sets',
-    badge: 'Grand Festive Edit 2026',
-    headline: 'The Diwali Edit',
-    subtext: 'Handcrafted kurtas, shararas and luxury festive coordinates',
-  },
-  {
-    id: 3,
-    image: '/assets/hero_banner_3.jpg',
-    alt: 'The Diwali Edit - Regal Handloom Silks and Artisanal Needlework',
-    badge: 'Artisanal Needlework • Limited Edition',
-    headline: 'Timeless Festive Glamour',
-    subtext: 'Crafted with fine French seams and mindful custom fits',
+    image: '/assets/black_friday_banner_2.jpg',
+    alt: 'The Black Friday Edit - Up to 40% Off on Shirts, Ethnic Wear & Indo Western Outfits',
+    badge: 'The Black Friday Edit • Limited Time',
+    headline: 'The Black Friday Edit',
+    subtext: 'Exclusive handcrafted festive & contemporary styles',
   },
 ];
 
@@ -62,10 +54,10 @@ export default function HeroSection() {
               data.hero.banners.map((img, idx) => ({
                 id: idx + 1,
                 image: img,
-                alt: `Sui Dhaga Hero Banner ${idx + 1}`,
-                badge: 'Grand Festive Edit 2026',
-                headline: 'Sui-Dhaga Festive Collection',
-                subtext: 'Pure handloom silks and royal silhouettes',
+                alt: `Sui Dhaga Black Friday Banner ${idx + 1}`,
+                badge: 'Black Friday Mega Deal • Up to 40% Off',
+                headline: 'The Black Friday Edit',
+                subtext: 'Up to 40% Off across shirts, ethnic wear and Indo-Western outfits',
               }))
             );
           }
@@ -152,7 +144,7 @@ export default function HeroSection() {
           cursor: 'pointer',
           overflow: 'hidden',
         }}
-        title="Click to explore the Festive Collection"
+        title="Click to explore Black Friday Deals"
       >
         {slides.map((slide, idx) => {
           const isActive = idx === currentSlide;
@@ -178,11 +170,9 @@ export default function HeroSection() {
                 className="hero-banner-img"
                 style={{
                   width: '100%',
-                  height: 'auto',
                   display: 'block',
                   objectFit: 'cover',
                   objectPosition: 'center center',
-                  maxHeight: '680px',
                 }}
               />
             </div>
@@ -229,7 +219,7 @@ export default function HeroSection() {
 
           {/* Quick WhatsApp Styling Assistance Chip */}
           <a
-            href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20Team!%20I'm%20browsing%20the%20Diwali%20collection%20on%20the%20website%20and%20would%20love%20styling%20guidance.`}
+            href={`https://wa.me/${cleanPhone}?text=Hi%20SuiDhaga%20Team!%20I'm%20browsing%20the%20Black%20Friday%20deals%20on%20the%20website%20and%20would%20love%20styling%20guidance.`}
             target="_blank"
             rel="noopener noreferrer"
             className="hero-wa-chip"
@@ -249,15 +239,16 @@ export default function HeroSection() {
         .hero-carousel-viewport {
           position: relative;
           background: #1c080e;
-          min-height: 220px;
+          width: 100%;
         }
 
         .hero-banner-img {
           width: 100%;
           display: block;
-          aspect-ratio: 16 / 9;
+          aspect-ratio: 2.15 / 1;
           object-fit: cover;
           object-position: center;
+          max-height: 560px;
         }
 
         /* Navigation Arrows */
@@ -368,6 +359,10 @@ export default function HeroSection() {
 
         /* Responsive Mobile Styling */
         @media (max-width: 768px) {
+          .hero-banner-img {
+            aspect-ratio: 2.15 / 1;
+            max-height: none;
+          }
           .hero-arrow-btn {
             width: 34px;
             height: 34px;

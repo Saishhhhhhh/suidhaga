@@ -28,12 +28,12 @@ export default function AnnouncementBar() {
       >
         {/* Left: Clean Festive Message */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', overflow: 'hidden' }} className="announcement-msg">
-          <span style={{ fontSize: '0.9rem' }}>🪔</span>
+          <span style={{ fontSize: '0.9rem' }}>✨</span>
           <span className="desktop-announcement-text">
-            Shubh Deepavali Offer: Use code <strong style={{ color: '#ffd700', letterSpacing: '0.08em' }}>DIWALI15</strong> for 15% Off • Complimentary Shipping across India
+            Black Friday Deals: Up to 40% Off Across Shirts, Ethnic Wear & Indo-Western Outfits • Complimentary Shipping Across India
           </span>
           <span className="mobile-announcement-text">
-            Festive Offer: 15% Off (Code: <strong style={{ color: '#ffd700' }}>DIWALI15</strong>) • Free Shipping
+            Black Friday: Up to 40% Off • Free Shipping
           </span>
         </div>
 

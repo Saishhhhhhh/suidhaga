@@ -280,7 +280,6 @@ function MainApp() {
               /* Home Page */
               <>
                 <HeroSection />
-                <DiwaliBanner />
                 <CollectionGrid onOpenCategory={navigateToCategory} />
                 <ProductCatalog
                   onOpenProduct={navigateToProduct}

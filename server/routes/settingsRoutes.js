@@ -6,13 +6,12 @@ const SiteSettings = require('../models/SiteSettings');
 const DEFAULT_HERO = {
   heroTitle: 'Crafted by hand, grounded in care.',
   heroSubtitle: 'Curated pure silks, artisanal handloom fabrics, and regal silhouettes.',
-  heroBannerUrl: '/assets/hero_banner_1.jpg',
+  heroBannerUrl: '/assets/black_friday_banner_1.jpg',
   banners: [
-    '/assets/hero_banner_1.jpg',
-    '/assets/hero_banner_2.jpg',
-    '/assets/hero_banner_3.jpg',
+    '/assets/black_friday_banner_1.jpg',
+    '/assets/black_friday_banner_2.jpg',
   ],
-  heroBadge: 'Grand Festive Edit 2026',
+  heroBadge: 'Black Friday Deals 2026',
   ctaText: 'Explore Collection',
   whatsappNumber: '918767547517',
   bannerPosition: 'center center',
