@@ -506,4 +506,135 @@ body {
   }
 }
 
+/* ===================================================
+   Sub-Hero Bigger Font Marquee Ticker (Below Main Banner)
+   =================================================== */
+@keyframes heroSubTickerScroll {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@-webkit-keyframes heroSubTickerScroll {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.hero-subbanner-ticker {
+  width: 100%;
+  background: linear-gradient(90deg, #180309 0%, #2f0713 50%, #180309 100%);
+  border-top: 1px solid rgba(212, 175, 55, 0.45);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.25);
+  padding: 0.85rem 0;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+}
+
+.hero-ticker-track {
+  display: inline-flex !important;
+  width: max-content !important;
+  white-space: nowrap !important;
+  -webkit-animation: heroSubTickerScroll 24s linear infinite !important;
+  animation: heroSubTickerScroll 24s linear infinite !important;
+  will-change: transform;
+}
+
+.hero-ticker-group {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.hero-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 1.25rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.18rem;
+  color: #fdfaf2;
+  letter-spacing: 0.02em;
+}
+
+.hero-ticker-sparkle {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.hero-ticker-highlight {
+  color: #ffd700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.hero-ticker-shipping {
+  color: #fce8a6;
+  font-weight: 600;
+}
+
+.hero-ticker-date {
+  color: #ffb703;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.96rem;
+  letter-spacing: 0.04em;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+}
+
+.hero-ticker-bullet {
+  color: #d4af37;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.hero-ticker-separator {
+  color: #d4af37;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  padding: 0 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .hero-subbanner-ticker {
+    padding: 0.6rem 0;
+  }
+  .hero-ticker-item {
+    font-size: 0.95rem;
+    gap: 0.45rem;
+    padding: 0 0.85rem;
+  }
+  .hero-ticker-highlight {
+    font-size: 0.88rem;
+  }
+  .hero-ticker-date {
+    font-size: 0.82rem;
+    padding: 0.1rem 0.45rem;
+  }
+  .hero-ticker-track {
+    -webkit-animation: heroSubTickerScroll 20s linear infinite !important;
+    animation: heroSubTickerScroll 20s linear infinite !important;
+  }
+}
+
+
 

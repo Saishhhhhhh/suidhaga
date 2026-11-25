@@ -231,6 +231,75 @@ export default function HeroSection() {
         </div>
       </div>
 
+      {/* High-Impact Bigger Font Moving Ticker Below Main Banner */}
+      <div
+        className="hero-subbanner-ticker"
+        onClick={() => {
+          const el = document.getElementById('products-catalog');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+        title="Click to explore Black Friday Deals"
+      >
+        <div
+          className="hero-ticker-track"
+          style={{
+            display: 'inline-flex',
+            width: 'max-content',
+            whiteSpace: 'nowrap',
+            animation: 'heroSubTickerScroll 24s linear infinite',
+            WebkitAnimation: 'heroSubTickerScroll 24s linear infinite',
+          }}
+        >
+          {/* Ticker Group 1 */}
+          <div className="hero-ticker-group">
+            <span className="hero-ticker-item">
+              <span className="hero-ticker-sparkle">✨</span>
+              <strong className="hero-ticker-highlight">BLACK FRIDAY DEALS:</strong>
+              <span>Up to 40% Off Across Shirts, Ethnic Wear &amp; Indo-Western Outfits</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-shipping">Shipping Across India</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-date">Offer till 30 Dec 2026</span>
+            </span>
+            <span className="hero-ticker-separator">✦</span>
+            <span className="hero-ticker-item">
+              <span className="hero-ticker-sparkle">✨</span>
+              <strong className="hero-ticker-highlight">BLACK FRIDAY DEALS:</strong>
+              <span>Up to 40% Off Across Shirts, Ethnic Wear &amp; Indo-Western Outfits</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-shipping">Shipping Across India</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-date">Offer till 30 Dec 2026</span>
+            </span>
+            <span className="hero-ticker-separator">✦</span>
+          </div>
+
+          {/* Ticker Group 2 (Clone for seamless 0% to -50% loop) */}
+          <div className="hero-ticker-group" aria-hidden="true">
+            <span className="hero-ticker-item">
+              <span className="hero-ticker-sparkle">✨</span>
+              <strong className="hero-ticker-highlight">BLACK FRIDAY DEALS:</strong>
+              <span>Up to 40% Off Across Shirts, Ethnic Wear &amp; Indo-Western Outfits</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-shipping">Shipping Across India</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-date">Offer till 30 Dec 2026</span>
+            </span>
+            <span className="hero-ticker-separator">✦</span>
+            <span className="hero-ticker-item">
+              <span className="hero-ticker-sparkle">✨</span>
+              <strong className="hero-ticker-highlight">BLACK FRIDAY DEALS:</strong>
+              <span>Up to 40% Off Across Shirts, Ethnic Wear &amp; Indo-Western Outfits</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-shipping">Shipping Across India</span>
+              <span className="hero-ticker-bullet">•</span>
+              <span className="hero-ticker-date">Offer till 30 Dec 2026</span>
+            </span>
+            <span className="hero-ticker-separator">✦</span>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         .hero-slider-section {
           user-select: none;
