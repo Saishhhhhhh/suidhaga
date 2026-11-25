@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, ShoppingBag, Star, ShieldCheck, Truck, RotateCcw, Heart } from 'lucide-react';
 import OfficialWhatsAppIcon from './OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
+import { getShortDescription } from '../utils/formatDescription';
 
 export default function ProductQuickView({ onOpenProduct }) {
   const { quickViewProduct, setQuickViewProduct, addToCart, wishlist, toggleWishlist } = useShop();
@@ -185,7 +186,7 @@ export default function ProductQuickView({ onOpenProduct }) {
 
             {/* Description */}
             <p style={{ color: 'var(--text-medium)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              {quickViewProduct.description || quickViewProduct.shortDescription}
+              {getShortDescription(quickViewProduct)}
             </p>
 
             {/* Size Selector */}

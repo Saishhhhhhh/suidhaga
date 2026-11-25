@@ -19,6 +19,7 @@ import OfficialWhatsAppIcon from '../components/OfficialWhatsAppIcon';
 import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
 import { getProductSlug, slugify } from '../utils/slug';
+import { getShortDescription, parseProductDescription } from '../utils/formatDescription';
 
 export default function ProductDetailPage({
   productSlugOrId,
@@ -102,7 +103,7 @@ export default function ProductDetailPage({
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
-  const [activeAccordion, setActiveAccordion] = useState('details');
+  const [activeAccordion, setActiveAccordion] = useState('description');
   const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
@@ -142,6 +143,7 @@ export default function ProductDetailPage({
     : 0;
 
   const isSoldOut = product.stock !== undefined ? Number(product.stock) <= 0 : false;
+  const parsedDesc = parseProductDescription(product.description, product.title);
 
   const handleAddToCart = () => {
     if (isSoldOut) return;
@@ -419,8 +421,7 @@ export default function ProductDetailPage({
 
             {/* Short Narrative Description */}
             <p style={{ color: 'var(--text-medium)', fontSize: '0.94rem', lineHeight: 1.65, marginBottom: '1.75rem' }}>
-              {product.description ||
-                'Impeccably tailored with intricate artisanal handwork. Blending traditional Indian aesthetics with effortless modern comfort, this outfit features generous 2-inch inner fabric margins for personalized sizing adjustments.'}
+              {getShortDescription(product)}
             </p>
 
             {/* Size Selector */}
@@ -660,10 +661,100 @@ export default function ProductDetailPage({
               </button>
             </div>
 
-            {/* Accordion Tabs for Craft, Fit, Shipping */}
+            {/* Accordion Tabs for Description, Craft, Fit, Shipping */}
             <div style={{ borderTop: '1px solid #e7ded4' }}>
               
-              {/* Accordion 1: Details & Craft */}
+              {/* Accordion 1: Full Description & Specifications */}
+              <div style={{ borderBottom: '1px solid #e7ded4' }}>
+                <button
+                  type="button"
+                  onClick={() => setActiveAccordion(activeAccordion === 'description' ? '' : 'description')}
+                  style={{
+                    width: '100%',
+                    padding: '1rem 0',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: 700,
+                    fontSize: '0.94rem',
+                    color: 'var(--maroon-900)',
+                  }}
+                >
+                  <span>Product Details &amp; Description</span>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 400, color: 'var(--maroon-800)' }}>
+                    {activeAccordion === 'description' ? '−' : '+'}
+                  </span>
+                </button>
+
+                {activeAccordion === 'description' && (
+                  <div style={{ paddingBottom: '1.25rem', fontSize: '0.9rem', color: 'var(--text-medium)', lineHeight: 1.7 }}>
+                    {/* Formatted Paragraphs */}
+                    {parsedDesc.paragraphs.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                        {parsedDesc.paragraphs.map((para, idx) => (
+                          <p key={idx} style={{ margin: 0 }}>
+                            {para}
+                          </p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p style={{ margin: 0 }}>
+                        {product.description || getShortDescription(product)}
+                      </p>
+                    )}
+
+                    {/* Specifications Grid if specs exist */}
+                    {parsedDesc.specs.length > 0 && (
+                      <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px dashed #dcd1c6' }}>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--maroon-900)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.85rem' }}>
+                          Product Specifications
+                        </div>
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+                            gap: '0.65rem',
+                          }}
+                        >
+                          {parsedDesc.specs.map((item, idx) => (
+                            <div
+                              key={idx}
+                              style={{
+                                backgroundColor: '#fcf8f5',
+                                border: '1px solid #ecdcd0',
+                                borderRadius: '6px',
+                                padding: '0.55rem 0.85rem',
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontSize: '0.72rem',
+                                  color: 'var(--text-muted)',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.05em',
+                                  display: 'block',
+                                  fontWeight: 600,
+                                  marginBottom: '0.15rem',
+                                }}
+                              >
+                                {item.key}
+                              </span>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-dark)' }}>
+                                {item.value}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Accordion 2: Details & Craft */}
               <div style={{ borderBottom: '1px solid #e7ded4' }}>
                 <button
                   type="button"
