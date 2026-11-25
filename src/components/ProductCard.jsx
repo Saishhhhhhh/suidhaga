@@ -56,19 +56,19 @@ export default function ProductCard({ product, onOpenProduct }) {
           className="product-img"
         />
 
-        {/* Top Badges */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '0.75rem',
-            left: '0.75rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.4rem',
-            zIndex: 2,
-          }}
-        >
-          {isSoldOut ? (
+        {/* Top Badges: Only display Sold Out when out of stock */}
+        {isSoldOut && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '0.75rem',
+              left: '0.75rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem',
+              zIndex: 2,
+            }}
+          >
             <span
               style={{
                 backgroundColor: '#1f2937',
@@ -89,20 +89,8 @@ export default function ProductCard({ product, onOpenProduct }) {
               <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
               Sold Out
             </span>
-          ) : (
-            <>
-              {product.discount > 0 && (
-                <span className="badge-sale">{product.discount}% OFF</span>
-              )}
-              {product.isBestseller && (
-                <span className="badge-gold">Bestseller</span>
-              )}
-              {product.isNewArrival && (
-                <span className="badge-maroon">New Launch</span>
-              )}
-            </>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Floating Top Right Actions (Wishlist + WhatsApp) */}
         <div

@@ -12,7 +12,7 @@ export default function AnnouncementBar() {
     }
   };
 
-  const announcementMessage =
+  const messageText =
     'Black Friday Deals: Up to 40% Off Across Shirts, Ethnic Wear & Indo-Western Outfits • Complimentary Shipping Across India';
 
   return (
@@ -21,22 +21,22 @@ export default function AnnouncementBar() {
         backgroundColor: '#26050e',
         color: '#fdfaf2',
         fontSize: '0.74rem',
-        padding: '0.35rem 1.25rem',
+        padding: '0.35rem 1rem',
         borderBottom: '1px solid rgba(212, 175, 55, 0.25)',
         letterSpacing: '0.03em',
         overflow: 'hidden',
+        width: '100%',
       }}
       className="top-announcement-bar"
     >
       <div
-        className="container announcement-bar-container"
+        className="announcement-bar-container"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '0.75rem',
-          maxWidth: '100%',
-          padding: '0 0.5rem',
+          width: '100%',
         }}
       >
         {/* Left/Center: Continuous Moving Marquee Ticker */}
@@ -44,32 +44,47 @@ export default function AnnouncementBar() {
           className="announcement-ticker-wrap"
           onClick={handleBannerClick}
           title="Click to explore Black Friday Deals"
+          style={{
+            flex: 1,
+            minWidth: 0,
+            overflow: 'hidden',
+            cursor: 'pointer',
+          }}
         >
-          <div className="announcement-ticker-track">
-            {/* Primary group */}
-            <div className="ticker-group">
+          <div
+            className="announcement-ticker-track"
+            style={{
+              display: 'inline-flex',
+              width: 'max-content',
+              whiteSpace: 'nowrap',
+              animation: 'suidhagaMarquee 20s linear infinite',
+              WebkitAnimation: 'suidhagaMarquee 20s linear infinite',
+            }}
+          >
+            {/* Group 1 */}
+            <div className="ticker-group" style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
               <span className="ticker-item">
                 <span className="ticker-sparkle">✨</span>
-                <span>{announcementMessage}</span>
+                <span>{messageText}</span>
               </span>
               <span className="ticker-separator">✦</span>
               <span className="ticker-item">
                 <span className="ticker-sparkle">✨</span>
-                <span>{announcementMessage}</span>
+                <span>{messageText}</span>
               </span>
               <span className="ticker-separator">✦</span>
             </div>
 
-            {/* Cloned group for seamless 0% to -50% infinite loop */}
-            <div className="ticker-group" aria-hidden="true">
+            {/* Group 2 (Duplicate for seamless loop) */}
+            <div className="ticker-group" aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
               <span className="ticker-item">
                 <span className="ticker-sparkle">✨</span>
-                <span>{announcementMessage}</span>
+                <span>{messageText}</span>
               </span>
               <span className="ticker-separator">✦</span>
               <span className="ticker-item">
                 <span className="ticker-sparkle">✨</span>
-                <span>{announcementMessage}</span>
+                <span>{messageText}</span>
               </span>
               <span className="ticker-separator">✦</span>
             </div>
@@ -85,7 +100,7 @@ export default function AnnouncementBar() {
             flexShrink: 0,
             zIndex: 2,
             background: '#26050e',
-            paddingLeft: '0.75rem',
+            paddingLeft: '0.5rem',
           }}
           className="announcement-right"
         >
@@ -131,104 +146,6 @@ export default function AnnouncementBar() {
           </button>
         </div>
       </div>
-
-      <style>{`
-        .announcement-ticker-wrap {
-          flex: 1;
-          min-width: 0;
-          overflow: hidden;
-          position: relative;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          mask-image: linear-gradient(90deg, transparent 0%, #000 15px, #000 calc(100% - 15px), transparent 100%);
-          -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 15px, #000 calc(100% - 15px), transparent 100%);
-        }
-
-        .announcement-ticker-track {
-          display: flex;
-          width: max-content;
-          white-space: nowrap;
-          animation: announcementTickerScroll 30s linear infinite;
-          will-change: transform;
-        }
-
-        .announcement-ticker-wrap:hover .announcement-ticker-track {
-          animation-play-state: paused;
-        }
-
-        @keyframes announcementTickerScroll {
-          0% {
-            transform: translate3d(0, 0, 0);
-          }
-          100% {
-            transform: translate3d(-50%, 0, 0);
-          }
-        }
-
-        .ticker-group {
-          display: flex;
-          align-items: center;
-          flex-shrink: 0;
-        }
-
-        .ticker-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.45rem;
-          padding: 0 0.9rem;
-          font-weight: 500;
-          color: #fdfaf2;
-          letter-spacing: 0.03em;
-          transition: color 0.2s;
-        }
-
-        .announcement-ticker-wrap:hover .ticker-item {
-          color: #fff;
-        }
-
-        .ticker-sparkle {
-          font-size: 0.85rem;
-          line-height: 1;
-        }
-
-        .ticker-separator {
-          color: #d4af37;
-          font-size: 0.62rem;
-          opacity: 0.75;
-          padding: 0 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-          .top-announcement-bar {
-            padding: 0.28rem 0.5rem !important;
-          }
-          .announcement-bar-container {
-            gap: 0.4rem !important;
-            padding: 0 !important;
-          }
-          .announcement-phone {
-            display: none !important;
-          }
-          .announcement-right {
-            padding-left: 0.4rem !important;
-          }
-          .ticker-item {
-            font-size: 0.72rem !important;
-            padding: 0 0.5rem !important;
-          }
-          .announcement-ticker-track {
-            animation-duration: 25s !important;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .announcement-ticker-track {
-            animation: none !important;
-            transform: none !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

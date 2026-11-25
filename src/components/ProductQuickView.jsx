@@ -95,7 +95,7 @@ export default function ProductQuickView({ onOpenProduct }) {
                   filter: isSoldOut ? 'grayscale(30%)' : 'none',
                 }}
               />
-              {isSoldOut ? (
+              {isSoldOut && (
                 <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 2 }}>
                   <span
                     style={{
@@ -118,11 +118,7 @@ export default function ProductQuickView({ onOpenProduct }) {
                     Sold Out
                   </span>
                 </div>
-              ) : quickViewProduct.discount > 0 ? (
-                <div style={{ position: 'absolute', top: '1rem', left: '1rem' }}>
-                  <span className="badge-sale">{quickViewProduct.discount}% OFF</span>
-                </div>
-              ) : null}
+              )}
             </div>
 
             {/* Thumbnail selector if multiple images */}

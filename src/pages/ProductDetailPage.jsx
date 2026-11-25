@@ -268,25 +268,7 @@ export default function ProductDetailPage({
                     <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
                     SOLD OUT
                   </span>
-                ) : (
-                  <>
-                    {discountVal > 0 && (
-                      <span className="badge-sale" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                        {discountVal}% OFF
-                      </span>
-                    )}
-                    {product.isBestseller && (
-                      <span className="badge-gold" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                        Bestseller
-                      </span>
-                    )}
-                    {product.isNewArrival && (
-                      <span className="badge-maroon" style={{ fontSize: '0.8rem', padding: '0.35rem 0.8rem' }}>
-                        Festive Edit
-                      </span>
-                    )}
-                  </>
-                )}
+                ) : null}
               </div>
 
               {/* Wishlist Button */}
